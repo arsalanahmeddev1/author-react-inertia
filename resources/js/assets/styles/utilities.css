@@ -1,0 +1,127 @@
+/* Utility classes for margins, paddings, and other common styles */
+
+/* Font sizes */
+.fs-16 { font-size: var(--text-16); }
+.fs-18 { font-size: var(--text-18); }
+.fs-20 { font-size: var(--text-20); }
+.fs-24 { font-size: var(--text-24); }
+.fs-29 { font-size: var(--text-29); }
+.fs-30 { font-size: var(--text-30); }
+.fs-32 { font-size: var(--text-32); }
+.fs-36 { font-size: var(--text-36); }
+.fs-48 { font-size: var(--text-48); }
+.fs-54 { font-size: var(--text-54); }
+
+/* Font weights */
+.fw-400 { font-weight: 400; }
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+.fw-700 { font-weight: 700; }
+
+/* Margins */
+.mb-10 { margin-bottom: var(--text-10); }
+.mb-20 { margin-bottom: var(--text-20); }
+.mb-30 { margin-bottom: var(--text-30); }
+.mb-40 { margin-bottom: var(--text-40); }
+.mb-70 { margin-bottom: var(--text-70); }
+
+.mt-10 { margin-top: var(--text-10); }
+.mt-20 { margin-top: var(--text-20); }
+.mt-30 { margin-top: var(--text-30); }
+.mt-40 { margin-top: var(--text-40); }
+.mt-70 { margin-top: var(--text-70); }
+
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+/* Paddings */
+.py-10 { padding-top: var(--text-10); padding-bottom: var(--text-10); }
+.py-20 { padding-top: var(--text-20); padding-bottom: var(--text-20); }
+.py-40 { padding-top: var(--text-40); padding-bottom: var(--text-40); }
+.py-100 { padding-top: var(--text-100); padding-bottom: var(--text-100); }
+
+.px-20 { padding-left: var(--text-20); padding-right: var(--text-20); }
+.px-40 { padding-left: var(--text-40); padding-right: var(--text-40); }
+
+.pt-20 { padding-top: var(--text-20); }
+.pt-30 { padding-top: var(--text-30); }
+.pt-33 { padding-top: var(--text-33); }
+.pt-50 { padding-top: var(--text-50); }
+.pt-100 { padding-top: var(--text-100); }
+
+.pb-100 { padding-bottom: var(--text-100); }
+
+.pl-10 { padding-left: var(--text-10); }
+.pl-30 { padding-left: var(--text-30); }
+
+/* Text colors */
+.text-white { color: var(--default-color) !important; }
+.text-black { color: var(--black) !important; }
+.light-black { color: var(--light-black); }
+.text-primary-theme { color: var(--primary-theme); }
+.text-secondry-theme { color: var(--secondry-theme); }
+
+/* Background colors */
+.bg-primary-theme { background-color: var(--primary-theme); }
+.bg-secondry-theme { background-color: var(--secondry-theme); }
+.light-theme { background-color: var(--light-theme); }
+.sec-bg { background-color: var(--sec-bg); }
+
+/* Text transforms */
+.text-capitalize { text-transform: capitalize; }
+.text-uppercase { text-transform: uppercase; }
+
+/* Display */
+.d-block { display: block; }
+.d-flex { display: flex; }
+.d-none { display: none; }
+
+/* Flex utilities */
+.flex-column { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.justify-content-center { justify-content: center; }
+.justify-content-between { justify-content: space-between; }
+.justify-content-end { justify-content: flex-end; }
+.align-items-center { align-items: center; }
+
+/* Positions */
+.position-relative { position: relative; }
+.position-absolute { position: absolute; }
+.top-0 { top: 0; }
+.start-0 { left: 0; }
+.end-0 { right: 0; }
+.w-100 { width: 100%; }
+
+/* Gaps */
+.gap-20 { gap: var(--text-20); }
+.gap-60 { gap: var(--text-60); }
+.row-gap-30 { row-gap: var(--text-30); }
+.row-gap-40 { row-gap: var(--text-40); }
+.row-gap-80 { row-gap: var(--text-80); }
+
+/* Border radius */
+.radius-60 { border-radius: var(--text-60); }
+
+/* Responsive utilities */
+@media (min-width: 576px) {
+  .d-sm-block { display: block; }
+  .d-sm-none { display: none; }
+  .text-sm-start { text-align: start; }
+  .flex-sm-row { flex-direction: row; }
+}
+
+@media (min-width: 992px) {
+  .d-lg-block { display: block; }
+  .d-lg-none { display: none; }
+  .text-lg-start { text-align: start; }
+  .justify-content-lg-start { justify-content: flex-start; }
+  .justify-content-lg-between { justify-content: space-between; }
+  .mx-lg-0 { margin-left: 0; margin-right: 0; }
+}
+
+/* Letter spacing */
+.ls-8 { letter-spacing: 8px; }
+
+/* Font families */
+.primary-font { font-family: var(--primary-font); }
+.secondry-font { font-family: var(--secondry-font); }
+.tertiary-font { font-family: var(--tertiary-font); }
