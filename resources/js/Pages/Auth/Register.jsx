@@ -1,8 +1,8 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
+import CustomInputError from '@/Components/CustomInputError';
+import CustomInputLabel from '@/Components/CustomInputLabel';
+import CustomButton from '@/Components/CustomButton';
+import CustomTextInput from '@/Components/CustomTextInput';
+import CustomAuthLayout from '@/Layouts/CustomAuthLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Register() {
@@ -22,73 +22,73 @@ export default function Register() {
     };
 
     return (
-        <GuestLayout>
+        <CustomAuthLayout title="Create Your">
             <Head title="Register" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
+            <form onSubmit={submit} className="auth-form">
+                <div className="mb-3">
+                    <CustomInputLabel htmlFor="name" value="Full Name" />
 
-                    <TextInput
+                    <CustomTextInput
                         id="name"
                         name="name"
                         value={data.name}
-                        className="mt-1 block w-full"
+                        className="form-control mb-2"
                         autoComplete="name"
                         isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
                         required
                     />
 
-                    <InputError message={errors.name} className="mt-2" />
+                    <CustomInputError message={errors.name} />
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
+                <div className="mb-3">
+                    <CustomInputLabel htmlFor="email" value="Email Address" />
 
-                    <TextInput
+                    <CustomTextInput
                         id="email"
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="form-control mb-2"
                         autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
                         required
                     />
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <CustomInputError message={errors.email} />
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                <div className="mb-3">
+                    <CustomInputLabel htmlFor="password" value="Password" />
 
-                    <TextInput
+                    <CustomTextInput
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="form-control mb-2"
                         autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
                         required
                     />
 
-                    <InputError message={errors.password} className="mt-2" />
+                    <CustomInputError message={errors.password} />
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel
+                <div className="mb-4">
+                    <CustomInputLabel
                         htmlFor="password_confirmation"
                         value="Confirm Password"
                     />
 
-                    <TextInput
+                    <CustomTextInput
                         id="password_confirmation"
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="mt-1 block w-full"
+                        className="form-control mb-2"
                         autoComplete="new-password"
                         onChange={(e) =>
                             setData('password_confirmation', e.target.value)
@@ -96,25 +96,27 @@ export default function Register() {
                         required
                     />
 
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
+                    <CustomInputError message={errors.password_confirmation} />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    <Link
-                        href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                <div className="d-grid gap-2 mb-4">
+                    <CustomButton
+                        className="btn-lg"
+                        disabled={processing}
                     >
-                        Already registered?
-                    </Link>
+                        Create Account
+                    </CustomButton>
+                </div>
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
+                <div className="text-center">
+                    <p className="fs-16 mb-0 secondry-font">
+                        Already have an account?
+                        <Link href={route('login')} className="text-primary-theme ms-2 fw-bold">
+                            Sign In
+                        </Link>
+                    </p>
                 </div>
             </form>
-        </GuestLayout>
+        </CustomAuthLayout>
     );
 }

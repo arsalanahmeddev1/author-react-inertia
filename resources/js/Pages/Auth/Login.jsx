@@ -1,9 +1,9 @@
-import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
+import CustomCheckbox from '@/Components/CustomCheckbox';
+import CustomInputError from '@/Components/CustomInputError';
+import CustomInputLabel from '@/Components/CustomInputLabel';
+import CustomButton from '@/Components/CustomButton';
+import CustomTextInput from '@/Components/CustomTextInput';
+import CustomAuthLayout from '@/Layouts/CustomAuthLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword }) {
@@ -22,79 +22,94 @@ export default function Login({ status, canResetPassword }) {
     };
 
     return (
-        <GuestLayout>
+        <CustomAuthLayout title="Login to Your">
             <Head title="Log in" />
 
             {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
+                <div className="alert alert-success mb-4 fs-18">
                     {status}
                 </div>
             )}
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+            <form onSubmit={submit} className="auth-form">
+                <div className="mb-4">
+                    <CustomInputLabel htmlFor="email" value="Email Address" />
 
-                    <TextInput
+                    <CustomTextInput
                         id="email"
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="form-control mb-2"
                         autoComplete="username"
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
                     />
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <CustomInputError message={errors.email} />
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                <div className="mb-4">
+                    <div className="d-flex justify-content-between align-items-center">
+                        <CustomInputLabel htmlFor="password" value="Password" />
 
-                    <TextInput
+                        {canResetPassword && (
+                            <Link
+                                href={route('password.request')}
+                                className="text-primary-theme fs-16"
+                                style={{ fontFamily: 'var(--secondry-font)' }}
+                            >
+                                Forgot password?
+                            </Link>
+                        )}
+                    </div>
+
+                    <CustomTextInput
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="form-control mb-2"
                         autoComplete="current-password"
                         onChange={(e) => setData('password', e.target.value)}
                     />
 
-                    <InputError message={errors.password} className="mt-2" />
+                    <CustomInputError message={errors.password} />
                 </div>
 
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
+                <div className="mb-4">
+                    <div className="d-flex align-items-center">
+                        <CustomCheckbox
                             name="remember"
                             checked={data.remember}
                             onChange={(e) =>
                                 setData('remember', e.target.checked)
                             }
                         />
-                        <span className="ms-2 text-sm text-gray-600">
+                        <span className="ms-2 fs-16 secondry-font">
                             Remember me
                         </span>
-                    </label>
+                    </div>
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                <div className="d-grid gap-2 mb-4">
+                    <CustomButton
+                        disabled={processing}
+                        className="btn-lg"
+                    >
                         Log in
-                    </PrimaryButton>
+                    </CustomButton>
+                </div>
+
+                <div className="text-center">
+                    <p className="fs-16 mb-0 secondry-font">
+                        Don't have an account?
+                        <Link href={route('register')} className="text-primary-theme ms-2 fw-bold">
+                            Sign Up
+                        </Link>
+                    </p>
                 </div>
             </form>
-        </GuestLayout>
+        </CustomAuthLayout>
     );
 }

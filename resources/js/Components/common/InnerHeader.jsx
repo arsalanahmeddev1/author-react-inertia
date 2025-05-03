@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 
-const Header = ({logoClass , headerClass}) => {
+const InnerHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { url } = usePage();
 
@@ -15,19 +15,19 @@ const Header = ({logoClass , headerClass}) => {
   };
 
   return (
-    <header className={`header pt-20 position-absolute top-0 w-100 ${headerClass ? headerClass : ''} }`}>
+    <header className="header py-3 w-100" style={{ backgroundColor: '#221408' }}>
       <div className="container position-relative">
         <div className="row justify-content-between">
           <div className="col-lg-3 col-6">
-            <div className="logo position-absolute top-0 start-0 text-center" data-aos-duration="3000" data-aos="fade-right">
-              <img src="/assets/images/logo.png" className={`${logoClass}`} alt="logo" />
-              <span className="text-white d-block fs-29">Verba aeternum fluentia</span>
-              <span className="text-white fs-24">(Words flowing eternally)</span>
+            <div className="logo">
+              <Link href="/">
+                <img src="/assets/images/logo.png" alt="logo" style={{ maxWidth: '100px' }} />
+              </Link>
             </div>
           </div>
           <div className="col-lg-4">
             <nav>
-              <ul className={`primary-navs d-flex align-items-center justify-content-between pt-50 ${isMenuOpen ? 'active' : ''}`} data-aos-duration="3000" data-aos="fade-down">
+              <ul className={`primary-navs d-flex align-items-center justify-content-between pt-50 ${isMenuOpen ? 'active' : ''}`}>
                 <div className="close-icon">
                   <i className="fa-solid fa-xmark menu-toggle" onClick={toggleMenu}></i>
                 </div>
@@ -42,7 +42,7 @@ const Header = ({logoClass , headerClass}) => {
             </nav>
           </div>
           <div className="col-lg-4">
-            <div className="d-flex align-items-center gap-20 pt-33 justify-content-end justify-content-lg-between" data-aos-duration="3000" data-aos="fade-down">
+            <div className="d-flex align-items-center gap-20 pt-33 justify-content-end justify-content-lg-between">
               <Link href='register' className="text-white d-none d-sm-block">Sign Up</Link>
               <div className="vertical-line d-none d-sm-block"></div>
               <Link href='login' className="text-white d-none d-sm-block">Sign In</Link>
@@ -59,4 +59,4 @@ const Header = ({logoClass , headerClass}) => {
   );
 };
 
-export default Header;
+export default InnerHeader;

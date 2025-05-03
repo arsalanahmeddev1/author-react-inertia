@@ -1,0 +1,232 @@
+/* Story Modal Styling */
+.story-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.story-modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.story-modal-content {
+  background-color: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+
+.story-modal-overlay.show .story-modal-content {
+  transform: translateY(0);
+}
+
+.story-modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary-theme);
+  color: white;
+}
+
+.story-modal-header h3 {
+  font-size: var(--text-24);
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: var(--text-20);
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.story-modal-tabs {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.story-modal-tabs .nav-tabs {
+  border-bottom: none;
+  padding: 0 1.5rem;
+}
+
+.story-modal-tabs .nav-link {
+  border: none;
+  padding: 1rem 1.5rem;
+  color: var(--light-black);
+  font-size: var(--text-18);
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.story-modal-tabs .nav-link:hover {
+  color: var(--primary-theme);
+}
+
+.story-modal-tabs .nav-link.active {
+  color: var(--primary-theme);
+  background-color: transparent;
+  border-bottom: 3px solid var(--primary-theme);
+}
+
+.story-modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Form elements */
+.story-textarea {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  padding: 1rem;
+  font-size: var(--text-16);
+  resize: none;
+  transition: all 0.3s ease;
+}
+
+.story-textarea:focus {
+  border-color: var(--primary-theme);
+  box-shadow: 0 0 0 0.2rem rgba(198, 124, 25, 0.15);
+  outline: none;
+}
+
+/* Character details */
+.character-details {
+  background-color: #f8f9fa;
+  border-left: 4px solid var(--primary-theme);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.character-details h6 {
+  color: var(--primary-theme);
+  font-weight: 600;
+}
+
+.character-details p {
+  color: var(--light-black);
+  line-height: 1.5;
+}
+
+/* Drafts list */
+.drafts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.draft-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.draft-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.draft-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.draft-date {
+  font-size: var(--text-14);
+  color: #718096;
+}
+
+.draft-character {
+  font-size: var(--text-14);
+  color: var(--primary-theme);
+  margin-bottom: 0.5rem;
+}
+
+.draft-preview {
+  font-size: var(--text-16);
+  color: var(--light-black);
+  margin-bottom: 1rem;
+}
+
+.draft-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: var(--text-48);
+  color: #e2e8f0;
+  margin-bottom: 1rem;
+}
+
+.empty-state h5 {
+  font-size: var(--text-20);
+  color: var(--light-black);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  font-size: var(--text-16);
+  color: #718096;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .story-modal-header h3 {
+    font-size: var(--text-20);
+  }
+
+  .story-modal-tabs .nav-link {
+    padding: 0.75rem 1rem;
+    font-size: var(--text-16);
+  }
+
+  .draft-actions {
+    flex-wrap: wrap;
+  }
+}

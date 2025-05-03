@@ -1,8 +1,8 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
+import CustomInputError from '@/Components/CustomInputError';
+import CustomInputLabel from '@/Components/CustomInputLabel';
+import CustomButton from '@/Components/CustomButton';
+import CustomTextInput from '@/Components/CustomTextInput';
+import CustomAuthLayout from '@/Layouts/CustomAuthLayout';
 import { Head, useForm } from '@inertiajs/react';
 
 export default function ConfirmPassword() {
@@ -19,37 +19,40 @@ export default function ConfirmPassword() {
     };
 
     return (
-        <GuestLayout>
+        <CustomAuthLayout title="Confirm Your">
             <Head title="Confirm Password" />
 
-            <div className="mb-4 text-sm text-gray-600">
+            <div className="mb-4 fs-16 secondry-font">
                 This is a secure area of the application. Please confirm your
                 password before continuing.
             </div>
 
-            <form onSubmit={submit}>
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+            <form onSubmit={submit} className="auth-form">
+                <div className="mb-4">
+                    <CustomInputLabel htmlFor="password" value="Password" />
 
-                    <TextInput
+                    <CustomTextInput
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="form-control mb-2"
                         isFocused={true}
                         onChange={(e) => setData('password', e.target.value)}
                     />
 
-                    <InputError message={errors.password} className="mt-2" />
+                    <CustomInputError message={errors.password} />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                <div className="d-grid gap-2">
+                    <CustomButton
+                        className="btn-lg"
+                        disabled={processing}
+                    >
                         Confirm
-                    </PrimaryButton>
+                    </CustomButton>
                 </div>
             </form>
-        </GuestLayout>
+        </CustomAuthLayout>
     );
 }

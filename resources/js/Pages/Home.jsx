@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <Layout>
       <Head title="Home" />
-      
+
       <section className="hero-banner text-center text-sm-start">
         <div className="container">
           <div className="row">
@@ -16,7 +16,7 @@ const Home = () => {
                 Join our creative community. Explore, interact, and create your own version of timeless tales.
               </p>
               <div className="d-flex align-items-center flex-column flex-sm-row gap-20">
-                <button className="btn btn-secondary">View Stories</button>
+                <Link href={route('stories.index')} className="btn btn-secondary">View Stories</Link>
                 <button className="btn btn-primary">Continue Story At Your Own Way</button>
               </div>
             </div>
@@ -105,7 +105,7 @@ const Home = () => {
                 <img src="/assets/images/book-03.png" className="mb-20 w-100" alt="" />
                 <div className="d-flex align-items-center justify-content-between mb-10">
                   <h4 className="light-black fs-36 fw-600">Death At Fallow End</h4>
-                  <div>
+                  <div className='d-flex align-items-center'>
                     <img src="/assets/images/comments.svg" className="" alt="comments" />
                     <span className="pl-10">64</span>
                   </div>
@@ -120,7 +120,7 @@ const Home = () => {
                 <img src="/assets/images/book-02.png" className="mb-20 w-100" alt="" />
                 <div className="d-flex align-items-center justify-content-between mb-10">
                   <h4 className="light-black fs-36 fw-600">Death At Fallow End</h4>
-                  <div>
+                  <div className='d-flex align-items-center'>
                     <img src="/assets/images/comments.svg" className="" alt="comments" />
                     <span className="pl-10">21</span>
                   </div>
@@ -135,7 +135,7 @@ const Home = () => {
                 <img src="/assets/images/book-04.png" className="mb-20 w-100" alt="" />
                 <div className="d-flex align-items-center justify-content-between mb-10">
                   <h4 className="light-black fs-36 fw-600">Death At Fallow End</h4>
-                  <div>
+                  <div className='d-flex align-items-center'>
                     <img src="/assets/images/comments.svg" className="" alt="comments" />
                     <span className="pl-10">06</span>
                   </div>

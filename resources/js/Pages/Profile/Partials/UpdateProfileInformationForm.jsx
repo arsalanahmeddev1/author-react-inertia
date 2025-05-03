@@ -1,14 +1,13 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import CustomInputError from '@/Components/CustomInputError';
+import CustomInputLabel from '@/Components/CustomInputLabel';
+import CustomButton from '@/Components/CustomButton';
+import CustomTextInput from '@/Components/CustomTextInput';
 import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 
 export default function UpdateProfileInformation({
     mustVerifyEmail,
     status,
-    className = '',
 }) {
     const user = usePage().props.auth.user;
 
@@ -25,24 +24,24 @@ export default function UpdateProfileInformation({
     };
 
     return (
-        <section className={className}>
+        <section>
             <header>
-                <h2 className="text-lg font-medium text-gray-900">
-                    Profile Information
+                <h2 className="profile-section-title primary-font">
+                    Profile <span>Information</span>
                 </h2>
 
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="profile-section-description secondry-font">
                     Update your account's profile information and email address.
                 </p>
             </header>
 
-            <form onSubmit={submit} className="mt-6 space-y-6">
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
+            <form onSubmit={submit} className="profile-form">
+                <div className="form-group">
+                    <CustomInputLabel htmlFor="name" value="Full Name" />
 
-                    <TextInput
+                    <CustomTextInput
                         id="name"
-                        className="mt-1 block w-full"
+                        className="form-control"
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
                         required
@@ -50,41 +49,41 @@ export default function UpdateProfileInformation({
                         autoComplete="name"
                     />
 
-                    <InputError className="mt-2" message={errors.name} />
+                    <CustomInputError message={errors.name} />
                 </div>
 
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                <div className="form-group">
+                    <CustomInputLabel htmlFor="email" value="Email Address" />
 
-                    <TextInput
+                    <CustomTextInput
                         id="email"
                         type="email"
-                        className="mt-1 block w-full"
+                        className="form-control"
                         value={data.email}
                         onChange={(e) => setData('email', e.target.value)}
                         required
                         autoComplete="username"
                     />
 
-                    <InputError className="mt-2" message={errors.email} />
+                    <CustomInputError message={errors.email} />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (
-                    <div>
-                        <p className="mt-2 text-sm text-gray-800">
+                    <div className="alert alert-warning mb-4 fs-16 secondry-font">
+                        <p className="mb-2">
                             Your email address is unverified.
-                            <Link
-                                href={route('verification.send')}
-                                method="post"
-                                as="button"
-                                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            >
-                                Click here to re-send the verification email.
-                            </Link>
                         </p>
+                        <Link
+                            href={route('verification.send')}
+                            method="post"
+                            as="button"
+                            className="text-primary-theme fw-bold secondry-font border-0 bg-transparent p-0"
+                        >
+                            Click here to re-send the verification email.
+                        </Link>
 
                         {status === 'verification-link-sent' && (
-                            <div className="mt-2 text-sm font-medium text-green-600">
+                            <div className="mt-2 alert alert-success fs-16">
                                 A new verification link has been sent to your
                                 email address.
                             </div>
@@ -92,8 +91,10 @@ export default function UpdateProfileInformation({
                     </div>
                 )}
 
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                <div className="d-flex align-items-center mt-4">
+                    <CustomButton disabled={processing}>
+                        Save Changes
+                    </CustomButton>
 
                     <Transition
                         show={recentlySuccessful}
@@ -102,8 +103,8 @@ export default function UpdateProfileInformation({
                         leave="transition ease-in-out"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-gray-600">
-                            Saved.
+                        <p className="profile-success-message secondry-font ms-3 mb-0">
+                            Saved successfully!
                         </p>
                     </Transition>
                 </div>
