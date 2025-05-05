@@ -35,17 +35,17 @@ const InnerHeader = () => {
                 <li><Link href="/stories" className={isActive('/stories') ? 'text-primary-theme' : ''}>Stories</Link></li>
                 <li><Link href="/publish" className={isActive('/publish') ? 'text-primary-theme' : ''}>Publish</Link></li>
                 <li><Link href="/about" className={isActive('/about') ? 'text-primary-theme' : ''}>About Us</Link></li>
-                <Link href='register' className="btn btn-secondary text-white d-block d-sm-none">Sign Up</Link>
-                <Link href='login' className="btn btn-secondary text-white d-block d-sm-none">Sign In</Link>
+                <Link href='/register' className="btn btn-secondary text-white d-block d-sm-none">Sign Up</Link>
+                <Link href='/login' className="btn btn-secondary text-white d-block d-sm-none">Sign In</Link>
                 <Link href="/guest" className="btn btn-secondary d-block d-sm-none">Guest Login</Link>
               </ul>
             </nav>
           </div>
           <div className="col-lg-4">
             <div className="d-flex align-items-center gap-20 pt-33 justify-content-end justify-content-lg-between">
-              <Link href='register' className="text-white d-none d-sm-block">Sign Up</Link>
+              <Link href='/register' className="text-white d-none d-sm-block">Sign Up</Link>
               <div className="vertical-line d-none d-sm-block"></div>
-              <Link href='login' className="text-white d-none d-sm-block">Sign In</Link>
+              <Link href='/login' className="text-white d-none d-sm-block">Sign In</Link>
               <div className="vertical-line d-none d-sm-block"></div>
               <Link href="/guest" className="btn btn-secondary d-none d-sm-block">Guest Login</Link>
               <div className="menu-icon">
