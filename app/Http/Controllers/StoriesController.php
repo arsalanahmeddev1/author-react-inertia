@@ -56,4 +56,17 @@ class StoriesController extends Controller
             'story' => $story,
         ]);
     }
+
+    /**
+     * Display the story for reading.
+     */
+    public function read(Story $story)
+    {
+        // Increment the read count
+        $story->increment('read_count');
+
+        return Inertia::render('Stories/Read', [
+            'story' => $story,
+        ]);
+    }
 }

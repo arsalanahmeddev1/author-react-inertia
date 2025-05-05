@@ -103,13 +103,18 @@ export default function Show({ story }) {
                       <Link href={route('stories.index')} className="btn btn-secondary d-flex align-items-center gap-1 story-btn back-btn">
                         <i className="fas fa-arrow-left me-2"></i> Back to Stories
                       </Link>
+                      <Link
+                        href={route('stories.read', story.id)}
+                        className="btn btn-primary d-flex align-items-center gap-1 story-btn read-btn"
+                      >
+                        <i className="fas fa-book me-2"></i> Read Story
+                      </Link>
                       <button
                         className="btn btn-primary story-btn continue-btn"
                         onClick={handleOpenModal}
                       >
-                        <i className="fas fa-book-open me-2"></i> Continue This Story
+                        <i className="fas fa-pen me-2"></i> Continue This Story
                       </button>
-
                     </div>
                   </div>
                 </div>

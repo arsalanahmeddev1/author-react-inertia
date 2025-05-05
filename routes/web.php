@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StoriesController;
 use Illuminate\Foundation\Application;
@@ -15,9 +16,14 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+Route::get('login/{provider}', [SocialAuthController::class, 'redirect'])->name('social.redirect');
+Route::get('login/{provider}/callback', [SocialAuthController::class, 'callback'])->name('social.callback');
+
+
 // Stories routes
 Route::get('/stories', [StoriesController::class, 'index'])->name('stories.index');
 Route::get('/stories/{story}', [StoriesController::class, 'show'])->name('stories.show');
+Route::get('/stories/{story}/read', [StoriesController::class, 'read'])->name('stories.read');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

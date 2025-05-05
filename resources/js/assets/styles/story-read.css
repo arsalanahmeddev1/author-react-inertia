@@ -1,0 +1,113 @@
+/* Reading Page Styles */
+
+.reading-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background-color: #f0f0f0;
+  z-index: 1000;
+}
+
+.reading-progress-bar {
+  height: 100%;
+  background-color: var(--primary-theme);
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.reading-container {
+  background-color: #f9f7f4;
+  min-height: calc(100vh - 80px);
+}
+
+.reading-content-wrapper {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  max-height: 70vh;
+}
+
+.reading-content {
+  padding: 2rem;
+  overflow-y: auto;
+  height: 70vh;
+  font-family: 'Georgia', serif;
+  line-height: 1.8;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.reading-content h2 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-theme);
+  font-family: var(--primary-font);
+}
+
+.reading-content .author {
+  font-style: italic;
+  margin-bottom: 2rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.reading-content p {
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.reading-header, .reading-footer {
+  padding: 1rem 0;
+}
+
+/* Bookmark button styles */
+.btn-outline-warning {
+  color: #ffc107;
+  border-color: #ffc107;
+}
+
+.btn-outline-warning:hover {
+  color: #212529;
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+
+.btn-warning {
+  color: #212529;
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .reading-content {
+    padding: 1.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .reading-content h2 {
+    font-size: 1.8rem;
+  }
+  
+  .reading-content-wrapper {
+    max-height: 80vh;
+  }
+  
+  .reading-content {
+    height: 80vh;
+  }
+}
+
+@media (max-width: 576px) {
+  .reading-content {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+  
+  .reading-content h2 {
+    font-size: 1.5rem;
+  }
+}
