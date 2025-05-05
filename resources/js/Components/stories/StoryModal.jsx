@@ -279,7 +279,7 @@ const StoryModal = ({ show, onHide, story }) => {
 
                 <div className="d-flex justify-content-end gap-3">
                   <button
-                    className="btn btn-secondary story-btn"
+                    className="btn btn-secondary story-btn secondry-font"
                     onClick={handleSaveDraft}
                     disabled={isLoading || !storyContent.trim() || !selectedCharacter}
                   >
@@ -287,7 +287,7 @@ const StoryModal = ({ show, onHide, story }) => {
                     Save Draft
                   </button>
                   <button
-                    className="btn btn-primary story-btn"
+                    className="btn btn-primary story-btn secondry-font"
                     onClick={handlePublish}
                     disabled={isLoading || !storyContent.trim() || !selectedCharacter}
                   >
@@ -319,13 +319,13 @@ const StoryModal = ({ show, onHide, story }) => {
                         <p className="draft-preview">{draft.content.substring(0, 150)}...</p>
                         <div className="draft-actions">
                           <button
-                            className="btn btn-sm btn-outline-secondary"
+                            className="btn btn-sm btn-outline-secondary secondry-font"
                             onClick={() => handleEditDraft(draft)}
                           >
                             <i className="fas fa-edit me-1"></i> Edit
                           </button>
                           <button
-                            className="btn btn-sm btn-outline-primary"
+                            className="btn btn-sm btn-outline-primary secondry-font"
                             onClick={() => handlePublishDraft(draft)}
                             disabled={isLoading}
                           >
@@ -333,7 +333,7 @@ const StoryModal = ({ show, onHide, story }) => {
                             Publish
                           </button>
                           <button
-                            className="btn btn-sm btn-outline-danger"
+                            className="btn btn-sm btn-outline-danger secondry-font"
                             onClick={() => setSavedDrafts(savedDrafts.filter(d => d.id !== draft.id))}
                           >
                             <i className="fas fa-trash me-1"></i> Delete

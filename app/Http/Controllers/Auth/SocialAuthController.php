@@ -40,7 +40,7 @@ class SocialAuthController extends Controller
 
             Auth::login($user);
 
-            return redirect()->route('dashboard'); // Change this to your intended route
+            return redirect()->route('home'); // Redirect to home page
 
         } catch (\Exception $e) {
             return redirect()->route('login')->withErrors(['social_login' => 'Failed to login using ' . $provider]);

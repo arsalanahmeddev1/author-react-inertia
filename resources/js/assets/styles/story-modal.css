@@ -284,6 +284,32 @@
   gap: 0.5rem;
 }
 
+.draft-actions .btn {
+  border-radius: var(--text-60);
+  font-size: var(--text-16);
+  transition: all 0.3s ease;
+}
+
+.draft-actions .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.draft-actions .btn-outline-secondary:hover {
+  background-color: var(--secondry-theme);
+  border-color: var(--secondry-theme);
+}
+
+.draft-actions .btn-outline-primary:hover {
+  background-color: var(--primary-theme);
+  border-color: var(--primary-theme);
+}
+
+.draft-actions .btn-outline-danger:hover {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
 /* Empty state */
 .empty-state {
   display: flex;
@@ -309,6 +335,15 @@
 .empty-state p {
   font-size: var(--text-16);
   color: #718096;
+}
+
+/* Login Prompt Modal */
+.login-prompt-modal {
+  max-width: 500px;
+}
+
+.login-icon {
+  color: var(--primary-theme);
 }
 
 /* Responsive adjustments */

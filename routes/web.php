@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\GuestAuthController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StoriesController;
@@ -19,15 +20,19 @@ Route::get('/', function () {
 Route::get('login/{provider}', [SocialAuthController::class, 'redirect'])->name('social.redirect');
 Route::get('login/{provider}/callback', [SocialAuthController::class, 'callback'])->name('social.callback');
 
+// Guest login route
+Route::get('/guest-login', [GuestAuthController::class, 'guestLogin'])->name('guest.login');
+
+// Logout and register route for guest users
+Route::get('/logout-and-register', [GuestAuthController::class, 'logoutAndRegister'])->name('guest.logout.register');
+
 
 // Stories routes
 Route::get('/stories', [StoriesController::class, 'index'])->name('stories.index');
 Route::get('/stories/{story}', [StoriesController::class, 'show'])->name('stories.show');
 Route::get('/stories/{story}/read', [StoriesController::class, 'read'])->name('stories.read');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Dashboard route removed - redirecting to home instead
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

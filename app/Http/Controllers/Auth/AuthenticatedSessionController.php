@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('home', absolute: false));
     }
 
     /**
@@ -41,11 +41,22 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $user = Auth::user();
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        if ($user && $user->is_guest) {
+            $user->delete();
+        }
+
+        // Check if there's a redirect parameter in the request
+        if ($request->has('redirect_to') && $request->redirect_to === 'register') {
+            return redirect('/register');
+        }
 
         return redirect('/');
     }

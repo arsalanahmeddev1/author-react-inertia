@@ -1,19 +1,27 @@
 import { useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import InnerLayout from '@/Layouts/InnerLayout';
 import StoryModal from '@/Components/stories/StoryModal';
 import CharacterModal from '@/Components/stories/CharacterModal';
+import LoginPromptModal from '@/Components/stories/LoginPromptModal';
 import '@/assets/styles/stories.css';
 import '@/assets/styles/story-modal.css';
 import '@/assets/styles/character-modal.css';
 
 export default function Show({ story }) {
+  const { auth } = usePage().props;
   const [showModal, setShowModal] = useState(false);
   const [showCharacterModal, setShowCharacterModal] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
   const handleOpenModal = () => {
-    setShowModal(true);
+    // Only allow access if user is logged in and is NOT a guest user
+    if (auth.user && !auth.user.is_guest) {
+      setShowModal(true);
+    } else {
+      setShowLoginPrompt(true);
+    }
   };
 
   const handleCloseModal = () => {
@@ -28,6 +36,10 @@ export default function Show({ story }) {
   const handleCloseCharacterModal = () => {
     setShowCharacterModal(false);
     setSelectedCharacter(null);
+  };
+
+  const handleCloseLoginPrompt = () => {
+    setShowLoginPrompt(false);
   };
 
   return (
@@ -135,6 +147,11 @@ export default function Show({ story }) {
         show={showCharacterModal}
         onHide={handleCloseCharacterModal}
         character={selectedCharacter}
+      />
+
+      <LoginPromptModal
+        show={showLoginPrompt}
+        onHide={handleCloseLoginPrompt}
       />
     </InnerLayout>
   );

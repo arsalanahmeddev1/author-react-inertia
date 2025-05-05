@@ -194,15 +194,33 @@
 
 /* Story buttons styling */
 .story-btn {
-  padding: 8px 16px;
-  font-size: var(--text-16);
+  padding: var(--text-10) var(--text-20);
+  font-size: var(--text-18);
   font-weight: 500;
+  border-radius: var(--text-60);
   transition: all 0.3s ease;
+  border: none;
 }
 
 .story-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary.story-btn {
+  background-color: var(--primary-theme);
+}
+
+.btn-primary.story-btn:hover {
+  background-color: var(--secondry-theme);
+}
+
+.btn-secondary.story-btn {
+  background-color: var(--secondry-theme);
+}
+
+.btn-secondary.story-btn:hover {
+  background-color: var(--primary-theme);
 }
 
 .back-btn:hover {
