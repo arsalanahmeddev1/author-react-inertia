@@ -21,7 +21,7 @@ return new class extends Migration
                 $table->string('cover_image');
                 $table->integer('read_count')->default(0);
                 $table->integer('comment_count')->default(0);
-                $table->string('style');
+                $table->string('style')->nullable();
                 $table->timestamps();
             });
         }

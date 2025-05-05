@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 
 export default function Read({ story }) {
   const [readingProgress, setReadingProgress] = useState(0);
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  // Removed bookmark state
   const [showCover, setShowCover] = useState(true);
   const contentRef = useRef(null);
 
@@ -45,24 +45,7 @@ export default function Read({ story }) {
     }
   };
 
-  // Toggle bookmark
-  const toggleBookmark = () => {
-    const newBookmarkState = !isBookmarked;
-    setIsBookmarked(newBookmarkState);
-
-    // Save bookmark state to localStorage
-    if (newBookmarkState) {
-      const bookmarks = JSON.parse(localStorage.getItem('story-bookmarks') || '[]');
-      if (!bookmarks.includes(story.id)) {
-        bookmarks.push(story.id);
-        localStorage.setItem('story-bookmarks', JSON.stringify(bookmarks));
-      }
-    } else {
-      const bookmarks = JSON.parse(localStorage.getItem('story-bookmarks') || '[]');
-      const updatedBookmarks = bookmarks.filter(id => id !== story.id);
-      localStorage.setItem('story-bookmarks', JSON.stringify(updatedBookmarks));
-    }
-  };
+  // Bookmark functionality removed
 
 
 
@@ -77,9 +60,7 @@ export default function Read({ story }) {
 
   // Load saved position and settings on component mount
   useEffect(() => {
-    // Check if story is bookmarked
-    const bookmarks = JSON.parse(localStorage.getItem('story-bookmarks') || '[]');
-    setIsBookmarked(bookmarks.includes(story.id));
+    // Bookmark check removed
 
     // Show cover for 2 seconds, then auto-start reading
     const timer = setTimeout(() => {
@@ -157,17 +138,10 @@ export default function Read({ story }) {
                   <div className="d-flex align-items-center">
                     <Link
                       href={route('stories.show', story.id)}
-                      className="btn btn-sm btn-outline-secondary me-2"
+                      className="btn btn-primary story-btn"
                     >
-                      <i className="fas fa-arrow-left me-1"></i> Back
+                      <i className="fas fa-arrow-left me-2"></i> Back to Story
                     </Link>
-                    <button
-                      className={`btn btn-sm ${isBookmarked ? 'btn-warning' : 'btn-outline-warning'} me-2`}
-                      onClick={toggleBookmark}
-                      title={isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
-                    >
-                      <i className={`${isBookmarked ? 'fas' : 'far'} fa-bookmark`}></i>
-                    </button>
                   </div>
                 </div>
               </div>
@@ -199,13 +173,13 @@ export default function Read({ story }) {
 
               {/* Chapter Navigation */}
               <div className="chapter-navigation">
-                <button className="btn btn-outline-secondary" disabled>
+                <button className="btn btn-outline-secondary story-btn chapter-btn" disabled>
                   <i className="fas fa-chevron-left me-2"></i> Previous Chapter
                 </button>
-                <div className="chapter-indicator">
+                <div className="chapter-indicator secondry-font">
                   Chapter 1 of 1
                 </div>
-                <button className="btn btn-outline-secondary" disabled>
+                <button className="btn btn-outline-secondary story-btn chapter-btn" disabled>
                   Next Chapter <i className="fas fa-chevron-right ms-2"></i>
                 </button>
               </div>
@@ -214,12 +188,22 @@ export default function Read({ story }) {
               <div className="reading-footer">
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    <span className="badge bg-secondary me-2">{story.genre}</span>
-                    <span className="badge bg-primary">{story.style}</span>
+                    <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block me-2">
+                      <i className="fas fa-bookmark me-2"></i> {story.genre}
+                    </span>
+                    {story.style && (
+                      <span className="label bg-primary-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
+                        <i className="fas fa-pen-fancy me-2"></i> {story.style}
+                      </span>
+                    )}
                   </div>
                   <div className="reading-stats">
-                    <span><i className="fas fa-eye me-1"></i> {story.read_count} reads</span>
-                    <span className="ms-3"><i className="fas fa-comment me-1"></i> {story.comment_count} comments</span>
+                    <span className="fs-18 secondry-font">
+                      <i className="fas fa-eye me-2 text-primary-theme"></i> {story.read_count} reads
+                    </span>
+                    <span className="ms-3 fs-18 secondry-font">
+                      <i className="fas fa-comment me-2 text-primary-theme"></i> {story.comment_count} comments
+                    </span>
                   </div>
                 </div>
 

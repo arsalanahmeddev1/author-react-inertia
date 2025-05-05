@@ -108,19 +108,102 @@
 }
 
 /* Form elements */
-.story-textarea {
+.editor-container {
+  position: relative;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.editor-container:focus-within {
+  border-color: var(--primary-theme);
+  box-shadow: 0 0 0 0.2rem rgba(198, 124, 25, 0.15);
+}
+
+.story-textarea {
+  border-radius: 0;
+  border: none;
   padding: 1rem;
   font-size: var(--text-16);
   resize: none;
   transition: all 0.3s ease;
+  min-height: 250px;
+  overflow-y: auto;
+  line-height: 1.6;
 }
 
 .story-textarea:focus {
-  border-color: var(--primary-theme);
-  box-shadow: 0 0 0 0.2rem rgba(198, 124, 25, 0.15);
+  box-shadow: none;
   outline: none;
+}
+
+.story-textarea[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  color: #adb5bd;
+  font-style: italic;
+}
+
+.story-textarea[contenteditable=true] {
+  white-space: pre-wrap;
+}
+
+/* Story starter styling */
+.story-textarea hr {
+  margin: 1rem 0;
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.story-textarea strong {
+  color: var(--primary-theme);
+}
+
+.story-textarea em {
+  color: var(--light-black);
+  font-style: italic;
+}
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e2e8f0;
+}
+
+.editor-btn {
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--light-black);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editor-btn:hover {
+  background-color: #e2e8f0;
+  color: var(--primary-theme);
+}
+
+.editor-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #e2e8f0;
+  margin: 0 0.5rem;
+}
+
+.word-count {
+  background-color: #f8f9fa;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: var(--text-14);
+  color: var(--light-black);
 }
 
 /* Character details */
@@ -171,16 +254,29 @@
   color: #718096;
 }
 
-.draft-character {
+.draft-info {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.draft-character, .draft-word-count {
   font-size: var(--text-14);
   color: var(--primary-theme);
-  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.draft-word-count {
+  color: var(--secondry-theme);
 }
 
 .draft-preview {
   font-size: var(--text-16);
   color: var(--light-black);
   margin-bottom: 1rem;
+  line-height: 1.5;
+  border-left: 3px solid #e2e8f0;
+  padding-left: 0.75rem;
 }
 
 .draft-actions {
