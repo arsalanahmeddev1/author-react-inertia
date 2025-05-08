@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import Header from '../Components/common/Header';
 import Footer from '../Components/common/Footer';
+import ToastContainer from '../Components/common/ToastContainer';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -31,6 +32,7 @@ export default function Layout({ children }) {
       <Header />
       <main>{children}</main>
       <Footer />
+      <ToastContainer />
     </>
   );
 }

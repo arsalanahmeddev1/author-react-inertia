@@ -33,8 +33,11 @@ const InnerHeader = () => {
                 <div className="close-icon">
                   <i className="fa-solid fa-xmark menu-toggle" onClick={toggleMenu}></i>
                 </div>
-                <li><Link href="/" className={isActive('/') && !isActive('/stories') && !isActive('/publish') && !isActive('/about') ? 'text-primary-theme' : ''}>Home</Link></li>
+                <li><Link href="/" className={isActive('/') && !isActive('/stories') && !isActive('/publish') && !isActive('/about') && !isActive('/community') ? 'text-primary-theme' : ''}>Home</Link></li>
                 <li><Link href="/stories" className={isActive('/stories') ? 'text-primary-theme' : ''}>Stories</Link></li>
+                {auth?.user && (
+                  <li><Link href="/community" className={isActive('/community') ? 'text-primary-theme' : ''}>Community</Link></li>
+                )}
                 <li><Link href="/publish" className={isActive('/publish') ? 'text-primary-theme' : ''}>Publish</Link></li>
                 <li><Link href="/about" className={isActive('/about') ? 'text-primary-theme' : ''}>About Us</Link></li>
                 {!auth?.user ? (

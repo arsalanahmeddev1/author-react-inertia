@@ -497,6 +497,11 @@ span.fs-54 {
 .pt-42 {
   padding-top: var(--text-42);
 }
+.story-title {
+  font-size: var(--text-29);
+  font-weight: 600;
+  max-width: 32rem;
+}
 /* responsive */
 @media(min-width: 1560px) {
   .container {

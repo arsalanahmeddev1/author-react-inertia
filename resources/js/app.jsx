@@ -3,6 +3,8 @@ import '../css/app.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 // Import FontAwesome for icons
 import '@fortawesome/fontawesome-free/css/all.css';
+// Import React Toastify
+import 'react-toastify/dist/ReactToastify.css';
 
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';

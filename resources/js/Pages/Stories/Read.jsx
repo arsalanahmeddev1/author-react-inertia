@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Head, Link } from '@inertiajs/react';
+import axios from 'axios';
 import InnerLayout from '@/Layouts/InnerLayout';
 import CommentSection from '@/Components/comments/CommentSection';
 import '@/assets/styles/stories.css';
@@ -12,6 +13,31 @@ export default function Read({ story, auth }) {
   // Removed bookmark state
   const [showCover, setShowCover] = useState(true);
   const contentRef = useRef(null);
+  const [commentCount, setCommentCount] = useState(story.comment_count || 0);
+
+  // Fetch the latest comment count when the page loads
+  useEffect(() => {
+    const fetchCommentCount = async () => {
+      try {
+        const response = await axios.get(route('comments.get', story.id));
+        const comments = response.data.comments;
+
+        // Count top-level comments and all replies
+        let totalCount = comments.length;
+        comments.forEach(comment => {
+          if (comment.replies && comment.replies.length > 0) {
+            totalCount += comment.replies.length;
+          }
+        });
+
+        setCommentCount(totalCount);
+      } catch (error) {
+        console.error('Error fetching comment count:', error);
+      }
+    };
+
+    fetchCommentCount();
+  }, [story.id]);
 
   // Get story content from the database, or create a default if not available
   const getStoryContent = () => {
@@ -204,7 +230,7 @@ export default function Read({ story, auth }) {
                       <i className="fas fa-eye me-2 text-primary-theme"></i> {story.read_count} reads
                     </span>
                     <span className="ms-3 fs-18 secondry-font">
-                      <i className="fas fa-comment me-2 text-primary-theme"></i> {story.comment_count} comments
+                      <i className="fas fa-comment me-2 text-primary-theme"></i> {commentCount} comments
                     </span>
                   </div>
                 </div>

@@ -37,7 +37,8 @@ class CommentsController extends Controller
 
             // Increment the comment count on the story
             // We count both top-level comments and replies
-            $story->increment('comment_count');
+            $story->comment_count = Comment::where('story_id', $story->id)->count();
+            $story->save();
 
             return Redirect::back()
                 ->with('success', 'Comment added successfully!')
@@ -89,14 +90,15 @@ class CommentsController extends Controller
         // Get the story before deleting the comment
         $story = $comment->story;
 
-        // Count how many replies this comment has (if any)
-        $replyCount = $comment->replies()->count();
+        // No need to count replies separately as we'll count all comments after deletion
 
         // Delete the comment (this will also delete all replies due to cascade)
         $comment->delete();
 
-        // Decrement the comment count on the story (including this comment and all its replies)
-        $story->decrement('comment_count', 1 + $replyCount);
+        // Update the comment count on the story after deletion
+        // Count all remaining comments for this story
+        $story->comment_count = Comment::where('story_id', $story->id)->count();
+        $story->save();
 
         return Redirect::back()
             ->with('success', 'Comment deleted successfully!')

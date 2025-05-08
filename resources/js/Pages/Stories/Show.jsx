@@ -5,6 +5,7 @@ import InnerLayout from '@/Layouts/InnerLayout';
 import StoryModal from '@/Components/stories/StoryModal';
 import CharacterModal from '@/Components/stories/CharacterModal';
 import LoginPromptModal from '@/Components/stories/LoginPromptModal';
+import LikeButton from '@/Components/stories/LikeButton';
 import '@/assets/styles/stories.css';
 import '@/assets/styles/story-modal.css';
 import '@/assets/styles/character-modal.css';
@@ -91,6 +92,9 @@ export default function Show({ story }) {
                       <span className="fs-18 secondry-font">
                         <i className="fas fa-comment me-2 text-primary-theme"></i> {commentCount}
                       </span>
+                    </div>
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <LikeButton storyId={story.id} className="fs-18 secondry-font" />
                     </div>
                     <div className="mb-3">
                       <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">

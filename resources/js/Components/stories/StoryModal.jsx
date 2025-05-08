@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { Tab, Nav } from 'react-bootstrap';
+import { usePage } from '@inertiajs/react';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const StoryModal = ({ show, onHide, story }) => {
+  const { auth } = usePage().props;
   const [activeTab, setActiveTab] = useState('continue');
   const [storyContent, setStoryContent] = useState('');
   const [wordCount, setWordCount] = useState(0);
@@ -10,6 +14,7 @@ const StoryModal = ({ show, onHide, story }) => {
   const [characterDetails, setCharacterDetails] = useState(null);
   const [savedDrafts, setSavedDrafts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingDrafts, setIsLoadingDrafts] = useState(false);
 
   // Reset state when modal is opened
   useEffect(() => {
@@ -21,8 +26,44 @@ const StoryModal = ({ show, onHide, story }) => {
       if (editorRef.current) {
         editorRef.current.innerHTML = '';
       }
+
+      // Load drafts when the modal is opened
+      if (auth.user) {
+        loadDrafts();
+      }
     }
   }, [show]);
+
+  // Load drafts from the API
+  const loadDrafts = async () => {
+    if (!auth.user) return;
+
+    setIsLoadingDrafts(true);
+
+    try {
+      const response = await axios.get(route('drafts.index'));
+
+      if (response.data && response.data.drafts) {
+        // Format the drafts to match our expected structure
+        const formattedDrafts = response.data.drafts.map(draft => ({
+          id: draft.id,
+          title: draft.title,
+          content: draft.content,
+          htmlContent: draft.html_content,
+          character: draft.character,
+          characterId: draft.character_id,
+          date: new Date(draft.created_at).toLocaleDateString(),
+          wordCount: draft.word_count
+        }));
+
+        setSavedDrafts(formattedDrafts);
+      }
+    } catch (error) {
+      console.error('Error loading drafts:', error);
+    } finally {
+      setIsLoadingDrafts(false);
+    }
+  };
 
   // Initialize editor
   useEffect(() => {
@@ -89,6 +130,77 @@ const StoryModal = ({ show, onHide, story }) => {
     }
   };
 
+  // Check if the story is ready for community
+  const isReadyForCommunity = () => {
+    // Story is ready if either:
+    // 1. A character is selected (regardless of content)
+    // 2. There's content in the editor (regardless of character selection)
+    return selectedCharacter || (editorRef.current && editorRef.current.innerText.trim().length > 0);
+  };
+
+  // Handle adding to community
+  const handleAddToCommunity = async () => {
+    setIsLoading(true);
+
+    try {
+      // Get the content from the editor
+      const content = editorRef.current ? editorRef.current.innerHTML : '';
+
+      // Prepare the data for the API call
+      const data = {
+        title: `${story.title} - Continued by ${selectedCharacter ? 'Character' : 'User'}`,
+        content: content,
+        character_id: selectedCharacter || null,
+        original_story_id: story.id,
+      };
+
+      // Make the API call
+      const response = await axios.post(route('community.store'), data);
+
+      if (response.data.success) {
+        // Redirect to the community story page
+        window.location.href = route('community.show', response.data.story.id);
+      } else {
+        toast.error('Failed to add story to community. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error adding story to community:', error);
+      toast.error('Failed to add story to community. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle adding to community from draft
+  const handleAddToCommunityFromDraft = async (draft) => {
+    setIsLoading(true);
+
+    try {
+      // Prepare the data for the API call
+      const data = {
+        title: `${story.title} - Continued from Draft`,
+        content: draft.htmlContent || `<p>${draft.content}</p>`,
+        character_id: draft.characterId || null,
+        original_story_id: story.id,
+      };
+
+      // Make the API call
+      const response = await axios.post(route('community.store'), data);
+
+      if (response.data.success) {
+        // Redirect to the community story page
+        window.location.href = route('community.show', response.data.story.id);
+      } else {
+        toast.error('Failed to add story to community. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error adding story to community:', error);
+      toast.error('Failed to add story to community. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Format text
   const formatText = (command, value = null) => {
     document.execCommand(command, false, value);
@@ -96,26 +208,49 @@ const StoryModal = ({ show, onHide, story }) => {
   };
 
   // Save draft
-  const handleSaveDraft = () => {
-    // This would connect to your backend in a real implementation
+  const handleSaveDraft = async () => {
+    // Connect to the backend to save the draft
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      const newDraft = {
-        id: Date.now(),
+    try {
+      const draftData = {
+        story_id: story.id,
+        character_id: selectedCharacter || null,
         title: `Draft of ${story.title}`,
         content: storyContent,
-        htmlContent: editorRef.current ? editorRef.current.innerHTML : '',
-        character: characterDetails,
-        characterId: selectedCharacter,
-        date: new Date().toLocaleDateString(),
-        wordCount: wordCount
+        html_content: editorRef.current ? editorRef.current.innerHTML : '',
+        word_count: wordCount
       };
 
-      setSavedDrafts([newDraft, ...savedDrafts]);
+      const response = await axios.post(route('drafts.store'), draftData);
+
+      if (response.data && response.data.draft) {
+        // Format the draft to match our expected structure
+        const newDraft = {
+          id: response.data.draft.id,
+          title: response.data.draft.title,
+          content: response.data.draft.content,
+          htmlContent: response.data.draft.html_content,
+          character: response.data.draft.character,
+          characterId: response.data.draft.character_id,
+          date: new Date(response.data.draft.created_at).toLocaleDateString(),
+          wordCount: response.data.draft.word_count
+        };
+
+        // Add the new draft to the list
+        setSavedDrafts([newDraft, ...savedDrafts]);
+
+        // Show success message with toast
+        toast.success('Draft saved successfully!', {
+          icon: '📝',
+        });
+      }
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      toast.error('Failed to save draft. Please try again.');
+    } finally {
       setIsLoading(false);
-    }, 500);
+    }
   };
 
   // Publish story from editor
@@ -125,11 +260,15 @@ const StoryModal = ({ show, onHide, story }) => {
 
     // Simulate API call
     setTimeout(() => {
-      alert('Your story has been published!');
+      toast.success('Your story has been published!', {
+        icon: '📚',
+      });
       setIsLoading(false);
       onHide();
     }, 500);
   };
+
+
 
   // Publish draft
   const handlePublishDraft = (draft) => {
@@ -138,7 +277,9 @@ const StoryModal = ({ show, onHide, story }) => {
 
     // Simulate API call
     setTimeout(() => {
-      alert(`Your draft "${draft.title}" has been published!`);
+      toast.success(`Your draft "${draft.title}" has been published!`, {
+        icon: '📚',
+      });
       setIsLoading(false);
 
       // Remove from drafts after publishing
@@ -177,6 +318,36 @@ const StoryModal = ({ show, onHide, story }) => {
         const words = content.trim() ? content.trim().split(/\s+/) : [];
         setWordCount(words.length);
       }
+    }
+  };
+
+  // Delete draft
+  const handleDeleteDraft = async (draftId) => {
+    if (!confirm('Are you sure you want to delete this draft?')) {
+      return;
+    }
+
+    toast.info('Deleting draft...', {
+      autoClose: 1000,
+    });
+
+    setIsLoading(true);
+
+    try {
+      await axios.delete(route('drafts.destroy', draftId));
+
+      // Remove the draft from the list
+      setSavedDrafts(savedDrafts.filter(d => d.id !== draftId));
+
+      // Show success message
+      toast.success('Draft deleted successfully!', {
+        icon: '🗑️',
+      });
+    } catch (error) {
+      console.error('Error deleting draft:', error);
+      toast.error('Failed to delete draft. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -281,15 +452,23 @@ const StoryModal = ({ show, onHide, story }) => {
                   <button
                     className="btn btn-secondary story-btn secondry-font"
                     onClick={handleSaveDraft}
-                    disabled={isLoading || !storyContent.trim() || !selectedCharacter}
+                    disabled={isLoading || !isReadyForCommunity()}
                   >
                     {isLoading ? <i className="fas fa-spinner fa-spin me-2"></i> : <i className="fas fa-save me-2"></i>}
                     Save Draft
                   </button>
                   <button
                     className="btn btn-primary story-btn secondry-font"
+                    onClick={() => handleAddToCommunity()}
+                    disabled={isLoading || !isReadyForCommunity()}
+                  >
+                    {isLoading ? <i className="fas fa-spinner fa-spin me-2"></i> : <i className="fas fa-users me-2"></i>}
+                    Add to Community
+                  </button>
+                  <button
+                    className="btn btn-secondary story-btn secondry-font"
                     onClick={handlePublish}
-                    disabled={isLoading || !storyContent.trim() || !selectedCharacter}
+                    disabled={isLoading || !isReadyForCommunity()}
                   >
                     {isLoading ? <i className="fas fa-spinner fa-spin me-2"></i> : <i className="fas fa-paper-plane me-2"></i>}
                     Publish
@@ -321,22 +500,36 @@ const StoryModal = ({ show, onHide, story }) => {
                           <button
                             className="btn btn-sm btn-outline-secondary secondry-font"
                             onClick={() => handleEditDraft(draft)}
+                            style={{ borderColor: 'var(--secondry-theme)', color: 'var(--secondry-theme)' }}
                           >
                             <i className="fas fa-edit me-1"></i> Edit
                           </button>
                           <button
-                            className="btn btn-sm btn-outline-primary secondry-font"
+                            className="btn btn-sm btn-outline-secondary secondry-font"
                             onClick={() => handlePublishDraft(draft)}
-                            disabled={isLoading}
+                            disabled={isLoading || (!draft.content && !draft.characterId)}
+                            style={{ borderColor: 'var(--secondry-theme)', color: 'var(--secondry-theme)' }}
                           >
                             {isLoading ? <i className="fas fa-spinner fa-spin me-1"></i> : <i className="fas fa-paper-plane me-1"></i>}
                             Publish
                           </button>
                           <button
-                            className="btn btn-sm btn-outline-danger secondry-font"
-                            onClick={() => setSavedDrafts(savedDrafts.filter(d => d.id !== draft.id))}
+                            className="btn btn-sm btn-outline-primary secondry-font"
+                            onClick={() => handleAddToCommunityFromDraft(draft)}
+                            disabled={isLoading || (!draft.content && !draft.characterId)}
+                            style={{ borderColor: 'var(--primary-theme)', color: 'var(--primary-theme)' }}
                           >
-                            <i className="fas fa-trash me-1"></i> Delete
+                            {isLoading ? <i className="fas fa-spinner fa-spin me-1"></i> : <i className="fas fa-users me-1"></i>}
+                            Add to Community
+                          </button>
+                          <button
+                            className="btn btn-sm btn-outline-danger secondry-font"
+                            onClick={() => handleDeleteDraft(draft.id)}
+                            disabled={isLoading}
+                            style={{ borderColor: '#dc3545', color: '#dc3545' }}
+                          >
+                            {isLoading ? <i className="fas fa-spinner fa-spin me-1"></i> : <i className="fas fa-trash me-1"></i>}
+                            Delete
                           </button>
                         </div>
                       </div>

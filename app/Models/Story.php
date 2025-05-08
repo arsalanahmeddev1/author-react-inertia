@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Story extends Model
 {
@@ -23,7 +24,19 @@ class Story extends Model
         'cover_image',
         'read_count',
         'comment_count',
+        'likes_count',
         'style',
+        'content',
+        'is_community',
+    ];
+
+    /**
+     * The attributes that should have default values.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'is_community' => false,
     ];
 
     /**
@@ -40,5 +53,38 @@ class Story extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Get the reads for the story.
+     */
+    public function reads(): HasMany
+    {
+        return $this->hasMany(StoryRead::class);
+    }
+
+    /**
+     * Get the likes for the story.
+     */
+    public function likes(): HasMany
+    {
+        return $this->hasMany(StoryLike::class);
+    }
+
+    /**
+     * Get the users who liked the story.
+     */
+    public function likedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'story_likes')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the drafts for the story.
+     */
+    public function drafts(): HasMany
+    {
+        return $this->hasMany(StoryDraft::class);
     }
 }

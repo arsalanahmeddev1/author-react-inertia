@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -65,5 +66,30 @@ class User extends Authenticatable
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Get the story likes for the user.
+     */
+    public function storyLikes(): HasMany
+    {
+        return $this->hasMany(StoryLike::class);
+    }
+
+    /**
+     * Get the stories that the user has liked.
+     */
+    public function likedStories(): BelongsToMany
+    {
+        return $this->belongsToMany(Story::class, 'story_likes')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the story drafts for the user.
+     */
+    public function storyDrafts(): HasMany
+    {
+        return $this->hasMany(StoryDraft::class);
     }
 }

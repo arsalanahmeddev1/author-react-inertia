@@ -5,13 +5,13 @@ import LikeCount from '@/Components/stories/LikeCount';
 import { debounce } from 'lodash';
 import '@/assets/styles/stories.css';
 
-export default function Index({ stories, genres, filters }) {
+export default function CommunityIndex({ stories, genres, filters }) {
   const [search, setSearch] = useState(filters.search || '');
   const [genre, setGenre] = useState(filters.genre || 'all');
 
   // Debounce the search to avoid too many requests
   const debouncedSearch = debounce((value) => {
-    router.get(route('stories.index'), { search: value, genre }, { preserveState: true });
+    router.get(route('community.index'), { search: value, genre }, { preserveState: true });
   }, 300);
 
   // Handle search input change
@@ -24,7 +24,7 @@ export default function Index({ stories, genres, filters }) {
   const handleGenreChange = (e) => {
     const selectedGenre = e.target.value;
     setGenre(selectedGenre);
-    router.get(route('stories.index'), { search, genre: selectedGenre }, { preserveState: true });
+    router.get(route('community.index'), { search, genre: selectedGenre }, { preserveState: true });
   };
 
   // Clean up debounce on unmount
@@ -38,18 +38,18 @@ export default function Index({ stories, genres, filters }) {
 
   return (
     <InnerLayout>
-      <Head title="Stories" />
+      <Head title="Community Stories" />
 
       <section className="py-100 sec-bg">
         <div className="container">
           <div className="row text-center mb-70">
             <div className="col-12" data-aos-duration="3000" data-aos="fade-down">
               <span className="fs-32 light-black ls-8">Explore</span>
-              <h2 className="heading mb-10">Our <span className="">Stories</span></h2>
-              <h5 className="secondry-font fs-30 light-black mb-20">Discover Tales That Captivate</h5>
+              <h2 className="heading mb-10">Community <span className="">Stories</span></h2>
+              <h5 className="secondry-font fs-30 light-black mb-20">Stories Written by Our Community</h5>
               <p className="fs-20 mb-30">
-                Browse our collection of gripping stories set against richly detailed backdrops of mystery, suspense, and romance.
-                Find your next literary adventure.
+                Discover unique continuations and interpretations of our stories, written by fellow community members.
+                Find inspiration, enjoy creative twists, and see how others have expanded on our original tales.
               </p>
             </div>
           </div>
@@ -97,22 +97,35 @@ export default function Index({ stories, genres, filters }) {
               stories.data.map((story) => (
                 <div className="col-lg-4 col-md-6" key={story.id}>
                   <div className="cards" data-aos-duration="3000" data-aos="flip-left">
-                    <img src={`/${story.cover_image}`} className="mb-20 w-100 story-book-img" alt={story.title} />
+                    <img
+                      src={`/${story.cover_image}`}
+                      className="mb-20 w-100 story-book-img"
+                      alt={story.title}
+                      onError={(e) => {
+                        const fallbackImages = [
+                          "/assets/images/book-03.png",
+                          "/assets/images/book-02.png",
+                          "/assets/images/book-04.png"
+                        ];
+                        e.target.src = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
+                      }}
+                    />
                     <div className="d-flex align-items-center justify-content-between mb-10">
-                      <h4 className="light-black fs-36 fw-600">{story.title}</h4>
+                      <h4 className="light-black story-title">{story.title}</h4>
                       <div className='d-flex align-items-center'>
                         <img src="/assets/images/comments.svg" className="" alt="comments" />
-                        <span className="pl-10">{story.comment_count}</span>
+                        <span className="pl-10">{story.comment_count || 0}</span>
                       </div>
                     </div>
                     <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">{story.author}</h4>
                     <div className="d-flex justify-content-between align-items-center mb-20 pl-10">
                       <div className='d-flex align-items-center'>
-                      <i className="fas fa-eye text-primary-theme me-2"></i>
-                      <h6 className="text-black fs-18 mb-0">{story.read_count} People Read This Story</h6>
+
+                        <i className="fas fa-eye text-primary-theme me-2"></i>
+                        <h6 className="text-black fs-18 mb-0">{story.read_count || 0} People Read This Story</h6>
                       </div>
                       <div>
-                      <LikeCount storyId={story.id} />
+                        <LikeCount storyId={story.id} />
                       </div>
                     </div>
                     <div className="d-flex justify-content-between align-items-center mb-20 pl-10">
@@ -121,7 +134,7 @@ export default function Index({ stories, genres, filters }) {
                       </span>
 
                     </div>
-                    <Link href={route('stories.show', story.id)} className="btn btn-primary">Story Details</Link>
+                    <Link href={route('community.show', story.id)} className="btn btn-primary">Story Details</Link>
                   </div>
                 </div>
               ))
@@ -131,6 +144,7 @@ export default function Index({ stories, genres, filters }) {
                 <p className="fs-18">Try adjusting your search or filter to find what you're looking for.</p>
               </div>
             )}
+
           </div>
 
           {/* Pagination */}

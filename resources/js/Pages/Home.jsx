@@ -1,7 +1,21 @@
-import { Link, Head } from '@inertiajs/react';
+import { Link, Head, usePage } from '@inertiajs/react';
 import Layout from '../Layouts/Layout';
+import { useEffect, useState } from 'react';
 
-const Home = ({ latestStories }) => {
+const Home = () => {
+  const { props } = usePage();
+  const [stories, setStories] = useState([]);
+
+  console.log('Home page props:', props);
+
+  useEffect(() => {
+    if (props.latestStories && props.latestStories.length > 0) {
+      console.log('Setting stories from props:', props.latestStories);
+      setStories(props.latestStories);
+    }
+  }, [props.latestStories]);
+
+  // No automatic refresh on component mount
   return (
     <Layout>
       <Head title="Home" />
@@ -100,37 +114,41 @@ const Home = ({ latestStories }) => {
             </div>
           </div>
           <div className="row row-gap-40 align-items-center justify-content-center">
-            {latestStories && latestStories.map((story, index) => (
-              <div className="col-lg-4 col-md-6" key={story.id || index}>
-                <div className="cards" data-aos-duration="3000" data-aos="flip-left">
-                  <img
-                    src={`/${story.cover_image}`}
-                    className="mb-20 w-100"
-                    alt={story.title}
-                    onError={(e) => {
-                      // Fallback images if the story image doesn't exist
-                      const fallbackImages = [
-                        "/assets/images/book-03.png",
-                        "/assets/images/book-02.png",
-                        "/assets/images/book-04.png"
-                      ];
-                      e.target.src = fallbackImages[index % fallbackImages.length];
-                    }}
-                  />
-                  <div className="d-flex align-items-center justify-content-between mb-10">
-                    <h4 className="light-black fs-36 fw-600">{story.title}</h4>
-                    <div className='d-flex align-items-center'>
-                      <img src="/assets/images/comments.svg" className="" alt="comments" />
-                      <span className="pl-10">{story.comment_count || 0}</span>
+            {stories && stories.length > 0 ? (
+              stories.map((story, index) => (
+                <div className="col-lg-4 col-md-6" key={story.id || index}>
+                  <div className="cards" data-aos-duration="3000" data-aos="flip-left">
+                    <img
+                      src={`/${story.cover_image}`}
+                      className="mb-20 w-100"
+                      alt={story.title}
+                      onError={(e) => {
+                        // Fallback images if the story image doesn't exist
+                        const fallbackImages = [
+                          "/assets/images/book-03.png",
+                          "/assets/images/book-02.png",
+                          "/assets/images/book-04.png"
+                        ];
+                        e.target.src = fallbackImages[index % fallbackImages.length];
+                      }}
+                    />
+                    <div className="d-flex align-items-center justify-content-between mb-10">
+                      <h4 className="light-black fs-36 fw-600">{story.title}</h4>
+                      <div className='d-flex align-items-center'>
+                        <img src="/assets/images/comments.svg" className="" alt="comments" />
+                        <span className="pl-10">{story.comment_count || 0}</span>
+                      </div>
                     </div>
+                    <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">{story.author}</h4>
+                    <div className="d-flex align-items-center mb-20 pl-10">
+                      <i className="fas fa-eye text-primary-theme me-2"></i>
+                      <h6 className="text-black fs-18 mb-0">{story.read_count || 0} People Read This Story</h6>
+                    </div>
+                    <Link href={route('stories.show', story.id)} className="btn btn-primary">Story Details</Link>
                   </div>
-                  <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">{story.author}</h4>
-                  <h6 className="text-black fs-18 mb-20 pl-10">{story.read_count || 0} People Read This Story</h6>
-                  <Link href={route('stories.show', story.id)} className="btn btn-primary">Story Details</Link>
                 </div>
-              </div>
-            ))}
-            {(!latestStories || latestStories.length === 0) && (
+              ))
+            ) : (
               <>
                 <div className="col-lg-4 col-md-6">
                   <div className="cards" data-aos-duration="3000" data-aos="flip-left">
@@ -143,7 +161,10 @@ const Home = ({ latestStories }) => {
                       </div>
                     </div>
                     <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">Anne Rice</h4>
-                    <h6 className="text-black fs-18 mb-20 pl-10">95 People Read This Story</h6>
+                    <div className="d-flex align-items-center mb-20 pl-10">
+                      <i className="fas fa-eye text-primary-theme me-2"></i>
+                      <h6 className="text-black fs-18 mb-0">95 People Read This Story</h6>
+                    </div>
                     <Link href="" className="btn btn-primary">Story Details</Link>
                   </div>
                 </div>
@@ -158,7 +179,10 @@ const Home = ({ latestStories }) => {
                       </div>
                     </div>
                     <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">Victoria Saccenti</h4>
-                    <h6 className="text-black fs-18 mb-20 pl-10">62 People Read This Story</h6>
+                    <div className="d-flex align-items-center mb-20 pl-10">
+                      <i className="fas fa-eye text-primary-theme me-2"></i>
+                      <h6 className="text-black fs-18 mb-0">62 People Read This Story</h6>
+                    </div>
                     <Link href="" className="btn btn-primary">Story Details</Link>
                   </div>
                 </div>
@@ -173,7 +197,10 @@ const Home = ({ latestStories }) => {
                       </div>
                     </div>
                     <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">Martha Grimes</h4>
-                    <h6 className="text-black fs-18 mb-20 pl-10">36 People Read This Story</h6>
+                    <div className="d-flex align-items-center mb-20 pl-10">
+                      <i className="fas fa-eye text-primary-theme me-2"></i>
+                      <h6 className="text-black fs-18 mb-0">36 People Read This Story</h6>
+                    </div>
                     <Link href="" className="btn btn-primary">Story Details</Link>
                   </div>
                 </div>
