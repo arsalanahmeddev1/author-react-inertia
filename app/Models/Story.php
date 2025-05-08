@@ -33,4 +33,12 @@ class Story extends Model
     {
         return $this->hasMany(Character::class);
     }
+
+    /**
+     * Get the comments for the story.
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

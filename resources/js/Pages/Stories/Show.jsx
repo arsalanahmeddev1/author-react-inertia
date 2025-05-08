@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
+import axios from 'axios';
 import InnerLayout from '@/Layouts/InnerLayout';
 import StoryModal from '@/Components/stories/StoryModal';
 import CharacterModal from '@/Components/stories/CharacterModal';
@@ -14,6 +15,31 @@ export default function Show({ story }) {
   const [showCharacterModal, setShowCharacterModal] = useState(false);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [commentCount, setCommentCount] = useState(story.comment_count);
+
+  // Fetch the latest comment count when the page loads
+  useEffect(() => {
+    const fetchCommentCount = async () => {
+      try {
+        const response = await axios.get(route('comments.get', story.id));
+        const comments = response.data.comments;
+
+        // Count top-level comments and all replies
+        let totalCount = comments.length;
+        comments.forEach(comment => {
+          if (comment.replies && comment.replies.length > 0) {
+            totalCount += comment.replies.length;
+          }
+        });
+
+        setCommentCount(totalCount);
+      } catch (error) {
+        console.error('Error fetching comment count:', error);
+      }
+    };
+
+    fetchCommentCount();
+  }, [story.id]);
 
   const handleOpenModal = () => {
     // Only allow access if user is logged in and is NOT a guest user
@@ -63,7 +89,7 @@ export default function Show({ story }) {
                         <i className="fas fa-eye me-2 text-primary-theme"></i> {story.read_count} reads
                       </span>
                       <span className="fs-18 secondry-font">
-                        <i className="fas fa-comment me-2 text-primary-theme"></i> {story.comment_count}
+                        <i className="fas fa-comment me-2 text-primary-theme"></i> {commentCount}
                       </span>
                     </div>
                     <div className="mb-3">

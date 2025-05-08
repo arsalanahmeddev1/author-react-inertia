@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Story;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class StoriesController extends Controller
@@ -67,6 +68,9 @@ class StoriesController extends Controller
 
         return Inertia::render('Stories/Read', [
             'story' => $story,
+            'auth' => [
+                'user' => Auth::user(),
+            ],
         ]);
     }
 }

@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import InnerLayout from '@/Layouts/InnerLayout';
+import CommentSection from '@/Components/comments/CommentSection';
 import '@/assets/styles/stories.css';
 import '@/assets/styles/story-read.css';
+import '@/assets/styles/comments.css';
 import { motion } from 'framer-motion';
 
-export default function Read({ story }) {
+export default function Read({ story, auth }) {
   const [readingProgress, setReadingProgress] = useState(0);
   // Removed bookmark state
   const [showCover, setShowCover] = useState(true);
@@ -211,6 +213,12 @@ export default function Read({ story }) {
                   <h5>Author's Note</h5>
                   <p>Thank you for reading "{story.title}". I hope you enjoyed this story written in the style of {story.author}. If you'd like to continue this story with your own twist, click the "Continue This Story" button on the story details page.</p>
                 </div>
+
+                {/* Comment Section */}
+                <CommentSection
+                  storyId={story.id}
+                  currentUser={auth.user}
+                />
               </div>
             </div>
           </div>

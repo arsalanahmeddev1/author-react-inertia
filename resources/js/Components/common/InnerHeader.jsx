@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
+import UserAvatar from './UserAvatar';
 
 const InnerHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,13 +51,15 @@ const InnerHeader = () => {
                     </Link>
                   </div>
                 ) : (
-                  <Link href="/logout" method="post" as="button" className="btn btn-secondary d-block d-sm-none">Logout</Link>
+                  <div className="d-flex justify-content-center mb-3 d-block d-sm-none">
+                    <UserAvatar user={auth.user} />
+                  </div>
                 )}
               </ul>
             </nav>
           </div>
           <div className="col-lg-4">
-            <div className="d-flex align-items-center gap-20 pt-33 justify-content-end justify-content-lg-between">
+            <div className={`d-flex align-items-center gap-20 ${auth.user ? "pt-42" : "pt-33"} justify-content-end justify-content-lg-between`}>
               {!auth?.user ? (
                 <>
                   <Link href='/register' className="text-white d-none d-sm-block">Sign Up</Link>
@@ -73,7 +76,7 @@ const InnerHeader = () => {
                   </Link>
                 </div>
               ) : (
-                <Link href="/logout" method="post" as="button" className="btn btn-secondary d-none d-sm-block">Logout</Link>
+                <UserAvatar user={auth.user} className="d-none d-sm-block" />
               )}
               <div className="menu-icon">
                 <i className="fa-solid fa-bars menu-toggle" onClick={toggleMenu}></i>
