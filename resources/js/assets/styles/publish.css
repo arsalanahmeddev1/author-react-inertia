@@ -1,0 +1,107 @@
+/* Publish Page Styles */
+
+.divider {
+  width: 80px;
+  height: 4px;
+  background-color: var(--primary-theme);
+  border-radius: 2px;
+}
+
+.py-100 {
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+
+@media (max-width: 768px) {
+  .py-100 {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+}
+
+.bg-light {
+  background-color: #f8f9fa;
+}
+
+.rounded-4 {
+  border-radius: 1rem;
+}
+
+.shadow-lg {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+}
+
+/* Animation enhancements */
+[data-aos] {
+  pointer-events: none;
+}
+
+[data-aos].aos-animate {
+  pointer-events: auto;
+}
+
+/* Custom styling for the publish page */
+.publish-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+}
+
+.btn-primary {
+  background-color: var(--primary-theme);
+  border-color: var(--primary-theme);
+}
+
+.btn-primary:hover {
+  background-color: var(--secondry-theme);
+  border-color: var(--secondry-theme);
+}
+
+.text-primary-theme {
+  color: var(--primary-theme);
+}
+
+.bg-primary-theme {
+  background-color: var(--primary-theme);
+}
+
+/* Step number styling */
+.step-number {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background-color: var(--primary-theme);
+  color: white;
+  border-radius: 50%;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+/* Image hover effect */
+.img-hover-zoom {
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.img-hover-zoom img {
+  transition: transform 0.5s ease;
+}
+
+.img-hover-zoom:hover img {
+  transform: scale(1.05);
+}
+
+/* CTA section styling */
+.cta-section {
+  background: linear-gradient(135deg, var(--primary-theme) 0%, var(--secondry-theme) 100%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .order-swap {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}

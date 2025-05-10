@@ -2,6 +2,7 @@ import CustomInputError from '@/Components/CustomInputError';
 import CustomInputLabel from '@/Components/CustomInputLabel';
 import CustomButton from '@/Components/CustomButton';
 import CustomTextInput from '@/Components/CustomTextInput';
+import GoogleSignInButton from '@/Components/GoogleSignInButton';
 import CustomAuthLayout from '@/Layouts/CustomAuthLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
@@ -116,6 +117,13 @@ export default function Register() {
                         </Link>
                     </p>
                 </div>
+
+                <div className="d-flex align-items-center my-3">
+                    <hr className="flex-grow-1" />
+                    <span className="px-3 fs-16 secondry-font text-muted">OR</span>
+                    <hr className="flex-grow-1" />
+                </div>
+                <GoogleSignInButton href={route('google.redirect')} />
             </form>
         </CustomAuthLayout>
     );

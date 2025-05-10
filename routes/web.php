@@ -1,6 +1,8 @@
 <?php
-
+namespace App\Http\Controllers\Auth;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\GuestAuthController;
+use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\CommunityController;
@@ -9,12 +11,23 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StoriesController;
 use App\Http\Controllers\StoryDraftsController;
 use App\Http\Controllers\StoryLikesController;
+use App\Models\User;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/publish', function () {
+    return inertia('Publish');
+})->name('publish');
+// google auth
 
-Route::get('login/{provider}', [SocialAuthController::class, 'redirect'])->name('social.redirect');
-Route::get('login/{provider}/callback', [SocialAuthController::class, 'callback'])->name('social.callback');
+
+Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
+
+// Route::get('/auth/facebook/redirect', [FacebookController::class, 'redirect'])->name('facebook.redirect');
+// Route::get('/auth/facebook/callback', [FacebookController::class, 'callback'])->name('facebook.callback');
+
 
 // Guest login route
 Route::get('/guest-login', [GuestAuthController::class, 'guestLogin'])->name('guest.login');
