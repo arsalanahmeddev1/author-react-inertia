@@ -1,17 +1,18 @@
 import React from 'react'
-import { AppSidebar, AppFooter, AppHeader } from '../components/admin/index'
+import { AppSidebar, AppFooter, AppHeader } from '../Components/admin/index'
 import '../assets/admin/scss/style.scss'
+import { CContainer } from '@coreui/react'
 
-const AdminLayout = ({ children }) => {
+const DefaultLayout = ({ children }) => {
   return (
     <div>
       <AppSidebar />
       <div className="wrapper d-flex flex-column min-vh-100">
         <AppHeader />
-        <div className="body flex-grow-1 px-4 py-3">
-          <div className="container-fluid">
+        <div className="body flex-grow-1">
+          <CContainer className="px-4" fluid>
             {children}
-          </div>
+          </CContainer>
         </div>
         <AppFooter />
       </div>
@@ -19,4 +20,4 @@ const AdminLayout = ({ children }) => {
   )
 }
 
-export default AdminLayout
+export default DefaultLayout

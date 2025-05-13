@@ -214,17 +214,17 @@ const Home = () => {
         <div className="container">
           <div className="row row-gap-40 align-items-center justify-content-between flex-column flex-lg-row align-items-center text-center text-lg-start mx-auto mx-lg-0">
             <div className="col-lg-8" data-aos-duration="3000" data-aos="fade-right">
-              <span className="fs-32 light-black ls-8">Sign In</span>
-              <h2 className="heading mb-10">Sign In to <span>Continue Crafting</span> the Story Your Way</h2>
-              <p className="fs-20 mb-20 sec-5-para">
+              <span className="fs-32 text-white ls-8">Sign In</span>
+              <h2 className="heading mb-10 text-white">Sign In to <span>Continue Crafting</span> the Story Your Way</h2>
+              <p className="fs-20 mb-20 sec-5-para text-white">
                 Take the reins and let your imagination run wild! Log in to pick up where the story left off or create your own twists and turns. Your words, your world—continue the adventure as you see fit.
               </p>
-              <p className="fs-24 light-black mb-40">
+              <p className="fs-24 text-white mb-40">
                 Ready to shape the next chapter? Sign in now and bring your unique vision to life.
               </p>
               <div className="d-flex align-items-center gap-60 justify-content-center justify-content-lg-start flex-column flex-sm-row">
                 <Link href='login' className="btn btn-secondary">Sign In</Link>
-                <p className="fs-20 light-black">Don't have an account?<Link href='register' className="pl-30 text-primary-theme">Sign Up Now</Link></p>
+                <p className="fs-20 text-white">Don't have an account?<Link href='register' className="pl-30 text-primary-theme text-white">Sign Up Now</Link></p>
               </div>
             </div>
             <div className="col-lg-4" data-aos-duration="3000" data-aos="fade-left">

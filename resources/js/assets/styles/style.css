@@ -502,6 +502,12 @@ span.fs-54 {
   font-weight: 600;
   max-width: 32rem;
 }
+.sec-5 {
+  background-image: url('../../../../public/assets/images/sec-5-bg.png');
+  background-size: cover;
+  padding: var(--text-100) 0 var(--text-150) 0;
+  position: relative;
+}
 /* responsive */
 @media(min-width: 1560px) {
   .container {

@@ -15,6 +15,7 @@ use App\Models\User;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
@@ -80,8 +81,6 @@ Route::get('/admin', function () {
     return Inertia::render('admin/Dashboard');
 })->name('admin.dashboard');
 
-Route::get('/admin/users', function () {
-    return Inertia::render('admin/users/Index');
-})->name('admin.users.index');
+Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
 
 require __DIR__.'/auth.php';
