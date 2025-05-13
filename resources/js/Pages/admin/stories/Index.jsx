@@ -26,7 +26,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 // import { cilTrash, cilEye } from '@coreui/icons'
-import { format } from 'date-fns'
+// import { format } from 'date-fns'
 
 const Index = ({ stories }) => {
   const [deleteModal, setDeleteModal] = useState(false)
@@ -48,14 +48,14 @@ const Index = ({ stories }) => {
     }
   }
 
-  const formatDate = (dateString) => {
-    if (!dateString) return 'N/A'
-    try {
-      return format(new Date(dateString), 'MMM d, yyyy')
-    } catch (e) {
-      return dateString
-    }
-  }
+  // const formatDate = (dateString) => {
+  //   if (!dateString) return 'N/A'
+  //   try {
+  //     return format(new Date(dateString), 'MMM d, yyyy')
+  //   } catch (e) {
+  //     return dateString
+  //   }
+  // }
 
   return (
     <AdminLayout>
@@ -106,7 +106,7 @@ const Index = ({ stories }) => {
                             </CBadge>
                           </div>
                         </CTableDataCell>
-                        <CTableDataCell>{formatDate(story.created_at)}</CTableDataCell>
+                        <CTableDataCell></CTableDataCell>
                         <CTableDataCell>
                           <div className="d-flex gap-2">
                             <CTooltip content="View Story">

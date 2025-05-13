@@ -80,4 +80,8 @@ Route::get('/admin', function () {
     return Inertia::render('admin/Dashboard');
 })->name('admin.dashboard');
 
+Route::get('/admin/users', function () {
+    return Inertia::render('admin/users/Index');
+})->name('admin.users.index');
+
 require __DIR__.'/auth.php';

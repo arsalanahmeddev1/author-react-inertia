@@ -1,15 +1,17 @@
 import React from 'react'
-import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/admin/index'
+import { AppSidebar, AppFooter, AppHeader } from '../components/admin/index'
 import '../assets/admin/scss/style.scss'
 
-const DefaultLayout = () => {
+const AdminLayout = ({ children }) => {
   return (
     <div>
       <AppSidebar />
       <div className="wrapper d-flex flex-column min-vh-100">
         <AppHeader />
-        <div className="body flex-grow-1">
-          <AppContent />
+        <div className="body flex-grow-1 px-4 py-3">
+          <div className="container-fluid">
+            {children}
+          </div>
         </div>
         <AppFooter />
       </div>
@@ -17,4 +19,4 @@ const DefaultLayout = () => {
   )
 }
 
-export default DefaultLayout
+export default AdminLayout

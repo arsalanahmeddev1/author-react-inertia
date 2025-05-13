@@ -37,7 +37,7 @@ const nav = [
       {
         component: CNavItem,
         name: 'List',
-        href: 'admin.users.index',
+        to: '/admin/users',
       },
       {
         component: CNavItem,
