@@ -14,12 +14,10 @@ use App\Http\Controllers\StoryLikesController;
 use App\Models\User;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/publish', function () {
-    return inertia('Publish');
-})->name('publish');
-// google auth
+// google auth 
 
 
 Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
@@ -77,5 +75,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/admin', function () {
+    return Inertia::render('admin/Dashboard');
+})->name('admin.dashboard');
 
 require __DIR__.'/auth.php';

@@ -3,7 +3,6 @@ import CustomInputError from '@/Components/CustomInputError';
 import CustomInputLabel from '@/Components/CustomInputLabel';
 import CustomButton from '@/Components/CustomButton';
 import CustomTextInput from '@/Components/CustomTextInput';
-import GoogleSignInButton from '@/Components/GoogleSignInButton';
 import CustomAuthLayout from '@/Layouts/CustomAuthLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 // import route from 'ziggy-js';
@@ -111,15 +110,10 @@ export default function Login({ status, canResetPassword }) {
                         </Link>
                     </p>
                 </div>
-                <div className="d-flex align-items-center my-3">
-                    <hr className="flex-grow-1" />
-                    <span className="px-3 fs-16 secondry-font text-muted">OR</span>
-                    <hr className="flex-grow-1" />
-                </div>
-                <GoogleSignInButton href={route('google.redirect')} />
-                {/* <a href="{{ route('facebook.redirect') }}">
-                    <button type="button">Sign in with Facebook</button>
-                </a> */}
+                <p className='text-center fs-16 secondry-font'>OR</p>
+                <a href={route('google.redirect')} className="btn btn-danger">
+                    Sign in with Google
+                </a>
             </form>
         </CustomAuthLayout>
     );
