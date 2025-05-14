@@ -39,38 +39,46 @@ const nav = [
         name: 'List',
         to: '/admin/users',
       },
-      {
-        component: CNavItem,
-        name: 'Show',
-        to: '/buttons/button-groups',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Show',
+      //   to: '/buttons/button-groups',
+      // },
     ],
   },
    {
     component: CNavGroup,
     name: 'Stories',
-    to: '/buttons',
+    to: '/admin/stories',
     icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
         name: 'List',
-        to: '/buttons/buttons',
+        to: '/admin/stories',
       },
       {
         component: CNavItem,
         name: 'Create',
-        to: '/buttons/button-groups',
+        to: '/admin/stories/create',
+      },
+    ],
+  },
+   {
+    component: CNavGroup,
+    name: 'Community',
+    to: '/admin/community',
+    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'List',
+        to: '/admin/community',
       },
       {
         component: CNavItem,
-        name: 'Edit',
-        to: '/buttons/button-groups',
-      },
-      {
-        component: CNavItem,
-        name: 'Show',
-        to: '/buttons/button-groups',
+        name: 'Create',
+        to: '/admin/community/create',
       },
     ],
   },

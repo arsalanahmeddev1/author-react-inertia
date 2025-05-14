@@ -1,0 +1,344 @@
+import React, { useState } from 'react';
+import { Head, useForm } from '@inertiajs/react';
+import AdminLayout from '../../../Layouts/AdminLayout';
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CForm,
+  CFormInput,
+  CFormLabel,
+  CFormTextarea,
+  CRow,
+  CFormSelect,
+  CAlert,
+  CListGroup,
+  CListGroupItem,
+  CInputGroup,
+  CInputGroupText,
+} from '@coreui/react';
+import ReactQuill from 'react-quill';
+// import 'react-quill/dist/quill.snow.css';
+
+const Edit = ({ story }) => {
+  const { data, setData, post, processing, errors } = useForm({
+    title: story.title || '',
+    description: story.description || '',
+    author: story.author || '',
+    genre: story.genre || '',
+    style: story.style || '',
+    content: story.content || '',
+    cover_image: null,
+    _method: 'PUT', // For method spoofing (PUT request)
+    characters: story.characters || [],
+    character_updates: {}, // To track updates to existing characters
+    character_deletes: [], // IDs of characters to delete
+  });
+
+  // Add state for new character input
+  const [newCharacter, setNewCharacter] = useState({ name: '', description: '' });
+  const [preview, setPreview] = useState(story.cover_image ? `/storage/${story.cover_image}` : null);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    post(route('admin.stories.update', story.id), {
+      preserveScroll: true,
+      onSuccess: () => {
+        setSuccessMessage('Story updated successfully!');
+        setTimeout(() => setSuccessMessage(''), 3000);
+      },
+    });
+  };
+
+  const handleContentChange = (content) => {
+    setData('content', content);
+  };
+
+  const handleCoverImageChange = (e) => {
+    if (e.target.files[0]) {
+      setData('cover_image', e.target.files[0]);
+      setPreview(URL.createObjectURL(e.target.files[0]));
+    }
+  };
+
+  // Handle adding a new character
+  const handleAddCharacter = () => {
+    if (newCharacter.name.trim() === '') return;
+    
+    setData('characters', [...data.characters, { ...newCharacter, is_new: true }]);
+    setNewCharacter({ name: '', description: '' });
+  };
+
+  // Handle updating an existing character
+  const handleUpdateCharacter = (index, field, value) => {
+    const updatedCharacters = [...data.characters];
+    updatedCharacters[index][field] = value;
+    
+    // Track changes for existing characters
+    if (updatedCharacters[index].id) {
+      const charUpdates = { ...data.character_updates };
+      if (!charUpdates[updatedCharacters[index].id]) {
+        charUpdates[updatedCharacters[index].id] = {};
+      }
+      charUpdates[updatedCharacters[index].id][field] = value;
+      setData('character_updates', charUpdates);
+    }
+    
+    setData('characters', updatedCharacters);
+  };
+
+  // Handle removing a character
+  const handleRemoveCharacter = (index) => {
+    const character = data.characters[index];
+    const updatedCharacters = [...data.characters];
+    updatedCharacters.splice(index, 1);
+    
+    // If it's an existing character, mark it for deletion
+    if (character.id) {
+      setData('character_deletes', [...data.character_deletes, character.id]);
+    }
+    
+    setData('characters', updatedCharacters);
+  };
+
+  const genreOptions = [
+    { value: '', label: 'Select a genre' },
+    { value: 'Mystery', label: 'Mystery' },
+    { value: 'Romance', label: 'Romance' },
+    { value: 'Fantasy', label: 'Fantasy' },
+    { value: 'Science Fiction', label: 'Science Fiction' },
+    { value: 'Thriller', label: 'Thriller' },
+    { value: 'Horror', label: 'Horror' },
+    { value: 'Historical Fiction', label: 'Historical Fiction' },
+  ];
+
+  return (
+    <AdminLayout>
+      <Head title="Edit Story" />
+      <CRow>
+        <CCol xs={12}>
+          <CCard className="mb-4">
+            <CCardHeader>
+              <strong>Edit Story: {story.title}</strong>
+            </CCardHeader>
+            <CCardBody>
+              {successMessage && (
+                <CAlert color="success" dismissible>
+                  {successMessage}
+                </CAlert>
+              )}
+              
+              <CForm onSubmit={handleSubmit} encType="multipart/form-data">
+                <CRow className="mb-3">
+                  <CCol md={6}>
+                    <CFormLabel htmlFor="title">Title</CFormLabel>
+                    <CFormInput
+                      id="title"
+                      value={data.title}
+                      onChange={(e) => setData('title', e.target.value)}
+                      invalid={errors.title}
+                    />
+                    {errors.title && (
+                      <div className="text-danger">{errors.title}</div>
+                    )}
+                  </CCol>
+                  
+                  <CCol md={6}>
+                    <CFormLabel htmlFor="author">Author</CFormLabel>
+                    <CFormInput
+                      id="author"
+                      value={data.author}
+                      onChange={(e) => setData('author', e.target.value)}
+                      invalid={errors.author}
+                    />
+                    {errors.author && (
+                      <div className="text-danger">{errors.author}</div>
+                    )}
+                  </CCol>
+                </CRow>
+                
+                <CRow className="mb-3">
+                  <CCol md={6}>
+                    <CFormLabel htmlFor="genre">Genre</CFormLabel>
+                    <CFormSelect
+                      id="genre"
+                      value={data.genre}
+                      onChange={(e) => setData('genre', e.target.value)}
+                      invalid={errors.genre}
+                      options={genreOptions}
+                    />
+                    {errors.genre && (
+                      <div className="text-danger">{errors.genre}</div>
+                    )}
+                  </CCol>
+                  
+                  <CCol md={6}>
+                    <CFormLabel htmlFor="style">Writing Style</CFormLabel>
+                    <CFormInput
+                      id="style"
+                      value={data.style}
+                      onChange={(e) => setData('style', e.target.value)}
+                      invalid={errors.style}
+                      placeholder="e.g., Gothic, Victorian, Modern, etc."
+                    />
+                    {errors.style && (
+                      <div className="text-danger">{errors.style}</div>
+                    )}
+                  </CCol>
+                </CRow>
+                
+                <CRow className="mb-3">
+                  <CCol md={12}>
+                    <CFormLabel htmlFor="description">Description</CFormLabel>
+                    <CFormTextarea
+                      id="description"
+                      rows={3}
+                      value={data.description}
+                      onChange={(e) => setData('description', e.target.value)}
+                      invalid={errors.description}
+                    />
+                    {errors.description && (
+                      <div className="text-danger">{errors.description}</div>
+                    )}
+                  </CCol>
+                </CRow>
+                
+                <CRow className="mb-3">
+                  <CCol md={12}>
+                    <CFormLabel htmlFor="cover_image">Cover Image</CFormLabel>
+                    <CFormInput
+                      type="file"
+                      id="cover_image"
+                      onChange={handleCoverImageChange}
+                      invalid={errors.cover_image}
+                      accept="image/*"
+                    />
+                    {errors.cover_image && (
+                      <div className="text-danger">{errors.cover_image}</div>
+                    )}
+                    
+                    {preview && (
+                      <div className="mt-2">
+                        <img 
+                          src={preview} 
+                          alt="Cover preview" 
+                          style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }} 
+                        />
+                      </div>
+                    )}
+                  </CCol>
+                </CRow>
+
+                {/* Characters Section */}
+                <CRow className="mb-3">
+                  <CCol md={12}>
+                    <CFormLabel>Story Characters</CFormLabel>
+                    
+                    {/* Character Input Form */}
+                    <CInputGroup className="mb-3">
+                      <CInputGroupText>Name</CInputGroupText>
+                      <CFormInput
+                        value={newCharacter.name}
+                        onChange={(e) => setNewCharacter({...newCharacter, name: e.target.value})}
+                        placeholder="Character name"
+                      />
+                      <CInputGroupText>Description</CInputGroupText>
+                      <CFormInput
+                        value={newCharacter.description}
+                        onChange={(e) => setNewCharacter({...newCharacter, description: e.target.value})}
+                        placeholder="Brief character description"
+                      />
+                      <CButton 
+                        type="button" 
+                        color="primary"
+                        onClick={handleAddCharacter}
+                      >
+                        Add Character
+                      </CButton>
+                    </CInputGroup>
+                    
+                    {/* Character List */}
+                    {data.characters.length > 0 && (
+                      <CListGroup className="mb-3">
+                        {data.characters.map((char, index) => (
+                          <CListGroupItem key={char.id || index} className="d-flex justify-content-between align-items-center">
+                            <div className="w-100">
+                              <div className="d-flex gap-2 mb-1">
+                                <CFormInput
+                                  size="sm"
+                                  value={char.name}
+                                  onChange={(e) => handleUpdateCharacter(index, 'name', e.target.value)}
+                                  placeholder="Character name"
+                                />
+                                <CButton 
+                                  color="danger" 
+                                  size="sm" 
+                                  onClick={() => handleRemoveCharacter(index)}
+                                >
+                                  Remove
+                                </CButton>
+                              </div>
+                              <CFormTextarea
+                                size="sm"
+                                value={char.description || ''}
+                                onChange={(e) => handleUpdateCharacter(index, 'description', e.target.value)}
+                                placeholder="Character description"
+                                rows={2}
+                              />
+                            </div>
+                          </CListGroupItem>
+                        ))}
+                      </CListGroup>
+                    )}
+                    
+                    {errors.characters && (
+                      <div className="text-danger">{errors.characters}</div>
+                    )}
+                  </CCol>
+                </CRow>
+                
+                <CRow className="mb-3">
+                  <CCol md={12}>
+                    <CFormLabel htmlFor="content">Story Content</CFormLabel>
+                    <div className={errors.content ? 'is-invalid' : ''}>
+                      <ReactQuill
+                        theme="snow"
+                        value={data.content}
+                        onChange={handleContentChange}
+                        style={{ minHeight: '300px', marginBottom: '50px' }}
+                      />
+                    </div>
+                    {errors.content && (
+                      <div className="text-danger">{errors.content}</div>
+                    )}
+                  </CCol>
+                </CRow>
+                
+                <CRow>
+                  <CCol xs={12} className="d-flex justify-content-end gap-2">
+                    <CButton 
+                      type="button" 
+                      color="secondary" 
+                      onClick={() => window.history.back()}
+                    >
+                      Cancel
+                    </CButton>
+                    <CButton type="submit" color="primary" disabled={processing}>
+                      {processing ? 'Saving...' : 'Update Story'}
+                    </CButton>
+                  </CCol>
+                </CRow>
+              </CForm>
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
+    </AdminLayout>
+  );
+};
+
+export default Edit;

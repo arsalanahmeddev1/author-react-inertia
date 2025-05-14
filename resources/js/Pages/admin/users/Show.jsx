@@ -27,8 +27,8 @@ const Show = ({ user }) => {
         <CCol xs={12}>
           <CCard className="mb-4">
             <CCardHeader className="d-flex justify-content-between align-items-center">
-              <div className="d-flex align-items-center">
-                <strong><FaUserCircle className="me-2" /> User Details</strong>
+              <div className="c">
+                <strong className='d-flex align-items-center'><FaUserCircle className="me-2" /> User Details</strong>
               </div>
               <div className="d-flex gap-2">
                 <Link href={route('admin.users.index')}>

@@ -1,8 +1,65 @@
 import { Link, Head, usePage } from '@inertiajs/react';
 import Layout from '../Layouts/Layout';
 import { useEffect, useState } from 'react';
+import Slider from "react-slick";
+import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 
 const Home = () => {
+  const NextArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <div
+        className="custom-arrow next-arrow"
+        style={{
+          position: 'absolute',
+          top: '36%',
+          right: '-17px',
+          transform: 'translateY(-36%)',
+          zIndex: 1,
+          cursor: 'pointer',
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          background: 'var(--primary-theme, #3a5a40)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#fff'
+        }}
+        onClick={onClick}
+      >
+        <FaChevronRight />
+      </div>
+    );
+  };
+
+  const PrevArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <div
+        className="custom-arrow prev-arrow"
+        style={{
+          position: 'absolute',
+          top: '36%',
+          left: '-17px',
+          transform: 'translateY(-36%)',
+          zIndex: 1,
+          cursor: 'pointer',
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          background: 'var(--primary-theme, #3a5a40)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#fff'
+        }}
+        onClick={onClick}
+      >
+        <FaChevronLeft />
+      </div>
+    );
+  };
   const { props } = usePage();
   const [stories, setStories] = useState([]);
 
@@ -20,7 +77,22 @@ const Home = () => {
     <Layout>
       <Head title="Home" />
 
-      <section className="hero-banner text-center text-sm-start">
+      <section className="hero-banner position-relative text-center text-sm-start overflow-hidden">
+        <video
+          autoPlay
+          muted
+          loop
+          className="position-absolute w-100 h-100 object-fit-cover"
+          // className="w-100 h-100 object-fit-cover"
+          style={{ top: 0, left: 0, zIndex: -1 }}
+        >
+          <source src="assets/videos/video-banner.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div
+          className="position-absolute w-100 h-100"
+          style={{ top: 0, left: 0, zIndex: -1, backgroundColor: 'rgb(0 0 0 / 77%)' }}
+        ></div>
         <div className="container">
           <div className="row">
             <div className="col-lg-9 offset-lg-3 pt-100 hero-banner-content" data-aos-duration="3000" data-aos="fade-down">
@@ -37,6 +109,30 @@ const Home = () => {
           </div>
         </div>
       </section>
+      {/* <section className='video-banner-sec position-relative'>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              <video
+                autoPlay
+                muted
+                loop
+                className="w-100 h-100 object-fit-cover"
+                // className="w-100 h-100 object-fit-cover"
+                style={{ top: 0, left: 0, zIndex: -1 }}
+              >
+                <source src="assets/videos/video-banner.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <div
+                className="position-absolute w-100 h-100"
+                style={{ top: 0, left: 0, zIndex: -1, backgroundColor: 'rgba(0,0,0,0.6)' }}
+              ></div>
+            </div>
+          </div>
+        </div>
+
+      </section> */}
 
       <section className="sec-2 py-100">
         <div className="container">
@@ -113,99 +209,88 @@ const Home = () => {
               </p>
             </div>
           </div>
-          <div className="row row-gap-40 align-items-center justify-content-center">
-            {stories && stories.length > 0 ? (
-              stories.map((story, index) => (
-                <div className="col-lg-4 col-md-6" key={story.id || index}>
-                  <div className="cards" data-aos-duration="3000" data-aos="flip-left">
-                    <img
-                      src={`/${story.cover_image}`}
-                      className="mb-20 w-100"
-                      alt={story.title}
-                      onError={(e) => {
-                        // Fallback images if the story image doesn't exist
-                        const fallbackImages = [
-                          "/assets/images/book-03.png",
-                          "/assets/images/book-02.png",
-                          "/assets/images/book-04.png"
-                        ];
-                        e.target.src = fallbackImages[index % fallbackImages.length];
-                      }}
-                    />
-                    <div className="d-flex align-items-center justify-content-between mb-10">
-                      <h4 className="light-black fs-36 fw-600">{story.title}</h4>
-                      <div className='d-flex align-items-center'>
-                        <img src="/assets/images/comments.svg" className="" alt="comments" />
-                        <span className="pl-10">{story.comment_count || 0}</span>
+          <div className="story-slider-container">
+            <Slider
+              dots={false}
+              infinite={true}
+              speed={500}
+              slidesToShow={3}
+              slidesToScroll={1}
+              nextArrow={<NextArrow />}
+              prevArrow={<PrevArrow />}
+              responsive={[
+                {
+                  breakpoint: 992,
+                  settings: {
+                    slidesToShow: 2,
+                  }
+                },
+                {
+                  breakpoint: 768,
+                  settings: {
+                    slidesToShow: 1,
+                  }
+                }
+              ]}
+            >
+              {stories && stories.length > 0 ? (
+                stories.map((story, index) => (
+                  <div key={story.id || index} className="px-2">
+                    <div className="cards" data-aos-duration="3000" data-aos="flip-left">
+                      <img
+                        src={`/${story.cover_image}`}
+                        className="mb-20 w-100"
+                        alt={story.title}
+                        onError={(e) => {
+                          const fallbackImages = [
+                            "/assets/images/book-03.png",
+                            "/assets/images/book-02.png",
+                            "/assets/images/book-04.png"
+                          ];
+                          e.target.src = fallbackImages[index % fallbackImages.length];
+                        }}
+                      />
+                      <div className="d-flex align-items-center justify-content-between mb-10">
+                        <h4 className="light-black fs-36 fw-600">{story.title}</h4>
+                        <div className='d-flex align-items-center'>
+                          <img src="/assets/images/comments.svg" className="" alt="comments" />
+                          <span className="pl-10">{story.comment_count || 0}</span>
+                        </div>
                       </div>
-                    </div>
-                    <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">{story.author}</h4>
-                    <div className="d-flex align-items-center mb-20 pl-10">
-                      <i className="fas fa-eye text-primary-theme me-2"></i>
-                      <h6 className="text-black fs-18 mb-0">{story.read_count || 0} People Read This Story</h6>
-                    </div>
-                    <Link href={route('stories.show', story.id)} className="btn btn-primary">Story Details</Link>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <>
-                <div className="col-lg-4 col-md-6">
-                  <div className="cards" data-aos-duration="3000" data-aos="flip-left">
-                    <img src="/assets/images/book-03.png" className="mb-20 w-100" alt="" />
-                    <div className="d-flex align-items-center justify-content-between mb-10">
-                      <h4 className="light-black fs-36 fw-600">Death At Fallow End</h4>
-                      <div className='d-flex align-items-center'>
-                        <img src="/assets/images/comments.svg" className="" alt="comments" />
-                        <span className="pl-10">64</span>
+                      <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">{story.author}</h4>
+                      <div className="d-flex align-items-center mb-20 pl-10">
+                        <i className="fas fa-eye text-primary-theme me-2"></i>
+                        <h6 className="text-black fs-18 mb-0">{story.read_count || 0} People Read This Story</h6>
                       </div>
+                      <Link href={route('stories.show', story.id)} className="btn btn-primary">Story Details</Link>
                     </div>
-                    <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">Anne Rice</h4>
-                    <div className="d-flex align-items-center mb-20 pl-10">
-                      <i className="fas fa-eye text-primary-theme me-2"></i>
-                      <h6 className="text-black fs-18 mb-0">95 People Read This Story</h6>
-                    </div>
-                    <Link href="" className="btn btn-primary">Story Details</Link>
                   </div>
-                </div>
-                <div className="col-lg-4 col-md-6">
-                  <div className="cards" data-aos-duration="3000" data-aos="flip-left">
-                    <img src="/assets/images/book-02.png" className="mb-20 w-100" alt="" />
-                    <div className="d-flex align-items-center justify-content-between mb-10">
-                      <h4 className="light-black fs-36 fw-600">Death At Fallow End</h4>
-                      <div className='d-flex align-items-center'>
-                        <img src="/assets/images/comments.svg" className="" alt="comments" />
-                        <span className="pl-10">21</span>
+                ))
+              ) : (
+                // Fallback content for slider when no stories
+                <>
+                  <div className="px-2">
+                    <div className="cards">
+                      <img src="/assets/images/book-03.png" className="mb-20 w-100" alt="" />
+                      <div className="d-flex align-items-center justify-content-between mb-10">
+                        <h4 className="light-black fs-36 fw-600">Death At Fallow End</h4>
+                        <div className='d-flex align-items-center'>
+                          <img src="/assets/images/comments.svg" className="" alt="comments" />
+                          <span className="pl-10">64</span>
+                        </div>
                       </div>
-                    </div>
-                    <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">Victoria Saccenti</h4>
-                    <div className="d-flex align-items-center mb-20 pl-10">
-                      <i className="fas fa-eye text-primary-theme me-2"></i>
-                      <h6 className="text-black fs-18 mb-0">62 People Read This Story</h6>
-                    </div>
-                    <Link href="" className="btn btn-primary">Story Details</Link>
-                  </div>
-                </div>
-                <div className="col-lg-4 col-md-6">
-                  <div className="cards" data-aos-duration="3000" data-aos="flip-left">
-                    <img src="/assets/images/book-04.png" className="mb-20 w-100" alt="" />
-                    <div className="d-flex align-items-center justify-content-between mb-10">
-                      <h4 className="light-black fs-36 fw-600">Death At Fallow End</h4>
-                      <div className='d-flex align-items-center'>
-                        <img src="/assets/images/comments.svg" className="" alt="comments" />
-                        <span className="pl-10">06</span>
+                      <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">Anne Rice</h4>
+                      <div className="d-flex align-items-center mb-20 pl-10">
+                        <i className="fas fa-eye text-primary-theme me-2"></i>
+                        <h6 className="text-black fs-18 mb-0">95 People Read This Story</h6>
                       </div>
+                      <Link href="" className="btn btn-primary">Story Details</Link>
                     </div>
-                    <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">Martha Grimes</h4>
-                    <div className="d-flex align-items-center mb-20 pl-10">
-                      <i className="fas fa-eye text-primary-theme me-2"></i>
-                      <h6 className="text-black fs-18 mb-0">36 People Read This Story</h6>
-                    </div>
-                    <Link href="" className="btn btn-primary">Story Details</Link>
                   </div>
-                </div>
-              </>
-            )}
+                  {/* Add the other two default cards here following the same pattern */}
+                </>
+              )}
+            </Slider>
           </div>
         </div>
       </section>

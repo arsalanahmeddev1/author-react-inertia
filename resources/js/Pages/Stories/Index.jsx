@@ -97,7 +97,11 @@ export default function Index({ stories, genres, filters }) {
               stories.data.map((story) => (
                 <div className="col-lg-4 col-md-6" key={story.id}>
                   <div className="cards" data-aos-duration="3000" data-aos="flip-left">
-                    <img src={`/${story.cover_image}`} className="mb-20 w-100 story-book-img" alt={story.title} />
+                    <img
+                      src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'}
+                      className="mb-20 w-100 story-book-img"
+                      alt={story.title}
+                    />
                     <div className="d-flex align-items-center justify-content-between mb-10">
                       <h4 className="light-black fs-36 fw-600">{story.title}</h4>
                       <div className='d-flex align-items-center'>
@@ -108,11 +112,11 @@ export default function Index({ stories, genres, filters }) {
                     <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">{story.author}</h4>
                     <div className="d-flex justify-content-between align-items-center mb-20 pl-10">
                       <div className='d-flex align-items-center'>
-                      <i className="fas fa-eye text-primary-theme me-2"></i>
-                      <h6 className="text-black fs-18 mb-0">{story.read_count} People Read This Story</h6>
+                        <i className="fas fa-eye text-primary-theme me-2"></i>
+                        <h6 className="text-black fs-18 mb-0">{story.read_count} People Read This Story</h6>
                       </div>
                       <div>
-                      <LikeCount storyId={story.id} />
+                        <LikeCount storyId={story.id} />
                       </div>
                     </div>
                     <div className="d-flex justify-content-between align-items-center mb-20 pl-10">

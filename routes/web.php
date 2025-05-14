@@ -81,9 +81,20 @@ Route::get('/admin', function () {
     return Inertia::render('admin/Dashboard');
 })->name('admin.dashboard');
 
-// Admin User Routes
+// Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
+    // User routes
     Route::resource('users', UserController::class);
+    
+    // Story routes - use resource for standard CRUD operations
+    Route::resource('stories', \App\Http\Controllers\Admin\StoriesController::class);
+    
+    // Additional custom story routes (these should be defined BEFORE the resource route)
+    Route::get('standard-stories', [\App\Http\Controllers\Admin\StoriesController::class, 'standardStories'])
+        ->name('stories.standard');
+    
+    Route::get('community-stories', [\App\Http\Controllers\Admin\StoriesController::class, 'communityStories'])
+        ->name('stories.community');
 });
 
 require __DIR__.'/auth.php';

@@ -51,7 +51,7 @@ const Create = () => {
           <CCard className="mb-4">
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center">
-                <strong><FaUserPlus className="me-2" /> Create New User</strong>
+                <strong className='d-flex align-items-center'><FaUserPlus className="me-2" /> Create New User</strong>
               </div>
               <Link href={route('admin.users.index')}>
                 <CButton 
