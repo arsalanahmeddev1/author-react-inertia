@@ -298,19 +298,16 @@
 .draft-actions .btn-outline-secondary:hover {
   background-color: var(--secondry-theme);
   border-color: var(--secondry-theme);
-  color: white !important;
 }
 
 .draft-actions .btn-outline-primary:hover {
   background-color: var(--primary-theme);
   border-color: var(--primary-theme);
-  color: white !important;
 }
 
 .draft-actions .btn-outline-danger:hover {
   background-color: #dc3545;
   border-color: #dc3545;
-  color: white !important;
 }
 
 /* Empty state */

@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Tab, Nav } from 'react-bootstrap';
 import { usePage } from '@inertiajs/react';
-import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const StoryModal = ({ show, onHide, story }) => {
@@ -161,11 +160,11 @@ const StoryModal = ({ show, onHide, story }) => {
         // Redirect to the community story page
         window.location.href = route('community.show', response.data.story.id);
       } else {
-        toast.error('Failed to add story to community. Please try again.');
+        alert('Failed to add story to community. Please try again.');
       }
     } catch (error) {
       console.error('Error adding story to community:', error);
-      toast.error('Failed to add story to community. Please try again.');
+      alert('Failed to add story to community. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -191,11 +190,11 @@ const StoryModal = ({ show, onHide, story }) => {
         // Redirect to the community story page
         window.location.href = route('community.show', response.data.story.id);
       } else {
-        toast.error('Failed to add story to community. Please try again.');
+        alert('Failed to add story to community. Please try again.');
       }
     } catch (error) {
       console.error('Error adding story to community:', error);
-      toast.error('Failed to add story to community. Please try again.');
+      alert('Failed to add story to community. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -240,14 +239,12 @@ const StoryModal = ({ show, onHide, story }) => {
         // Add the new draft to the list
         setSavedDrafts([newDraft, ...savedDrafts]);
 
-        // Show success message with toast
-        toast.success('Draft saved successfully!', {
-          icon: '📝',
-        });
+        // Show success message
+        alert('Draft saved successfully!');
       }
     } catch (error) {
       console.error('Error saving draft:', error);
-      toast.error('Failed to save draft. Please try again.');
+      alert('Failed to save draft. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -260,9 +257,7 @@ const StoryModal = ({ show, onHide, story }) => {
 
     // Simulate API call
     setTimeout(() => {
-      toast.success('Your story has been published!', {
-        icon: '📚',
-      });
+      alert('Your story has been published!');
       setIsLoading(false);
       onHide();
     }, 500);
@@ -277,9 +272,7 @@ const StoryModal = ({ show, onHide, story }) => {
 
     // Simulate API call
     setTimeout(() => {
-      toast.success(`Your draft "${draft.title}" has been published!`, {
-        icon: '📚',
-      });
+      alert(`Your draft "${draft.title}" has been published!`);
       setIsLoading(false);
 
       // Remove from drafts after publishing
@@ -327,10 +320,6 @@ const StoryModal = ({ show, onHide, story }) => {
       return;
     }
 
-    toast.info('Deleting draft...', {
-      autoClose: 1000,
-    });
-
     setIsLoading(true);
 
     try {
@@ -340,12 +329,10 @@ const StoryModal = ({ show, onHide, story }) => {
       setSavedDrafts(savedDrafts.filter(d => d.id !== draftId));
 
       // Show success message
-      toast.success('Draft deleted successfully!', {
-        icon: '🗑️',
-      });
+      alert('Draft deleted successfully!');
     } catch (error) {
       console.error('Error deleting draft:', error);
-      toast.error('Failed to delete draft. Please try again.');
+      alert('Failed to delete draft. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -458,7 +445,7 @@ const StoryModal = ({ show, onHide, story }) => {
                     Save Draft
                   </button>
                   <button
-                    className="btn btn-primary story-btn secondry-font"
+                    className="btn btn-success story-btn secondry-font"
                     onClick={() => handleAddToCommunity()}
                     disabled={isLoading || !isReadyForCommunity()}
                   >
@@ -466,7 +453,7 @@ const StoryModal = ({ show, onHide, story }) => {
                     Add to Community
                   </button>
                   <button
-                    className="btn btn-secondary story-btn secondry-font"
+                    className="btn btn-primary story-btn secondry-font"
                     onClick={handlePublish}
                     disabled={isLoading || !isReadyForCommunity()}
                   >
@@ -500,24 +487,21 @@ const StoryModal = ({ show, onHide, story }) => {
                           <button
                             className="btn btn-sm btn-outline-secondary secondry-font"
                             onClick={() => handleEditDraft(draft)}
-                            style={{ borderColor: 'var(--secondry-theme)', color: 'var(--secondry-theme)' }}
                           >
                             <i className="fas fa-edit me-1"></i> Edit
                           </button>
                           <button
-                            className="btn btn-sm btn-outline-secondary secondry-font"
+                            className="btn btn-sm btn-outline-primary secondry-font"
                             onClick={() => handlePublishDraft(draft)}
                             disabled={isLoading || (!draft.content && !draft.characterId)}
-                            style={{ borderColor: 'var(--secondry-theme)', color: 'var(--secondry-theme)' }}
                           >
                             {isLoading ? <i className="fas fa-spinner fa-spin me-1"></i> : <i className="fas fa-paper-plane me-1"></i>}
                             Publish
                           </button>
                           <button
-                            className="btn btn-sm btn-outline-primary secondry-font"
+                            className="btn btn-sm btn-outline-success secondry-font"
                             onClick={() => handleAddToCommunityFromDraft(draft)}
                             disabled={isLoading || (!draft.content && !draft.characterId)}
-                            style={{ borderColor: 'var(--primary-theme)', color: 'var(--primary-theme)' }}
                           >
                             {isLoading ? <i className="fas fa-spinner fa-spin me-1"></i> : <i className="fas fa-users me-1"></i>}
                             Add to Community
@@ -526,7 +510,6 @@ const StoryModal = ({ show, onHide, story }) => {
                             className="btn btn-sm btn-outline-danger secondry-font"
                             onClick={() => handleDeleteDraft(draft.id)}
                             disabled={isLoading}
-                            style={{ borderColor: '#dc3545', color: '#dc3545' }}
                           >
                             {isLoading ? <i className="fas fa-spinner fa-spin me-1"></i> : <i className="fas fa-trash me-1"></i>}
                             Delete

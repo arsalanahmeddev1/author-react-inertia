@@ -213,7 +213,7 @@ const Home = () => {
       <section className="sec-5 pb-100">
         <div className="container">
           <div className="row row-gap-40 align-items-center justify-content-between flex-column flex-lg-row align-items-center text-center text-lg-start mx-auto mx-lg-0">
-            <div className="col-lg-8" data-aos-duration="3000" data-aos="fade-right">
+            <div className="col-lg-7" data-aos-duration="3000" data-aos="fade-right">
               <span className="fs-32 text-white ls-8">Sign In</span>
               <h2 className="heading mb-10 text-white">Sign In to <span>Continue Crafting</span> the Story Your Way</h2>
               <p className="fs-20 mb-20 sec-5-para text-white">
@@ -227,7 +227,7 @@ const Home = () => {
                 <p className="fs-20 text-white">Don't have an account?<Link href='register' className="pl-30 text-primary-theme text-white">Sign Up Now</Link></p>
               </div>
             </div>
-            <div className="col-lg-4" data-aos-duration="3000" data-aos="fade-left">
+            <div className="col-lg-5" data-aos-duration="3000" data-aos="fade-left">
               <img src="/assets/images/laptop.png" alt="" />
             </div>
           </div>

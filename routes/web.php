@@ -81,6 +81,9 @@ Route::get('/admin', function () {
     return Inertia::render('admin/Dashboard');
 })->name('admin.dashboard');
 
-Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
+// Admin User Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('users', UserController::class);
+});
 
 require __DIR__.'/auth.php';

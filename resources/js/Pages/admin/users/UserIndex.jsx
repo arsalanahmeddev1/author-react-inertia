@@ -1,5 +1,5 @@
-import React from 'react'
-import { Head, Link } from '@inertiajs/react'
+import React, { useState } from 'react'
+import { Head, Link, router } from '@inertiajs/react'
 import AdminLayout from '../../../Layouts/AdminLayout'
 import {
   CCard,
@@ -17,10 +17,40 @@ import {
   CPaginationItem,
   CButton,
   CTooltip,
-  CBadge
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
 } from '@coreui/react'
+import { FaEye, FaEdit, FaUserCircle, FaTrash, FaUserPlus } from 'react-icons/fa'
 
-const UserIndex = ({ users }) => {
+// Define theme colors
+const themeColors = {
+  primary: '#C67C19',
+  secondary: '#74989E',
+}
+
+const UserIndex = ({ users, flash }) => {
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [userToDelete, setUserToDelete] = useState(null)
+
+  const confirmDelete = (user) => {
+    setUserToDelete(user)
+    setDeleteModal(true)
+  }
+
+  const handleDelete = () => {
+    if (userToDelete) {
+      router.delete(route('admin.users.destroy', userToDelete.id), {
+        onSuccess: () => {
+          setDeleteModal(false)
+          setUserToDelete(null)
+        }
+      })
+    }
+  }
+
   return (
     <AdminLayout>
       <Head title="User Management" />
@@ -28,9 +58,24 @@ const UserIndex = ({ users }) => {
         <CCol xs={12}>
           <CCard className="mb-4">
             <CCardHeader className="d-flex justify-content-between align-items-center">
-              <strong>Users</strong>
+              <strong className="d-flex align-items-center">
+                <FaUserCircle className="me-2" /> Users
+              </strong>
+              <Link href={route('admin.users.create')}>
+                <CButton 
+                  style={{ backgroundColor: themeColors.primary, borderColor: themeColors.primary }}
+                  className="d-flex align-items-center" 
+                  size="sm"
+                >
+                  <FaUserPlus className="me-2" /> <span>Create User</span>
+                </CButton>
+              </Link>
             </CCardHeader>
             <CCardBody>
+              {flash?.success && (
+                <div className="alert alert-success mb-3">{flash.success}</div>
+              )}
+              
               <CTable hover responsive>
                 <CTableHead>
                   <CTableRow>
@@ -52,19 +97,44 @@ const UserIndex = ({ users }) => {
                         <CTableDataCell>
                           <div className="d-flex gap-2">
                             <CTooltip content="View User">
-                              <CButton 
-                                color="info" 
-                                size="sm"
-                              >
-                                View
-                              </CButton>
+                              <Link href={route('admin.users.show', user.id)}>
+                                <CButton 
+                                  style={{ 
+                                    color: themeColors.primary, 
+                                    borderColor: themeColors.primary 
+                                  }}
+                                  size="sm"
+                                  variant="outline"
+                                  className="d-flex align-items-center justify-content-center"
+                                >
+                                  <FaEye />
+                                </CButton>
+                              </Link>
                             </CTooltip>
                             <CTooltip content="Edit User">
+                              <Link href={route('admin.users.edit', user.id)}>
+                                <CButton 
+                                  style={{ 
+                                    color: themeColors.secondary, 
+                                    borderColor: themeColors.secondary 
+                                  }}
+                                  size="sm"
+                                  variant="outline"
+                                  className="d-flex align-items-center justify-content-center"
+                                >
+                                  <FaEdit />
+                                </CButton>
+                              </Link>
+                            </CTooltip>
+                            <CTooltip content="Delete User">
                               <CButton 
-                                color="warning" 
+                                color="danger" 
                                 size="sm"
+                                variant="outline"
+                                onClick={() => confirmDelete(user)}
+                                className="d-flex align-items-center justify-content-center"
                               >
-                                Edit
+                                <FaTrash />
                               </CButton>
                             </CTooltip>
                           </div>
@@ -87,8 +157,12 @@ const UserIndex = ({ users }) => {
                     <CPaginationItem
                       key={index}
                       active={link.active}
+                      style={link.active ? { 
+                        backgroundColor: themeColors.primary, 
+                        borderColor: themeColors.primary 
+                      } : {}}
                       disabled={!link.url}
-                      onClick={() => link.url && window.location.replace(link.url)}
+                      onClick={() => link.url && router.visit(link.url)}
                     >
                       <span dangerouslySetInnerHTML={{ __html: link.label }} />
                     </CPaginationItem>
@@ -99,6 +173,29 @@ const UserIndex = ({ users }) => {
           </CCard>
         </CCol>
       </CRow>
+
+      {/* Delete Confirmation Modal */}
+      <CModal visible={deleteModal} onClose={() => setDeleteModal(false)}>
+        <CModalHeader onClose={() => setDeleteModal(false)}>
+          <CModalTitle>Confirm Delete</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          Are you sure you want to delete the user: <strong>{userToDelete?.name}</strong>?
+          <br />
+          This action cannot be undone.
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setDeleteModal(false)}>
+            Cancel
+          </CButton>
+          <CButton 
+            style={{ backgroundColor: 'var(--cui-danger)', borderColor: 'var(--cui-danger)' }} 
+            onClick={handleDelete}
+          >
+            Delete
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </AdminLayout>
   )
 }
