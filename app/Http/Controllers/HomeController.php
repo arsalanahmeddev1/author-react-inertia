@@ -16,7 +16,7 @@ class HomeController extends Controller
         // Get the latest 3 non-community stories for the "Other Stories" section
         $latestStories = Story::where('is_community', false)
             ->latest()
-            ->take(3)
+            // ->take(3)
             ->get();
 
         // We'll keep the data refresh to ensure accurate counts

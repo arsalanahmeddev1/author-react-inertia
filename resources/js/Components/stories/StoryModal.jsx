@@ -131,10 +131,8 @@ const StoryModal = ({ show, onHide, story }) => {
 
   // Check if the story is ready for community
   const isReadyForCommunity = () => {
-    // Story is ready if either:
-    // 1. A character is selected (regardless of content)
-    // 2. There's content in the editor (regardless of character selection)
-    return selectedCharacter || (editorRef.current && editorRef.current.innerText.trim().length > 0);
+    // Story is ready only if a character is selected AND there's content in the editor
+    return selectedCharacter && storyContent.trim().length > 0;
   };
 
   // Handle adding to community

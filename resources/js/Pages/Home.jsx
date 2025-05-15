@@ -218,46 +218,40 @@ const Home = () => {
           </div>
           <div className="story-slider-container">
 
-            <Slider
-              dots={false}
-              infinite={true}
-              speed={500}
-              slidesToShow={slidesToShow}
-              slidesToScroll={1}
-              nextArrow={showArrows ? <NextArrow /> : null}
-              prevArrow={showArrows ? <PrevArrow /> : null}
-              responsive={[
-                {
-                  breakpoint: 992,
-                  settings: {
-                    slidesToShow: Math.min(2, storyCount),
+            {stories.length > 0 && (
+              <Slider
+                dots={false}
+                infinite={true}
+                speed={500}
+                slidesToShow={3}
+                slidesToScroll={1}
+                nextArrow={showArrows ? <NextArrow /> : null}
+                prevArrow={showArrows ? <PrevArrow /> : null}
+                responsive={[
+                  {
+                    breakpoint: 1024,
+                    settings: {
+                      slidesToShow: 2,
+                    }
+                  },
+                  {
+                    breakpoint: 600,
+                    settings: {
+                      slidesToShow: 1,
+                    }
                   }
-                },
-                {
-                  breakpoint: 768,
-                  settings: {
-                    slidesToShow: 1,
-                  }
-                }
-              ]}
-            >
-              {stories && stories.length > 0 ? (
-                stories.map((story, index) => (
-                  <div key={story.id || index} className="px-2">
-                    <div className="cards" data-aos-duration="3000" data-aos="flip-left">
-                       <img
-                      src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'}
-                      className="mb-20 w-100"
+                ]}
+              >
+                {stories.map((story, index) => (
+                  
+
+                  <div key={index} className="p-3">
+                    <div style={{maxWidth: '450px'  }} className="story-card cards p-4 border rounded h-100 text-start" data-aos-duration="3000" data-aos="flip-left">
+                      <img src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'} 
                       alt={story.title}
-                        onError={(e) => {
-                          const fallbackImages = [
-                            "/assets/images/book-00.png",
-                            "/assets/images/book-02.png",
-                            "/assets/images/book-04.png"
-                          ];
-                          e.target.src = fallbackImages[index % fallbackImages.length];
-                        }}
+                       className="w-100 object-cover rounded mb-2"
                       />
+                      
                       <div className="d-flex align-items-center justify-content-between mb-10">
                         <h4 className="light-black fs-36 fw-600">{story.title}</h4>
                         <div className='d-flex align-items-center'>
@@ -270,12 +264,14 @@ const Home = () => {
                         <i className="fas fa-eye text-primary-theme me-2"></i>
                         <h6 className="text-black fs-18 mb-0">{story.read_count || 0} People Read This Story</h6>
                       </div>
-                      <Link href={route('stories.show', story.id)} className="btn btn-primary">Story Details</Link>
+                      <Link href={`/stories/${story.id}`} className="btn btn-sm btn-primary mt-3">
+                        Read More
+                      </Link>
                     </div>
                   </div>
-                ))
-              ) : null}
-            </Slider>
+                ))}
+              </Slider>
+            )}
           </div>
         </div>
       </section>
