@@ -80,10 +80,10 @@ export default function Show({ story }) {
               <div className="bg-white p-4 p-md-5 rounded-4 shadow-sm">
                 <div className="row">
                   <div className="col-md-4 mb-4 mb-md-0">
-                    <img
-                      src={`/${story.cover_image}`}
-                      alt={story.title}
+                     <img
+                      src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'}
                       className="img-fluid rounded-3 mb-3"
+                      alt={story.title}
                     />
                     <div className="d-flex justify-content-between align-items-center mb-3">
                       <span className="fs-18 secondry-font">

@@ -5,7 +5,9 @@ import Slider from "react-slick";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 
 const Home = () => {
+
   const NextArrow = (props) => {
+
     const { onClick } = props;
     return (
       <div
@@ -71,6 +73,11 @@ const Home = () => {
       setStories(props.latestStories);
     }
   }, [props.latestStories]);
+
+  const storyCount = stories.length;
+  const slidesToShow = Math.min(storyCount);
+  const infiniteMode = storyCount > slidesToShow;
+  const showArrows = storyCount > 1;
 
   // No automatic refresh on component mount
   return (
@@ -210,19 +217,20 @@ const Home = () => {
             </div>
           </div>
           <div className="story-slider-container">
+
             <Slider
               dots={false}
               infinite={true}
               speed={500}
-              slidesToShow={3}
+              slidesToShow={slidesToShow}
               slidesToScroll={1}
-              nextArrow={<NextArrow />}
-              prevArrow={<PrevArrow />}
+              nextArrow={showArrows ? <NextArrow /> : null}
+              prevArrow={showArrows ? <PrevArrow /> : null}
               responsive={[
                 {
                   breakpoint: 992,
                   settings: {
-                    slidesToShow: 2,
+                    slidesToShow: Math.min(2, storyCount),
                   }
                 },
                 {
@@ -237,13 +245,13 @@ const Home = () => {
                 stories.map((story, index) => (
                   <div key={story.id || index} className="px-2">
                     <div className="cards" data-aos-duration="3000" data-aos="flip-left">
-                      <img
-                        src={`/${story.cover_image}`}
-                        className="mb-20 w-100"
-                        alt={story.title}
+                       <img
+                      src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'}
+                      className="mb-20 w-100"
+                      alt={story.title}
                         onError={(e) => {
                           const fallbackImages = [
-                            "/assets/images/book-03.png",
+                            "/assets/images/book-00.png",
                             "/assets/images/book-02.png",
                             "/assets/images/book-04.png"
                           ];
@@ -266,30 +274,7 @@ const Home = () => {
                     </div>
                   </div>
                 ))
-              ) : (
-                // Fallback content for slider when no stories
-                <>
-                  <div className="px-2">
-                    <div className="cards">
-                      <img src="/assets/images/book-03.png" className="mb-20 w-100" alt="" />
-                      <div className="d-flex align-items-center justify-content-between mb-10">
-                        <h4 className="light-black fs-36 fw-600">Death At Fallow End</h4>
-                        <div className='d-flex align-items-center'>
-                          <img src="/assets/images/comments.svg" className="" alt="comments" />
-                          <span className="pl-10">64</span>
-                        </div>
-                      </div>
-                      <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">Anne Rice</h4>
-                      <div className="d-flex align-items-center mb-20 pl-10">
-                        <i className="fas fa-eye text-primary-theme me-2"></i>
-                        <h6 className="text-black fs-18 mb-0">95 People Read This Story</h6>
-                      </div>
-                      <Link href="" className="btn btn-primary">Story Details</Link>
-                    </div>
-                  </div>
-                  {/* Add the other two default cards here following the same pattern */}
-                </>
-              )}
+              ) : null}
             </Slider>
           </div>
         </div>
@@ -318,7 +303,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-    </Layout>
+    </Layout >
   );
 };
 

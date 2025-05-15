@@ -125,11 +125,11 @@ export default function Read({ story, auth }) {
         >
           <div className="book-cover-container">
             <div className="book-cover-wrapper">
-              <img
-                src={`/${story.cover_image}`}
-                alt={story.title}
-                className="book-cover-image"
-              />
+               <img
+                      src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'}
+                      className="book-cover-image"
+                      alt={story.title}
+                    />
               <div className="book-cover-details">
                 <h1 className="book-title">{story.title}</h1>
                 <h3 className="book-author">By {story.author}</h3>
@@ -177,11 +177,12 @@ export default function Read({ story, auth }) {
               {/* Book Info Bar */}
               <div className="book-info-bar">
                 <div className="d-flex align-items-center">
-                  <img
-                    src={`/${story.cover_image}`}
-                    alt={story.title}
-                    className="mini-cover me-3"
-                  />
+                 
+                   <img
+                      src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'}
+                      className="mini-cover mb-3 me-3"
+                      alt={story.title}
+                    />
                   <div>
                     <h4 className="mb-0">{story.title}</h4>
                     <p className="mb-0 text-muted">Chapter 1</p>
