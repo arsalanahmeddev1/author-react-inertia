@@ -131,8 +131,19 @@ const StoryModal = ({ show, onHide, story }) => {
 
   // Check if the story is ready for community
   const isReadyForCommunity = () => {
-    // Story is ready only if a character is selected AND there's content in the editor
-    return selectedCharacter && storyContent.trim().length > 0;
+    // Check if character is selected
+    if (!selectedCharacter) return false;
+    
+    // Check if editor has content
+    if (!storyContent.trim().length) return false;
+    
+    // Get the character
+    const character = story?.characters?.find(c => c.id.toString() === selectedCharacter);
+    if (!character) return false;
+    
+    // Check if the content contains the character's perspective text
+    const characterPerspectiveText = `As ${character.name}, I`;
+    return storyContent.includes(characterPerspectiveText);
   };
 
   // Handle adding to community
