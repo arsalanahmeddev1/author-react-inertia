@@ -221,7 +221,7 @@ const Home = () => {
             {stories.length > 0 && (
               <Slider
                 dots={false}
-                infinite={true}
+                infinite={stories.length > 3}
                 speed={500}
                 slidesToShow={3}
                 slidesToScroll={1}

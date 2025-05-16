@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Head, router } from '@inertiajs/react'
-import AdminLayout from '../../../Layouts/AdminLayout'
+import AdminLayout from '../../../Layouts/AdminLayout';
+import { Icons } from '../../../utils/icons';
 import {
   CButton,
   CCard,
@@ -95,63 +96,74 @@ const Index = ({ stories }) => {
                         </CTableDataCell>
                         <CTableDataCell>
                           <div className="d-flex gap-2">
-                            <CBadge color="primary" title="Reads">
-                              👁️ {story.read_count}
+                            <CBadge className="d-flex gap-2" color="primary" title="Reads">
+                              <Icons.View /> {story.read_count}
                             </CBadge>
-                            <CBadge color="danger" title="Likes">
-                              ❤️ {story.likes_count}
+                            <CBadge className="d-flex gap-2" color="danger" title="Likes">
+                              <Icons.Like /> {story.likes_count}
                             </CBadge>
-                            <CBadge color="dark" title="Comments">
-                              💬 {story.comment_count}
+                            <CBadge className="d-flex gap-2" color="dark" title="Comments">
+                              <Icons.Comment /> {story.comment_count}
                             </CBadge>
                           </div>
                         </CTableDataCell>
                         <CTableDataCell></CTableDataCell>
                         <CTableDataCell>
                           <div className="d-flex gap-2">
-                            <CTooltip content="View Story">
-                              <CButton
-                                color="info"
-                                size="sm"
-                                onClick={() => router.visit(route('admin.stories.show', story.id))}
-                              >
-                                {/* <CIcon icon={cilEye} /> View */}
-                              </CButton>
-                            </CTooltip>
-                            <CTooltip content="Delete Story">
-                              <CButton
-                                color="danger"
-                                size="sm"
-                                onClick={() => confirmDelete(story)}
-                              >
-                                {/* <CIcon icon={cilTrash} /> Delete */}
-                              </CButton>
-                            </CTooltip>
-                            {story.status === 'pending' || (
-                              <>
-                                <CTooltip content="Approve Story">
-                                  <CButton
-                                    color="success"
-                                    size="sm"
-                                    onClick={() => router.post(route('admin.stories.approve', story.id))}
-                                  >
-                                    ✅
-                                  </CButton>
-                                </CTooltip>
-                                <CTooltip content="Reject Story">
-                                  <CButton
-                                    color="warning"
-                                    size="sm"
-                                    onClick={() => router.post(route('admin.stories.reject', story.id))}
-                                  >
-                                    ❌
-                                  </CButton>
-                                </CTooltip>
-                              </>
-                            )}
+                            {[
+                              <CTooltip key="view" content="View Story">
+                                <CButton
+                                  color="info"
+                                  size="sm"
+                                  onClick={() => router.visit(route('admin.stories.show', story.id))}
+                                >
+                                  {/* <CIcon icon={cilEye} /> View */}
+                                  <Icons.View />
+                                </CButton>
+                              </CTooltip>,
+                              <CTooltip key="edit" content="Edit Story">
+                                <CButton
+                                  color="warning"
+                                  size="sm"
+                                  onClick={() => router.visit(route('admin.stories.edit', story.id))}
+                                >
+                                  <Icons.Edit />
+                                </CButton>
+                              </CTooltip>,
+                              <CTooltip key="delete" content="Delete Story">
+                                <CButton
+                                  color="danger"
+                                  size="sm"
+                                  onClick={() => confirmDelete(story)}
+                                >
+                                  <Icons.Delete />
+                                </CButton>
+                              </CTooltip>,
+                              story.is_community && story.status === 'pending' && (
+                                <>
+                                  <CTooltip key="approve" content="Approve Story">
+                                    <CButton
+                                      color="success"
+                                      size="sm"
+                                      onClick={() => router.post(route('admin.stories.approve', story.id))}
+                                    >
+                                      ✅
+                                    </CButton>
+                                  </CTooltip>
+                                  <CTooltip key="reject" content="Reject Story">
+                                    <CButton
+                                      color="warning"
+                                      size="sm"
+                                      onClick={() => router.post(route('admin.stories.reject', story.id))}
+                                    >
+                                      ❌
+                                    </CButton>
+                                  </CTooltip>
+                                </>
+                              ),
+                            ].filter(Boolean)}
                           </div>
                         </CTableDataCell>
-
                       </CTableRow>
                     ))
                   ) : (
