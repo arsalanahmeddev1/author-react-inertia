@@ -110,25 +110,48 @@ const Index = ({ stories }) => {
                         <CTableDataCell>
                           <div className="d-flex gap-2">
                             <CTooltip content="View Story">
-                              <CButton 
-                                color="info" 
-                                size="sm" 
+                              <CButton
+                                color="info"
+                                size="sm"
                                 onClick={() => router.visit(route('admin.stories.show', story.id))}
                               >
                                 {/* <CIcon icon={cilEye} /> View */}
                               </CButton>
                             </CTooltip>
                             <CTooltip content="Delete Story">
-                              <CButton 
-                                color="danger" 
-                                size="sm" 
+                              <CButton
+                                color="danger"
+                                size="sm"
                                 onClick={() => confirmDelete(story)}
                               >
                                 {/* <CIcon icon={cilTrash} /> Delete */}
                               </CButton>
                             </CTooltip>
+                            {story.status === 'pending' || (
+                              <>
+                                <CTooltip content="Approve Story">
+                                  <CButton
+                                    color="success"
+                                    size="sm"
+                                    onClick={() => router.post(route('admin.stories.approve', story.id))}
+                                  >
+                                    ✅
+                                  </CButton>
+                                </CTooltip>
+                                <CTooltip content="Reject Story">
+                                  <CButton
+                                    color="warning"
+                                    size="sm"
+                                    onClick={() => router.post(route('admin.stories.reject', story.id))}
+                                  >
+                                    ❌
+                                  </CButton>
+                                </CTooltip>
+                              </>
+                            )}
                           </div>
                         </CTableDataCell>
+
                       </CTableRow>
                     ))
                   ) : (

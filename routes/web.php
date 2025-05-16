@@ -1,7 +1,10 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
+
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\GuestAuthController;
+use App\Http\Controllers\Admin\StoriesController as AdminStoriesController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\CommentsController;
@@ -85,16 +88,20 @@ Route::get('/admin', function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     // User routes
     Route::resource('users', UserController::class);
-    
+
     // Story routes - use resource for standard CRUD operations
     Route::resource('stories', \App\Http\Controllers\Admin\StoriesController::class);
-    
+
     // Additional custom story routes (these should be defined BEFORE the resource route)
     Route::get('standard-stories', [\App\Http\Controllers\Admin\StoriesController::class, 'standardStories'])
         ->name('stories.standard');
-    
+
     Route::get('community-stories', [\App\Http\Controllers\Admin\StoriesController::class, 'communityStories'])
         ->name('stories.community');
+
+    Route::get('stories/pending', [\App\Http\Controllers\Admin\StoriesController::class, 'pending'])->name('stories.pending');
+    Route::post('{story}/approve', [\App\Http\Controllers\Admin\StoriesController::class, 'approve'])->name('stories.approve');
+    Route::post('{story}/reject', [\App\Http\Controllers\Admin\StoriesController::class, 'reject'])->name('stories.reject');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

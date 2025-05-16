@@ -245,8 +245,8 @@ const Home = () => {
                 {stories.map((story, index) => (
                   
 
-                  <div key={index} className="p-3">
-                    <div style={{maxWidth: '450px'  }} className="story-card cards p-4 border rounded h-100 text-start" data-aos-duration="3000" data-aos="flip-left">
+                  <div key={index} className="">
+                    <div style={{maxWidth: '450px'  }} className="story-card cards  rounded h-100 text-start" data-aos-duration="3000" data-aos="flip-left">
                       <img src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'} 
                       alt={story.title}
                        className="w-100 object-cover rounded mb-2"

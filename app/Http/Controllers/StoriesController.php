@@ -16,7 +16,6 @@ class StoriesController extends Controller
     {
         // Only show non-community stories
         $query = Story::where('is_community', false);
-
         // Filter by genre if provided
         if ($request->has('genre') && $request->genre !== 'all') {
             $query->where('genre', $request->genre);
@@ -24,9 +23,9 @@ class StoriesController extends Controller
 
         // Search by title or description if provided
         if ($request->has('search') && !empty($request->search)) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('title', 'like', "%{$request->search}%")
-                  ->orWhere('description', 'like', "%{$request->search}%");
+                    ->orWhere('description', 'like', "%{$request->search}%");
             });
         }
 
@@ -50,6 +49,27 @@ class StoriesController extends Controller
             'genres' => $genres,
             'filters' => $request->only(['search', 'genre']),
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        Story::create([
+            'title' => $request->title,
+            'content' => $request->content,
+            'user_id' => Auth::id(),
+            'status' => 'pending', // ← This sets the initial status
+            'read_count' => 0,
+            'likes_count' => 0,
+            'comment_count' => 0,
+            'is_community' => false, // Or true, depending on your logic
+        ]);
+
+        return redirect()->back()->with('success', 'Story submitted for approval.');
     }
 
     /**

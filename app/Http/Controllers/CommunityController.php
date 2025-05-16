@@ -14,7 +14,7 @@ class CommunityController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Story::where('is_community', true);
+        $query = Story::where('is_community', true)->where('status', 'approved');
 
         // Filter by genre if provided
         if ($request->has('genre') && $request->genre !== 'all') {

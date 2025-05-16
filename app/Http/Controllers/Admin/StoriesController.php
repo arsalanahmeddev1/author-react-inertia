@@ -15,13 +15,36 @@ class StoriesController extends Controller
      */
     public function index()
     {
-        $stories = Story::select('id', 'title', 'author', 'genre', 'read_count', 'likes_count', 'comment_count', 'created_at', 'is_community')
+        $stories = Story::select('id', 'title', 'author', 'genre', 'read_count', 'likes_count', 'comment_count', 'created_at', 'is_community', 'status')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return Inertia::render('admin/stories/Index', [
             'stories' => $stories,
         ]);
+    }
+
+    public function pending()
+    {
+        $stories = Story::where('status', 'pending')->orderBy('created_at', 'desc')->paginate(10);
+
+        return Inertia::render('admin/stories/Pending', [
+            'stories' => $stories,
+            'pageTitle' => 'Pending Stories',
+        ]);
+    }
+
+
+    public function approve(Story $story)
+    {
+        $story->update(['status' => 'approved']);
+        return redirect()->back()->with('success', 'Story approved.');
+    }
+
+    public function reject(Story $story)
+    {
+        $story->update(['status' => 'rejected']);
+        return redirect()->back()->with('success', 'Story rejected.');
     }
 
     public function standardStories()
@@ -86,6 +109,7 @@ class StoriesController extends Controller
             'read_count' => 0,
             'likes_count' => 0,
             'comment_count' => 0,
+
         ];
 
         // Handle cover image upload
@@ -117,7 +141,7 @@ class StoriesController extends Controller
     {
         // Load the characters relationship
         $story->load('characters');
-        
+
         return Inertia::render('admin/stories/Show', [
             'story' => $story,
         ]);
@@ -127,7 +151,7 @@ class StoriesController extends Controller
     {
         // Load the characters relationship
         $story->load('characters');
-        
+
         return Inertia::render('admin/stories/Edit', [
             'story' => $story,
         ]);
@@ -165,7 +189,7 @@ class StoriesController extends Controller
             if ($story->cover_image) {
                 Storage::disk('public')->delete($story->cover_image);
             }
-            
+
             $path = $request->file('cover_image')->store('cover_images', 'public');
             $storyData['cover_image'] = $path;
         }
@@ -218,16 +242,16 @@ class StoriesController extends Controller
         if ($story->cover_image) {
             Storage::disk('public')->delete($story->cover_image);
         }
-        
+
         // Delete associated data (comments, likes, etc.)
         $story->comments()->delete();
         $story->likes()->delete();
         $story->drafts()->delete();
         $story->characters()->delete(); // Delete characters
-        
+
         $story->delete();
 
         return redirect()->route('admin.stories.index')
             ->with('success', 'Story deleted successfully.');
     }
-} 
+}

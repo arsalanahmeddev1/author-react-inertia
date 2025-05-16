@@ -28,6 +28,8 @@ class Story extends Model
         'style',
         'content',
         'is_community',
+        'status',
+        'user_id',
     ];
 
     /**
