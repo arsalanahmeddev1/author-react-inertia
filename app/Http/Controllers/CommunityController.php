@@ -63,7 +63,9 @@ class CommunityController extends Controller
         if ($story->status !== 'approved') {
             // If not approved, you can:
             // Option 1: Abort with a 404 Not Found error
-            return Inertia::render('Stories/PendingApproval');
+            return Inertia::render('Stories/PendingApproval', [
+                'story' => $story,
+            ]);
 
             // Option 2: Redirect to another page (e.g., home)
             // return redirect()->route('home')->with('error', 'Story is pending approval.');
