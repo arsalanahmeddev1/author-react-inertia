@@ -41,6 +41,16 @@ class Story extends Model
         'is_community' => false,
     ];
 
+    public function scopeCommunity($query)
+    {
+        return $query->where('is_community', true);
+    }
+
+    public function scopeStandard($query)
+    {
+        return $query->where('is_community', false);
+    }
+
     /**
      * Get the characters for the story.
      */

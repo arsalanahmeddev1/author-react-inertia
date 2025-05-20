@@ -15,10 +15,11 @@ use App\Http\Controllers\StoriesController;
 use App\Http\Controllers\StoryDraftsController;
 use App\Http\Controllers\StoryLikesController;
 use App\Models\User;
-use Illuminate\Container\Attributes\Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DashboardController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
@@ -83,9 +84,8 @@ Route::middleware('auth')->group(function () {
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('admin/Dashboard');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->middleware(['auth']);
+
     Route::resource('users', UserController::class);
     Route::resource('stories', \App\Http\Controllers\Admin\StoriesController::class);
 

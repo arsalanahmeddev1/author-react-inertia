@@ -52,28 +52,15 @@ class CommunityController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified community story.
-     */
     public function show($id)
     {
         $story = Story::findOrFail($id);
 
         // Check if the story is approved
         if ($story->status !== 'approved') {
-            // If not approved, you can:
-            // Option 1: Abort with a 404 Not Found error
             return Inertia::render('Stories/PendingApproval', [
                 'story' => $story,
             ]);
-
-            // Option 2: Redirect to another page (e.g., home)
-            // return redirect()->route('home')->with('error', 'Story is pending approval.');
-
-            // Option 3: Return a view/Inertia page with a message
-            // return Inertia::render('Story/PendingApproval', [
-            //     'message' => 'This story is pending admin approval.',
-            // ]);
         }
         // Increment the read count
         $story->increment('read_count');

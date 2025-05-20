@@ -176,7 +176,9 @@
   background-color: var(--secondry-theme);
   border-radius: var(--text-10);
 }
-
+.primary-font {
+  font-family: var(--primary-font);
+}
 /* globals start */
 html,
 body {

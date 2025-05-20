@@ -92,4 +92,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(StoryDraft::class);
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->is_admin === 1; // or simply: (bool) $this->isAdmin;
+    }
 }
