@@ -39,7 +39,6 @@ export default function Index({ stories, genres, filters }) {
   return (
     <InnerLayout>
       <Head title="Stories" />
-
       <section className="py-100 sec-bg">
         <div className="container">
           <div className="row text-center mb-70">

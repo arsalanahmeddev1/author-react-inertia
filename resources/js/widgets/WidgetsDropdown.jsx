@@ -15,11 +15,17 @@ import { CChartBar, CChartLine } from '@coreui/react-chartjs'
 import CIcon from '@coreui/icons-react'
 import { cilArrowBottom, cilArrowTop, cilOptions } from '@coreui/icons'
 
-const WidgetsDropdown = ({ usersCount, totalUsers, communityStoriesCount, adminStoriesCount, userCountsByMonth, className, props }) => {
+const WidgetsDropdown = ({ usersCount, adminStoriesByMonth, totalUsers, communityStoriesByMonth, communityStoriesCount, adminStoriesCount, userCountsByMonth, className, props }) => {
   const widgetChartRef1 = useRef(null)
   const widgetChartRef2 = useRef(null)
   const labels = userCountsByMonth.map(item => item.month)
-  const data = userCountsByMonth.map(item => item.count)
+  const countsMap = {}
+  userCountsByMonth.forEach(item => {
+    countsMap[item.month] = item.count
+  })
+  const userChartData = labels.map(month => countsMap[month] || 0)
+
+
 
   useEffect(() => {
     document.documentElement.addEventListener('ColorSchemeChange', () => {
@@ -38,6 +44,22 @@ const WidgetsDropdown = ({ usersCount, totalUsers, communityStoriesCount, adminS
       }
     })
   }, [widgetChartRef1, widgetChartRef2])
+
+
+  const storyCountsMap = {};
+  if (Array.isArray(communityStoriesByMonth)) {
+    communityStoriesByMonth.forEach(item => {
+      storyCountsMap[item.month] = item.count;
+    });
+  }
+  const storyChartData = labels.map(month => storyCountsMap[month] || 0);
+
+  const adminStoryCountsMap = {}
+  adminStoriesByMonth?.forEach(item => {
+    adminStoryCountsMap[item.month] = item.count
+  })
+
+  const adminStoryChartData = labels.map(month => adminStoryCountsMap[month] || 0)
 
   return (
     <CRow className={className} xs={{ gutter: 4 }}>
@@ -76,7 +98,7 @@ const WidgetsDropdown = ({ usersCount, totalUsers, communityStoriesCount, adminS
                     backgroundColor: 'transparent',
                     borderColor: 'rgba(255,255,255,.55)',
                     pointBackgroundColor: getStyle('--cui-primary'),
-                    data: data,
+                    data: userChartData,
                   },
                 ],
               }}
@@ -241,13 +263,13 @@ const WidgetsDropdown = ({ usersCount, totalUsers, communityStoriesCount, adminS
               className="mt-3"
               style={{ height: '70px' }}
               data={{
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: labels,
                 datasets: [
                   {
                     label: 'My First dataset',
                     backgroundColor: 'rgba(255,255,255,.2)',
                     borderColor: 'rgba(255,255,255,.55)',
-                    data: [78, 81, 80, 45, 34, 12, 40],
+                    data: storyChartData,
                     fill: true,
                   },
                 ],
@@ -333,7 +355,7 @@ const WidgetsDropdown = ({ usersCount, totalUsers, communityStoriesCount, adminS
                     label: 'My First dataset',
                     backgroundColor: 'rgba(255,255,255,.2)',
                     borderColor: 'rgba(255,255,255,.55)',
-                    data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
+                    data: adminStoryChartData,
                     barPercentage: 0.6,
                   },
                 ],

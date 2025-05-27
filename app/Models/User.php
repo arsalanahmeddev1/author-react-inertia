@@ -97,4 +97,22 @@ class User extends Authenticatable
     {
         return $this->is_admin === 1; // or simply: (bool) $this->isAdmin;
     }
+
+    public static function monthlyRegistrations($year = null)
+    {
+        $year = $year ?? now()->year;
+
+        $users = self::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->whereYear('created_at', $year)
+            ->groupBy('month')
+            ->get()
+            ->keyBy('month');
+
+        return collect(range(1, 12))->map(function ($month) use ($users) {
+            return [
+                'month' => \Carbon\Carbon::create()->month($month)->format('M'),
+                'count' => $users[$month]->count ?? 0,
+            ];
+        });
+    }
 }

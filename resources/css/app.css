@@ -1,6 +1,6 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
 :root {
   --secondry-theme-rgb: 108, 92, 231; /* RGB values for the secondary theme color */
@@ -127,3 +127,16 @@
     transform: translateY(0);
   }
 }
+
+/* home revamp */
+.container {
+  @apply mx-auto
+}
+.hd-lg {
+  @apply text-[70px]
+}
+.para {
+  @apply text-[18px] 
+}
+/* responsive */
+  

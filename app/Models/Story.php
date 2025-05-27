@@ -99,4 +99,35 @@ class Story extends Model
     {
         return $this->hasMany(StoryDraft::class);
     }
+
+    public static function monthlyCountsByType($type = 'community', $year = null)
+    {
+        $year = $year ?? now()->year;
+
+        $query = self::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->whereYear('created_at', $year)
+            ->groupBy('month');
+
+        if ($type === 'community') {
+            $query->community();
+        } else {
+            $query->standard();
+        }
+
+        $stories = $query->get()->keyBy('month');
+
+        return collect(range(1, 12))->map(function ($month) use ($stories) {
+            return [
+                'month' => \Carbon\Carbon::create()->month($month)->format('M'),
+                'count' => $stories[$month]->count ?? 0,
+            ];
+        });
+    }
+
+    protected $appends = ['created_at_formatted'];
+
+    public function getCreatedAtFormattedAttribute()
+    {
+        return $this->created_at->format('d M Y'); // e.g., "20 May 2025"
+    }
 }

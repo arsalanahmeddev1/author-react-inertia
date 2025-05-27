@@ -107,7 +107,7 @@ const Index = ({ stories }) => {
                             </CBadge>
                           </div>
                         </CTableDataCell>
-                        <CTableDataCell></CTableDataCell>
+                        <CTableDataCell>{story.created_at_formatted}</CTableDataCell>
                         <CTableDataCell>
                           <div className="d-flex gap-2">
                             {[
@@ -218,4 +218,4 @@ const Index = ({ stories }) => {
   )
 }
 
-export default Index 
+export default Index

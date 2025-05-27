@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import UserAvatar from './UserAvatar';
 
-const Header = ({logoClass , headerClass}) => {
+const Header = ({ logoClass, headerClass }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { url } = usePage();
   const { auth } = usePage().props;
@@ -15,80 +15,37 @@ const Header = ({logoClass , headerClass}) => {
   const isActive = (path) => {
     return url.startsWith(path);
   };
-
   return (
-    <header className={`header pt-20 position-absolute top-0 w-100 ${headerClass ? headerClass : ''} }`}>
-      <div className="container position-relative">
-        <div className="row justify-content-between">
-          <div className="col-lg-3 col-6">
-            <div className="logo position-absolute top-0 start-0 text-center" data-aos-duration="3000" data-aos="fade-right">
-              <img src="/assets/images/logo.png" className={`${logoClass}`} alt="logo" />
-              <span className="text-white d-block fs-29">Verba aeternum fluentia</span>
-              <span className="text-white fs-24">(Words flowing eternally)</span>
+    <header className='position-absolute top-0 w-100 z-3' style={{paddingTop: '30px'}}>
+      <div className="container">
+        <div className="row align-items-center justify-content-between">
+          <div className="col-lg-2 col-6">
+            <div className="logo">
+              <img src="/assets/images/logo.png" alt="logo" />
             </div>
           </div>
-          <div className="col-lg-4">
+          <div className="col-lg-6 col-6">
             <nav>
-              <ul className={`primary-navs d-flex align-items-center justify-content-between pt-50 ${isMenuOpen ? 'active' : ''}`} >
-                <div className="close-icon">
-                  <i className="fa-solid fa-xmark menu-toggle" onClick={toggleMenu}></i>
-                </div>
-                <li><Link href="/" className={isActive('/') && !isActive('/stories') && !isActive('/publish') && !isActive('/about') ? 'text-primary-theme' : ''}>Home</Link></li>
-                <li><Link href="/stories" className={isActive('/stories') ? 'text-primary-theme' : ''}>Stories</Link></li>
-                <li><Link href="/publish" className={isActive('/publish') ? 'text-primary-theme' : ''}>Publish</Link></li>
-                <li><Link href="/about" className={isActive('/about') ? 'text-primary-theme' : ''}>About Us</Link></li>
-                {!auth?.user ? (
-                  <>
-                    <Link href='/register' className="btn btn-secondary text-white d-block d-sm-none">Sign Up</Link>
-                    <Link href='/login' className="btn btn-secondary text-white d-block d-sm-none">Sign In</Link>
-                    <Link href="/guest-login" className="btn btn-secondary d-block d-sm-none">Guest Login</Link>
-                  </>
-                ) : auth?.user?.is_guest ? (
-                  <div className="d-flex flex-column gap-2 d-block d-sm-none">
-                    <span className="btn btn-secondary">Guest</span>
-                    <Link href="/logout" method="post" as="button" className="btn btn-outline-secondary btn-sm">
-                      <i className="fas fa-sign-out-alt me-1"></i> Logout
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="d-flex justify-content-center mb-3 d-block d-sm-none">
-                    <UserAvatar user={auth.user} />
-                  </div>
-                )}
+              <ul className='d-flex primary-navs align-items-center justify-content-center gap-20'>
+                <li><Link href="/">Home</Link></li>
+                <li><Link href="/stories">Stories</Link></li>
+                <li><Link href="/publish">Publish</Link></li>
+                <li><Link href="/about-us">About Us</Link></li>
               </ul>
             </nav>
           </div>
           <div className="col-lg-4">
-            <div className={`d-flex align-items-center gap-20 ${auth.user ? "pt-42" : "pt-33"} justify-content-end justify-content-lg-between`}
-            
-            >
-              {!auth?.user ? (
-                <>
-                  <Link href='/register' className="text-white d-none d-sm-block">Sign Up</Link>
-                  <div className="vertical-line d-none d-sm-block"></div>
-                  <Link href='/login' className="text-white d-none d-sm-block">Sign In</Link>
-                  <div className="vertical-line d-none d-sm-block"></div>
-                  <Link href="/guest-login" className="btn btn-secondary d-none d-sm-block">Guest Login</Link>
-                </>
-              ) : auth?.user?.is_guest ? (
-                <div className="d-flex align-items-center gap-2">
-                  <span className="btn btn-secondary d-none d-sm-block">Guest</span>
-                  <Link href="/logout" method="post" as="button" className="btn btn-outline-secondary btn-sm d-none d-sm-block">
-                    <i className="fas fa-sign-out-alt"></i>
-                  </Link>
-                </div>
-              ) : (
-                <UserAvatar user={auth.user} className="d-none d-sm-block" />
-              )}
-              <div className="menu-icon">
-                <i className="fa-solid fa-bars menu-toggle" onClick={toggleMenu}></i>
-              </div>
+            <div className="d-flex align-items-center gap-20">
+              <Link href="/login" className='text-primary text-18'>Sign in </Link>
+              <div className="text-primary text-18">/</div>
+              <Link href="/signup" className='text-primary text-18'>Sign Up</Link>
+              <Link href="/" className='btn btn-primary text-18'>Guest Login</Link>
             </div>
           </div>
         </div>
       </div>
     </header>
-  );
+  )
 };
 
 export default Header;
