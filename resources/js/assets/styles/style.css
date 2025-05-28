@@ -1,5 +1,5 @@
 :root {
-    --primary-theme: #c67c19;
+    --primary-theme: #FEA257;
     --secondry-theme: #74989e;
     --light-theme: #ffe6d0;
     --sec-bg: #f7eee2;
@@ -191,6 +191,26 @@
 .primary-navs a {
     color: #fff;
 }
+.text-20 {
+    font-size: 20px;
+}
+.story-month,
+.collection-sec {
+    padding: 150px 0;
+}
+.collection-card-img {
+    position: relative;
+    z-index: 1;
+    border: 7px solid #d9d9d9;
+}
+.story-month-bg {
+    background-image: url("/public/assets/images/story-month-bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 150px 0;
+    position: relative;
+}
 /* globals start */
 html,
 body {
@@ -379,8 +399,13 @@ span.fs-54 {
 }
 
 .footer {
-    background-color: #221408;
-    padding: var(--text-60) 0 0 0;
+    background-image: url("/public/assets/images/footer-bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.footer-content {
+    padding: 150px 0;
 }
 
 .footer .heading span,
@@ -556,6 +581,7 @@ span.fs-54 {
     background-size: cover;
     /* background-position: center; */
     background-repeat: no-repeat;
+    max-height: 980px;
 }
 .btn-primary {
     background-color: #fea257 !important;
@@ -573,48 +599,167 @@ span.fs-54 {
     color: #fea257 !important;
 }
 
-.image-container {
-    height: 445px; /* Set your desired visible height */
-    overflow: hidden;
-    /* You might also need to adjust the image styles */
-}
-
-.image-container img {
-    display: block;
-}
-/* .image-left-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
-.image-center-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-} */
 .fearured-stories {
-    padding: 150px 0 80px 0;
+    padding: 150px 0;
 }
 .text-sm {
-  font-weight: 700;
-  font-size: 18px;
-  color: #202020;
+    font-weight: 700;
+    font-size: 18px;
+    color: #202020;
 }
 .hd-md {
-  color: #202020;
-  font-weight: 700;
-  font-size: 48px;
+    color: #202020;
+    font-weight: 700;
+    font-size: 48px;
 }
 .featured-sub-title {
-  font-size: 24px;
+    font-size: 24px;
 }
 .para-mid {
-  color: #6B6B6B;
-  font-size: 18px;
+    color: #6b6b6b;
+    font-size: 18px;
+}
+.signin-bg {
+    background-image: url("/public/assets/images/signin-bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 153px 0;
+}
+.signin-bg::after {
+    content: "";
+    background-image: url("/public/assets/images/signin-right.png");
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    /* background-size: cover; */
+    background-position: right bottom;
+    background-repeat: no-repeat;
+}
+.signin-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 524px;
+    top: -141px;
+    width: 100%;
+    height: 100%;
+    background-image: url("http://[::1]:5173/public/assets/images/signin-book.png");
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    animation: moveBook 10s linear infinite;
+}
+@keyframes moveBook {
+    0% {
+        transform: translatey(0);
+    }
+    50% {
+        transform: translatey(-30px);
+    }
+    100% {
+        transform: translatey(0);
+    }
+}
+.text-30-bold {
+    font-size: 30px;
+    font-weight: 700;
+}
+.story-month-right {
+    margin-top: -310px;
+}
+.story-month .slick-list {
+    overflow: visible;
+}
+.story-month-custom-arrows {
+    max-width: 750px;
+    justify-content: space-between;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    z-index: 1;
+}
+.story-month-dots li {
+    background-color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #fff;
 
 }
+.dot-number {
+    width: 40px;
+}
+.story-month-dots li.slick-active {
+    background-color: #fea257;
+}
+.testi-card {
+    background-color: #F5F5F5;
+    padding: 50px;
+}
+.text-light-grey {
+    color: #868686;
+}
+.testimonials-sec .slick-slide {
+    padding: 0 10px;
+}
+.footer-nav li {
+    margin-bottom: 10px;
+}
+.footer-nav a {
+    font-size: 20px;
+    color: #fff;
+}
+.field-wrapper .btn-primary {
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    right: 10px;
+}
+.field-wrapper .input-field {
+    color: 333333;
+    padding: 20px;
+}
+.field-wrapper .input-field::placeholder {
+    font-family: var(--secondry-font);
+    color: 333333;
+}
+.bottom-bar {
+    background-color: var(--primary-theme);
+    padding: 10px 0;
+}
+.footer-content .logo img {
+    width: 100%;
+    max-width: 130px;
+}
+.testimonials-sec {
+    padding-bottom: 153px;
+}
+.image-left-container {
+    left: -290px;
+    z-index: -1;
+    bottom: -80px;
+}
+.image-right-container {
+    right: -310px;
+    z-index: -1;
+    width: 100%;
+    bottom: -80px;
+}
+.fearured-stories-card-inner:hover {
+    transform: scale(1.05);
+    transition: all .6s ease-in-out;
+}
+
 /* responsive */
 @media (min-width: 1560px) {
     .container {
@@ -668,7 +813,11 @@ span.fs-54 {
         height: var(--text-60);
     }
 }
-
+@media (min-width: 1400px) {
+    .container-xxl {
+      max-width: 1600px;
+    }
+  }
 @media (max-width: 1366px) {
     :root {
         font-size: 58%;
@@ -733,7 +882,13 @@ span.fs-54 {
         right: 2rem !important;
     }
 }
-
+@media (min-width: 992px) {
+    .container-xxl {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  
 @media (max-width: 991px) {
     /* <---------mobile menu----------> */
     .close-icon i,

@@ -2,11 +2,15 @@ import React from 'react'
 import Button from '../Components/common/Button'
 import Layout from '@/Layouts/Layout'
 import { Link } from '@inertiajs/react'
+import StoryOfTheMonth from '@/Components/StoryOfTheMonth'
+import Testimonials from '@/Components/Testimonials'
 const Home = () => {
+
+
   return (
     <Layout>
       <section className='hero-banner overflow-hidden z-2'>
-        <div className="container">
+        <div className="container-xxl">
           <div className="d-flex justify-content-center align-items-center flex-column">
             <h1 className='hd-lg mb-20 text-white'>Where Every Story Leaves a Mark</h1>
             <p className='para-dark mb-20 '>
@@ -18,35 +22,35 @@ const Home = () => {
             </div>
           </div>
           <div className="d-flex align-items-center justify-content-center position-relative">
-            <div className="image-left-container image-container">
-              <img src="/assets/images/banner-card-01.png" alt="banner-image" />
-            </div>
-            <div className="image-center-container image-container">
+            <div className="image-center-container image-container position-relative z-1">
+              <div className="image-left-container position-absolute image-container-xxl">
+                <img src="/assets/images/banner-card-01.png" alt="banner-image" />
+              </div>
               <img src="/assets/images/banner-card-02.png" alt="banner-image" />
-            </div>
-            <div className="image-right-container image-container">
-              <img src="/assets/images/banner-card-03.png" alt="banner-image" />
+              <div className="image-right-container position-absolute image-container-xxl">
+                <img src="/assets/images/banner-card-03.png" alt="banner-image" />
+              </div>
             </div>
           </div>
         </div>
       </section>
       <section className='fearured-stories'>
-        <div className="container">
+        <div className="container-xxl">
           <div className="row">
             <div className="col-lg-6">
               <h2 className='hd-lg mb-40'>Featured Stories</h2>
               <div className="fearured-stories-card">
                 <div className="row">
-                  <div className="col-lg-4">
+                  <div className="col-lg-4 fearured-stories-card-inner">
                     <img src="/assets/images/featured-01.png" className='mb-10' alt="featured-stories-card-01" />
                     <span className='text-sm text-uppercase' >Death at Fallow End</span>
                   </div>
-                  <div className="col-lg-4">
+                  <div className="col-lg-4 fearured-stories-card-inner">
                     <img src="/assets/images/featured-02.png" className='mb-10' alt="featured-stories-card-02" />
                     <span className='text-sm text-uppercase'>Death at Fallow End</span>
 
                   </div>
-                  <div className="col-lg-4">
+                  <div className="col-lg-4 fearured-stories-card-inner">
                     <img src="/assets/images/featured-03.png" className='mb-10' alt="featured-stories-card-03" />
                     <span className='text-sm text-uppercase'>Death at Fallow End</span>
                   </div>
@@ -69,6 +73,79 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <section className="signin-bg position-relative">
+        <div className="container-xxl">
+          <div className="row">
+            <div className="col-lg-7">
+              <h2 className='hd-md mb-20 text-white' style={{ maxWidth: "770px" }}>Sign In to Continue Crafting the Story Your Way</h2>
+              <p className='text-white mb-20'>
+                Take the reins and let your imagination run wild! Log in to pick up where the story left off or create your own twists and turns. Your words, your world—continue the adventure as you see fit.
+              </p>
+              <div className="d-flex gap-20">
+                <Button className="btn btn-primary">Sign In</Button>
+                <Button className="btn btn-secondary">Read A Sample</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className='collection-sec'>
+        <div className="container-xxl">
+          <div className="row">
+            <h2 className='hd-md mb-20 mb-70 uppercase text-center' style={{ fontWeight: "400" }}>Our Collection</h2>
+            <div className="col-lg-4">
+              <div className="collection-card d-flex align-items-center gap-20" >
+                <div className="collection-card-img" >
+                  <img src="/assets/images/collection-01.png" alt="collection-01" />
+                </div>
+                <div>
+                  <h4 className='text-30-bold mb-10' style={{ maxWidth: "195px" }}>Death At Fallow End</h4>
+                  <span className="text-primary secondary-font text-20 ">Anne Rice</span>
+                  <p className='text-black secondary-font mb-20 mt-10'>
+                    95 People Read This Story
+                  </p>
+                  <Button className='btn btn-primary text-white'>Story Detail</Button>
+
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-4">
+              <div className="collection-card d-flex align-items-center gap-20" >
+                <div className="collection-card-img" >
+                  <img src="/assets/images/collection-02.png" alt="collection-01" />
+                </div>
+                <div>
+                  <h4 className='text-30-bold mb-10' style={{ maxWidth: "195px" }}>Death At Fallow End</h4>
+                  <span className="text-primary secondary-font text-20 ">Anne Rice</span>
+                  <p className='text-black secondary-font mb-20 mt-10'>
+                    95 People Read This Story
+                  </p>
+                  <Button className='btn btn-primary text-white'>Story Detail</Button>
+
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-4">
+              <div className="collection-card d-flex align-items-center gap-20" >
+                <div className="collection-card-img" >
+                  <img src="/assets/images/collection-03.png" alt="collection-01" />
+                </div>
+                <div>
+                  <h4 className='text-30-bold mb-10' style={{ maxWidth: "195px" }}>Death At Fallow End</h4>
+                  <span className="text-primary secondary-font text-20 ">Anne Rice</span>
+                  <p className='text-black secondary-font mb-20 mt-10'>
+                    95 People Read This Story
+                  </p>
+                  <Button className='btn btn-primary text-white'>Story Detail</Button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <StoryOfTheMonth />
+      <Testimonials />
     </Layout>
   )
 }
