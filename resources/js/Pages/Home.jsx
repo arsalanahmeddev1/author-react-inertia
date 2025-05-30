@@ -12,8 +12,8 @@ const Home = () => {
       <section className='hero-banner overflow-hidden z-2'>
         <div className="container-xxl">
           <div className="d-flex justify-content-center align-items-center flex-column">
-            <h1 className='hd-lg mb-20 text-white'>Where Every Story Leaves a Mark</h1>
-            <p className='para-dark mb-20 '>
+            <h1 className='hd-lg mb-20 text-center text-white'>Where Every Story Leaves a Mark</h1>
+            <p className='para-dark mb-20 text-center'>
               Join our creative community. Explore, interact, and create your own version of timeless tales.
             </p>
             <div className="d-flex gap-20 mb-20">
@@ -26,7 +26,7 @@ const Home = () => {
               <div className="image-left-container position-absolute image-container-xxl">
                 <img src="/assets/images/banner-card-01.png" alt="banner-image" />
               </div>
-              <img src="/assets/images/banner-card-02.png" alt="banner-image" />
+              <img src="/assets/images/banner-card-02.png" className='hero-banner-center-img' alt="banner-image" />
               <div className="image-right-container position-absolute image-container-xxl">
                 <img src="/assets/images/banner-card-03.png" alt="banner-image" />
               </div>
@@ -36,30 +36,30 @@ const Home = () => {
       </section>
       <section className='fearured-stories'>
         <div className="container-xxl">
-          <div className="row">
+          <div className="row row-gap-40">
             <div className="col-lg-6">
-              <h2 className='hd-lg mb-40'>Featured Stories</h2>
+              <h2 className='hd-lg mb-40 text-center text-lg-start'>Featured Stories</h2>
               <div className="fearured-stories-card">
-                <div className="row">
-                  <div className="col-lg-4 fearured-stories-card-inner">
-                    <img src="/assets/images/featured-01.png" className='mb-10' alt="featured-stories-card-01" />
-                    <span className='text-sm text-uppercase' >Death at Fallow End</span>
+                <div className="row justify-content-center row-gap-40">
+                  <div className="col-lg-4 col-md-6 fearured-stories-card-inner">
+                    <img src="/assets/images/featured-01.png" className='mb-10 fsc-image' alt="featured-stories-card-01" />
+                    <h6 className='text-sm text-uppercase text-center' >Death at Fallow End</h6>
                   </div>
-                  <div className="col-lg-4 fearured-stories-card-inner">
-                    <img src="/assets/images/featured-02.png" className='mb-10' alt="featured-stories-card-02" />
-                    <span className='text-sm text-uppercase'>Death at Fallow End</span>
+                  <div className="col-lg-4 col-md-6 fearured-stories-card-inner">
+                    <img src="/assets/images/featured-02.png" className='mb-10 fsc-image' alt="featured-stories-card-02 " />
+                    <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>
 
                   </div>
-                  <div className="col-lg-4 fearured-stories-card-inner">
-                    <img src="/assets/images/featured-03.png" className='mb-10' alt="featured-stories-card-03" />
-                    <span className='text-sm text-uppercase'>Death at Fallow End</span>
+                  <div className="col-lg-4 col-md-6 fearured-stories-card-inner">
+                    <img src="/assets/images/featured-03.png" className='mb-10 fsc-image' alt="featured-stories-card-03" />
+                    <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-lg-6">
-              <div className="mt-20">
-                <h2 className='hd-md text-uppercase '>Death at Fallow End</h2>
+              <div className="mt-20 text-center text-lg-start">
+                <h2 className='hd-md text-uppercase'>Death at Fallow End</h2>
                 <h4 className='text-primary font-medium featured-sub-title secondry-font mb-20'>Fallow End had the perfume of rot beneath roses.</h4>
                 <p className='para-mid mb-30'>
                   It masqueraded as a village of perfect English serenity—an illusion spun from moss-draped eaves, honeyed stone walls, and the gentle sigh of hedgerows whispering against flaking garden gates. But if one stayed still long enough in its meadows, one would hear it: the creak of something ancient refusing to die, and the hush of secrets wound tight as ivy around the bones of Halverton House.
@@ -75,13 +75,15 @@ const Home = () => {
       </section>
       <section className="signin-bg position-relative">
         <div className="container-xxl">
-          <div className="row">
+          <img src="/assets/images/signin-book.png" alt="signin-book" className='signin-book position-absolute'/>
+          <img src="/assets/images/signin-right.png" alt="signin-right" className='signin-right position-absolute bottom-0 end-0' />
+          <div className="row text-center text-lg-start">
             <div className="col-lg-7">
               <h2 className='hd-md mb-20 text-white' style={{ maxWidth: "770px" }}>Sign In to Continue Crafting the Story Your Way</h2>
-              <p className='text-white mb-20'>
+              <p className='text-white mb-20' style={{ maxWidth: "840px" }}>
                 Take the reins and let your imagination run wild! Log in to pick up where the story left off or create your own twists and turns. Your words, your world—continue the adventure as you see fit.
               </p>
-              <div className="d-flex gap-20">
+              <div className="d-flex gap-20 justify-content-center justify-content-lg-start">
                 <Button className="btn btn-primary">Sign In</Button>
                 <Button className="btn btn-secondary">Read A Sample</Button>
               </div>
@@ -91,10 +93,10 @@ const Home = () => {
       </section>
       <section className='collection-sec'>
         <div className="container-xxl">
-          <div className="row">
             <h2 className='hd-md mb-20 mb-70 uppercase text-center' style={{ fontWeight: "400" }}>Our Collection</h2>
-            <div className="col-lg-4">
-              <div className="collection-card d-flex align-items-center gap-20" >
+          <div className="row justify-content-center row-gap-40">
+            <div className="col-lg-6 col-xl-4 col-md-6">
+              <div className="collection-card d-flex justify-content-center align-items-center gap-20" >
                 <div className="collection-card-img" >
                   <img src="/assets/images/collection-01.png" alt="collection-01" />
                 </div>
@@ -109,8 +111,8 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="col-lg-4">
-              <div className="collection-card d-flex align-items-center gap-20" >
+            <div className="col-lg-6 col-xl-4 col-md-6">
+              <div className="collection-card d-flex justify-content-center align-items-center gap-20" >
                 <div className="collection-card-img" >
                   <img src="/assets/images/collection-02.png" alt="collection-01" />
                 </div>
@@ -125,8 +127,8 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="col-lg-4">
-              <div className="collection-card d-flex align-items-center gap-20" >
+            <div className="col-lg-6 col-xl-4 col-md-6">
+              <div className="collection-card d-flex justify-content-center align-items-center gap-20" >
                 <div className="collection-card-img" >
                   <img src="/assets/images/collection-03.png" alt="collection-01" />
                 </div>

@@ -132,11 +132,6 @@
 .container {
   @apply mx-auto
 }
-.hd-lg {
-  @apply text-[70px]
-}
-.para {
-  @apply text-[18px] 
-}
+
 /* responsive */
   

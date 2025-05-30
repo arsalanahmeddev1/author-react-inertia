@@ -5,6 +5,10 @@ import { FaComment } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa6";
 import { IoMdSend } from "react-icons/io";
+import { RxCross1 } from "react-icons/rx";
+import { CiMenuFries } from "react-icons/ci";
+
+
 
 
 
@@ -17,4 +21,6 @@ export const Icons = {
   ArrowLeft: FaArrowLeft,
   ArrowRight: FaArrowRight,
   Send: IoMdSend,
+  Cross: RxCross1,
+  Menu: CiMenuFries,
 }

@@ -1,5 +1,5 @@
 :root {
-    --primary-theme: #FEA257;
+    --primary-theme: #fea257;
     --secondry-theme: #74989e;
     --light-theme: #ffe6d0;
     --sec-bg: #f7eee2;
@@ -194,9 +194,12 @@
 .text-20 {
     font-size: 20px;
 }
-.story-month,
+
 .collection-sec {
-    padding: 150px 0;
+    padding: 150px 0 200px 0;
+}
+.story-month {
+    padding-bottom: 150px 0;
 }
 .collection-card-img {
     position: relative;
@@ -626,31 +629,12 @@ span.fs-54 {
     background-repeat: no-repeat;
     padding: 153px 0;
 }
-.signin-bg::after {
-    content: "";
-    background-image: url("/public/assets/images/signin-right.png");
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    /* background-size: cover; */
-    background-position: right bottom;
-    background-repeat: no-repeat;
-}
-.signin-bg::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 524px;
-    top: -141px;
-    width: 100%;
-    height: 100%;
-    background-image: url("http://[::1]:5173/public/assets/images/signin-book.png");
-    background-repeat: no-repeat;
-    background-position: right bottom;
+.signin-book {
+    top: -104px;
+    right: 520px;
     animation: moveBook 10s linear infinite;
 }
+
 @keyframes moveBook {
     0% {
         transform: translatey(0);
@@ -672,14 +656,13 @@ span.fs-54 {
 .story-month .slick-list {
     overflow: visible;
 }
-.story-month-custom-arrows {
-    max-width: 750px;
+/* .story-month-custom-arrows {
     justify-content: space-between;
     position: absolute;
     width: 100%;
     top: 50%;
     z-index: 1;
-}
+} */
 .story-month-dots li {
     background-color: #333333;
     display: flex;
@@ -690,7 +673,6 @@ span.fs-54 {
     border-radius: 50%;
     cursor: pointer;
     color: #fff;
-
 }
 .dot-number {
     width: 40px;
@@ -699,7 +681,7 @@ span.fs-54 {
     background-color: #fea257;
 }
 .testi-card {
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
     padding: 50px;
 }
 .text-light-grey {
@@ -742,7 +724,7 @@ span.fs-54 {
     max-width: 130px;
 }
 .testimonials-sec {
-    padding-bottom: 153px;
+    padding: 153px 0;
 }
 .image-left-container {
     left: -290px;
@@ -757,9 +739,44 @@ span.fs-54 {
 }
 .fearured-stories-card-inner:hover {
     transform: scale(1.05);
-    transition: all .6s ease-in-out;
+    transition: all 0.6s ease-in-out;
 }
-
+.hd-lg {
+    font-size: 70px;
+}
+.para {
+    font-size: 18px;
+}
+.story-month-custom-arrows .prev-arrow {
+    top: 50%;
+    position: absolute;
+    left: -60px;
+}
+.story-month-custom-arrows .next-arrow {
+    top: 50%;
+    position: absolute;
+    right: -37px;
+}
+.container-xxl {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+.fsc-image {
+    width: 100%;
+}
+.close-menu {
+    display: flex;
+    position: absolute;
+    top: 21px;
+    right: 20px;
+    background-color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
 /* responsive */
 @media (min-width: 1560px) {
     .container {
@@ -812,12 +829,38 @@ span.fs-54 {
         width: var(--text-60);
         height: var(--text-60);
     }
+    .signin-right {
+        max-width: 740px;
+    }
+    .signin-book {
+        right: 260px;
+    }
+    .hd-lg {
+        font-size: 60px;
+    }
+    .footer-content,
+    .testimonials-sec,
+    .story-month-bg,
+    .collection-sec,
+    .signin-bg,
+    .fearured-stories {
+        padding: 100px 0;
+    }
+    .hero-banner {
+        padding-top: 228px;
+    }
+    /* .story-month-custom-arrows {
+        max-width: 680px; 
+    } */
+    /* .story-month-custom-arrows .prev-arrow {
+        margin-left: -56px;
+    } */
 }
 @media (min-width: 1400px) {
     .container-xxl {
-      max-width: 1600px;
+        max-width: 1600px;
     }
-  }
+}
 @media (max-width: 1366px) {
     :root {
         font-size: 58%;
@@ -840,6 +883,12 @@ span.fs-54 {
     .sec-3-cover-2 {
         right: -4rem !important;
     }
+    .signin-book {
+        right: 190px;
+    }
+    .signin-right {
+        max-width: 670px;
+    }
 }
 
 @media (max-width: 1200px) {
@@ -854,9 +903,25 @@ span.fs-54 {
     .big-img-cover-wrapper:hover {
         transform: translate(1%, -50%) scale(1.2);
     }
+    .btn {
+        padding: 13px 26px;
+        font-size: 16px;
+    }
+    .hd-md {
+        font-size: 44px;
+    }
+    .hd-lg {
+        font-size: 50px;
+    }
 }
 
 @media (max-width: 1024px) {
+    .signin-book {
+        right: 120px;
+    }
+    .signin-right {
+        max-width: 600px;
+    }
     :root {
         font-size: 50%;
     }
@@ -881,14 +946,24 @@ span.fs-54 {
     .sec-3-cover-2 {
         right: 2rem !important;
     }
-}
-@media (min-width: 992px) {
-    .container-xxl {
-      padding-left: 2rem;
-      padding-right: 2rem;
+    .hero-banner {
+        max-height: 880px;
     }
-  }
-  
+}
+@media (max-width: 992px) {
+    .signin-right,
+    .signin-book {
+        display: none;
+    }
+    .signin-bg p,
+    .signin-bg .hd-md {
+        max-width: 100% !important;
+    }
+    .story-month-right {
+        margin-top: 0;
+    }
+}
+
 @media (max-width: 991px) {
     /* <---------mobile menu----------> */
     .close-icon i,
@@ -951,6 +1026,14 @@ span.fs-54 {
     }
 }
 
+@media (max-width: 767px) {
+    .fsc-image {
+        max-width: 460px;
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+    }
+}
 @media (max-width: 575px) {
     .header .logo img {
         max-width: 12rem;
@@ -995,5 +1078,25 @@ span.fs-54 {
     .sec-3-cover-2:hover,
     .sec-3-cover-1:hover {
         transform: translate(8rem, -70%) scale(1);
+    }
+    .btn {
+        padding: 13px 10px;
+        font-size: 13px;
+    }
+    .image-right-container {
+        right: -130px;
+        z-index: -1;
+        width: 100%;
+        bottom: -40px;
+        max-width: 190px;
+    }
+    .image-left-container {
+        left: -130px;
+        z-index: -1;
+        bottom: -80px;
+        max-width: 190px;
+    }
+    .hero-banner-center-img {
+        max-width: 150px;
     }
 }

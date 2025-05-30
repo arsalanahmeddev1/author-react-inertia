@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className='footer'>
       <div className="container-xxl">
         <div className="footer-content">
-          <div className="row justify-content-between">
+          <div className="row justify-content-between row-gap-40">
             <div className="col-lg-2">
               <div className="logo">
                 <img src="/assets/images/logo.png" alt="logo" />

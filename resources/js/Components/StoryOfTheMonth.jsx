@@ -64,19 +64,23 @@ const StoryOfTheMonth = () => {
 
       <div className="story-month-bg">
         <div className="container">
-          <div className="story-month-custom-arrows d-flex gap-3 mb-4">
-            <div className="prev-arrow" style={{marginLeft: '-70px'}} onClick={() => sliderRef.current.slickPrev()}>
-              <Icons.ArrowLeft className="text-white fs-30"/>
-            </div>
-            <div className="next-arrow" onClick={() => sliderRef.current.slickNext()}>
-              <Icons.ArrowRight className="text-white fs-30"/>
-            </div>
-          </div>
-          <Slider ref={sliderRef} {...settings}>
-            {stories.map((story, index) => (
-              <div key={index}>
-                <div className="row justify-content-between align-items-center">
-                  <div className="col-lg-6 position-relative">
+          <div className="row justify-content-between align-items-center row-gap-40">
+
+            {/* Left Column with Text & Arrows */}
+            <div className="col-lg-6 position-relative">
+              {/* Arrows Positioned Inside the Column */}
+              <div className="story-month-custom-arrows d-flex gap-3 mb-4" style={{ top: 0, right: 0 }}>
+                <div className="prev-arrow" onClick={() => sliderRef.current.slickPrev()}>
+                  <Icons.ArrowLeft className="text-white fs-30" />
+                </div>
+                <div className="next-arrow" onClick={() => sliderRef.current.slickNext()}>
+                  <Icons.ArrowRight className="text-white fs-30" />
+                </div>
+              </div>
+
+              <Slider ref={sliderRef} {...settings}>
+                {stories.map((story, index) => (
+                  <div key={index}>
                     <h3 className="mb-20 fs-40 secondry-font text-white">
                       {story.title}
                     </h3>
@@ -85,18 +89,21 @@ const StoryOfTheMonth = () => {
                       {story.description}
                     </p>
                   </div>
-                  <div className="col-lg-4">
-                    <div className="story-month-right d-flex justify-content-end">
-                      <img src={story.image} alt={`story-${index}`} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </Slider>
+                ))}
+              </Slider>
+            </div>
 
+            {/* Right Column with Image */}
+            <div className="col-lg-4">
+              <div className="story-month-right d-flex justify-content-end">
+                {/* You may move image out of the map and show current story based on index if needed */}
+                <img src={stories[0]?.image} alt={`story`} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
     </section>
   );
 };
