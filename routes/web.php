@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Models\Community;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
@@ -88,6 +89,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::resource('users', UserController::class);
     Route::resource('stories', \App\Http\Controllers\Admin\StoriesController::class);
+    Route::resource('community', \App\Http\Controllers\Admin\CommunityController::class)
+        ->parameters(['community' => 'story']);
 
     Route::get('standard-stories', [\App\Http\Controllers\Admin\StoriesController::class, 'standardStories'])
         ->name('stories.standard');

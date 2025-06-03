@@ -16,6 +16,7 @@ class StoriesController extends Controller
     public function index()
     {
         $stories = Story::select('id', 'title', 'author', 'genre', 'read_count', 'likes_count', 'comment_count', 'created_at', 'is_community', 'status')
+            ->where('is_community', false)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
