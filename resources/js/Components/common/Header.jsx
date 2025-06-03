@@ -29,6 +29,7 @@ const Header = ({ logoClass, headerClass }) => {
             <nav>
               <ul className={`d-flex primary-navs align-items-center justify-content-center gap-50 ${isMenuOpen ? 'active' : ''}`}>
                 <div className="close-menu d-flex d-lg-none" onClick={toggleMenu}><Icons.Cross /></div>
+                {/* navigation links */}
                 <li><Link href="/">Home</Link></li>
                 <li><Link href="/stories">Stories</Link></li>
                 <li><Link href="/community">Community</Link></li>
