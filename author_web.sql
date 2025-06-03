@@ -3,11 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
-<<<<<<< HEAD
 -- Generation Time: Jun 03, 2025 at 06:08 PM
-=======
--- Generation Time: Jun 03, 2025 at 06:04 PM
->>>>>>> feature/seprating-standard-community
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
