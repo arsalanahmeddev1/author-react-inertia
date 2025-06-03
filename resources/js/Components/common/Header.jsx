@@ -17,7 +17,7 @@ const Header = ({ logoClass, headerClass }) => {
     return url.startsWith(path);
   };
   return (
-    <header className='position-absolute top-0 w-100 z-3' style={{ paddingTop: '30px' }}>
+    <header className={`position-absolute top-0 w-100 z-3 ${headerClass}`}>
       <div className="container-xxl">
         <div className="row align-items-center justify-content-between">
           <div className="col-lg-2 col-md-2 col-3">
@@ -31,6 +31,7 @@ const Header = ({ logoClass, headerClass }) => {
                 <div className="close-menu d-flex d-lg-none" onClick={toggleMenu}><Icons.Cross /></div>
                 <li><Link href="/">Home</Link></li>
                 <li><Link href="/stories">Stories</Link></li>
+                <li><Link href="/community">Community</Link></li>
                 <li><Link href="/publish">Publish</Link></li>
                 <li><Link href="/about-us">About Us</Link></li>
                 <div className="d-flex d-lg-none flex-column align-items-center gap-20 justify-content-end justify-content-lg-start">

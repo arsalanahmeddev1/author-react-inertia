@@ -1,10 +1,10 @@
 import React from 'react'
 import { Head, Link, router } from '@inertiajs/react';
-import InnerLayout from '@/Layouts/InnerLayout';
+import Layout from '@/Layouts/Layout';
 
 const PendingApproval = ({story}) => {
   return (
-    <InnerLayout>
+    <Layout>
       <Head title="Pending Approval Stories" />
       <section className="py-100">
         <div className="container mx-auto">
@@ -19,7 +19,7 @@ const PendingApproval = ({story}) => {
 
         </div>
       </section>
-    </InnerLayout>
+    </Layout>
   );
 };
 

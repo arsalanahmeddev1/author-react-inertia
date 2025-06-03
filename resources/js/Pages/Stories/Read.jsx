@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import axios from 'axios';
-import InnerLayout from '@/Layouts/InnerLayout';
+import Layout from '@/Layouts/Layout';
 import CommentSection from '@/Components/comments/CommentSection';
 import '@/assets/styles/stories.css';
 import '@/assets/styles/story-read.css';
@@ -112,7 +112,7 @@ export default function Read({ story, auth }) {
   }, [story.id, showCover]);
 
   return (
-    <InnerLayout>
+    <Layout headerClass="bg-light-black py-10">
       <Head title={`Reading: ${story.title}`} />
 
       {/* Book Cover Overlay */}
@@ -149,14 +149,16 @@ export default function Read({ story, auth }) {
       )}
 
       {/* Reading Progress Bar */}
+      {readingProgress > 0 && (
       <div className="reading-progress-container">
         <div
           className="reading-progress-bar"
           style={{ width: `${readingProgress}%` }}
         ></div>
       </div>
+      )}
 
-      <section className="reading-container">
+      <section className="reading-container pt-200 pb-100">
         <div className="container">
           <div className="row">
             <div className="col-lg-10 mx-auto">
@@ -251,6 +253,6 @@ export default function Read({ story, auth }) {
           </div>
         </div>
       </section>
-    </InnerLayout>
+    </Layout>
   );
 }

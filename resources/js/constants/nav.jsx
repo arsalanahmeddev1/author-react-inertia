@@ -62,23 +62,10 @@ const nav = [
         name: 'Create',
         to: '/admin/stories/create',
       },
-    ],
-  },
-   {
-    component: CNavGroup,
-    name: 'Community',
-    to: '/admin/community',
-    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
-    items: [
       {
         component: CNavItem,
-        name: 'List',
-        to: '/admin/community',
-      },
-      {
-        component: CNavItem,
-        name: 'Create',
-        to: '/admin/community/create',
+        name: 'Community',
+        to: '/admin/stories/community',
       },
     ],
   },

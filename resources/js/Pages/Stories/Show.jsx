@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import axios from 'axios';
-import InnerLayout from '@/Layouts/InnerLayout';
+import Layout from '@/Layouts/Layout';
 import StoryModal from '@/Components/stories/StoryModal';
 import CharacterModal from '@/Components/stories/CharacterModal';
 import LoginPromptModal from '@/Components/stories/LoginPromptModal';
@@ -70,10 +70,10 @@ export default function Show({ story }) {
   };
 
   return (
-    <InnerLayout>
+    <Layout headerClass="bg-light-black py-10">
       <Head title={story.title} />
 
-      <section className="py-100 sec-bg">
+      <section className="pt-200 pb-100 sec-bg">
         <div className="container">
           <div className="row">
             <div className="col-lg-10 mx-auto">
@@ -183,6 +183,6 @@ export default function Show({ story }) {
         show={showLoginPrompt}
         onHide={handleCloseLoginPrompt}
       />
-    </InnerLayout>
+    </Layout>
   );
 }

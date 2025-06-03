@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import InnerLayout from '@/Layouts/InnerLayout';
+import Layout from '@/Layouts/Layout';
 import LikeCount from '@/Components/stories/LikeCount';
 import { debounce } from 'lodash';
 import '@/assets/styles/stories.css';
@@ -37,10 +37,10 @@ export default function CommunityIndex({ stories, genres, filters }) {
   // No automatic refresh on component mount
 
   return (
-    <InnerLayout>
+    <Layout headerClass="bg-light-black py-10">
       <Head title="Community Stories" />
 
-      <section className="py-100 sec-bg">
+      <section className="pt-200 pb-100 sec-bg">
         <div className="container">
           <div className="row text-center mb-70">
             <div className="col-12" data-aos-duration="3000" data-aos="fade-down">
@@ -179,6 +179,6 @@ export default function CommunityIndex({ stories, genres, filters }) {
           )}
         </div>
       </section>
-    </InnerLayout>
+    </Layout>
   );
 }

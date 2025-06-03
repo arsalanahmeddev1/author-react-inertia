@@ -13,14 +13,25 @@ class StoriesController extends Controller
     /**
      * Display a listing of the stories.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $stories = Story::select('id', 'title', 'author', 'genre', 'read_count', 'likes_count', 'comment_count', 'created_at', 'is_community', 'status')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
+        $query = Story::query()->with('user');
+    
+        // Only fetch standard stories
+        $query->where('is_community', false);
+    
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                  ->orWhere('content', 'like', '%' . $request->search . '%');
+            });
+        }
+    
+        $stories = $query->orderByDesc('id')->paginate(10);
+    
         return Inertia::render('admin/stories/Index', [
             'stories' => $stories,
+            'filters' => $request->only('search'),
         ]);
     }
 
@@ -75,7 +86,7 @@ class StoriesController extends Controller
 
         $stories = $query->latest()->paginate(10);
 
-        return Inertia::render('Admin/Stories/CommunityIndex', [
+        return Inertia::render('admin/stories/Community', [
             'stories' => $stories,
             'filters' => $request->only('search'),
         ]);

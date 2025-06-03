@@ -7,7 +7,7 @@ import '../../assets/styles/profile.css';
 
 export default function Edit({ mustVerifyEmail, status }) {
     return (
-        <CustomAuthenticatedLayout title="My Profile">
+        <CustomAuthenticatedLayout>
             <Head title="Profile" />
 
             <div className="row">
