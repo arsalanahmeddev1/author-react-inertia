@@ -159,4 +159,6 @@ class StoriesController extends Controller
             'story' => $story,
         ]);
     }
+
+    
 }

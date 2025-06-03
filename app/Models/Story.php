@@ -130,4 +130,9 @@ class Story extends Model
     {
         return $this->created_at->format('d M Y'); // e.g., "20 May 2025"
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

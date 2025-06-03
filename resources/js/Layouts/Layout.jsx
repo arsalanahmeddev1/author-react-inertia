@@ -8,7 +8,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../../js/assets/styles/utilities.css';
 import '../../js/assets/styles/style.css';
 
-export default function Layout({ children }) {
+export default function Layout({ children, headerClass }) {
   useEffect(() => {
     // Initialize AOS
     if (window.innerWidth < 1025) {
@@ -28,7 +28,7 @@ export default function Layout({ children }) {
 
   return (
     <>
-      <Header />
+      <Header headerClass={headerClass} />
       <main>{children}</main>
       <Footer />
     </>

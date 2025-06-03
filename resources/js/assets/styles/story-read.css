@@ -109,7 +109,6 @@
 .reading-container {
   background-color: #f9f7f4;
   min-height: calc(100vh - 80px);
-  padding: 2rem 0;
   transition: all 0.3s ease;
 }
 

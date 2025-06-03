@@ -8,7 +8,7 @@ const Home = () => {
 
 
   return (
-    <Layout>
+    <Layout headerClass="pt-30">
       <section className='hero-banner overflow-hidden z-2'>
         <div className="container-xxl">
           <div className="d-flex justify-content-center align-items-center flex-column">

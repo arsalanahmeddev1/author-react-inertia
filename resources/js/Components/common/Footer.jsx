@@ -23,10 +23,9 @@ const Footer = () => {
             <div className="col-lg-2">
               <h4 className='fs-36 secondry-font text-primary fw-600 mb-10'>Other links</h4>
               <ul className='footer-nav secondry-font'>
-                <li><Link href="/">Home</Link></li>
-                <li><Link href="/">Stories</Link></li>
-                <li><Link href="/">Publish</Link></li>
-                <li><Link href="/">About Us</Link></li>
+                <li><Link href="/">FAQ’s</Link></li>
+                <li><Link href="/">Terms & Conditions</Link></li>
+                <li><Link href="/">Privacy Policy</Link></li>
               </ul>
             </div>
             <div className="col-lg-4">
