@@ -95,6 +95,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('community-stories', [\App\Http\Controllers\Admin\StoriesController::class, 'communityStories'])
         ->name('stories.community');
 
+        Route::get('standard-stories', [StoriesController::class, 'standardStories'])->name('stories.standard');
+        Route::get('community-stories', [StoriesController::class, 'communityStories'])->name('stories.community');
+
     Route::get('stories/pending', [\App\Http\Controllers\Admin\StoriesController::class, 'pending'])->name('stories.pending');
     Route::post('{story}/approve', [\App\Http\Controllers\Admin\StoriesController::class, 'approve'])->name('stories.approve');
     Route::post('{story}/reject', [\App\Http\Controllers\Admin\StoriesController::class, 'reject'])->name('stories.reject');
