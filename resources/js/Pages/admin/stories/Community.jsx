@@ -29,7 +29,7 @@ import CIcon from '@coreui/icons-react'
 // import { cilTrash, cilEye } from '@coreui/icons'
 // import { format } from 'date-fns'
 
-const Index = ({ stories }) => {
+const Community = ({ stories }) => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [storyToDelete, setStoryToDelete] = useState(null)
 
@@ -218,4 +218,4 @@ const Index = ({ stories }) => {
   )
 }
 
-export default Index
+export default Community;

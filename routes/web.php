@@ -21,12 +21,16 @@ use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 
+
+
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
 
 
 Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
+
 
 // Route::get('/auth/facebook/redirect', [FacebookController::class, 'redirect'])->name('facebook.redirect');
 // Route::get('/auth/facebook/callback', [FacebookController::class, 'callback'])->name('facebook.callback');
@@ -43,6 +47,7 @@ Route::get('/logout-and-register', [GuestAuthController::class, 'logoutAndRegist
 Route::get('/stories', [StoriesController::class, 'index'])->name('stories.index');
 Route::get('/stories/{story}', [StoriesController::class, 'show'])->name('stories.show');
 Route::get('/stories/{story}/read', [StoriesController::class, 'read'])->name('stories.read');
+
 
 // Community routes
 Route::middleware('auth')->group(function () {
@@ -88,23 +93,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::resource('users', UserController::class);
     Route::resource('stories', \App\Http\Controllers\Admin\StoriesController::class);
+    Route::get('community/stories', [AdminStoriesController::class, 'communityStories'])->name('stories.community');
 
-    // Route::get('standard-stories', [\App\Http\Controllers\Admin\StoriesController::class, 'standardStories'])
-    //     ->name('stories.standard');
-
-    Route::get('stories/community', [\App\Http\Controllers\Admin\StoriesController::class, 'communityStories'])
-        ->name('stories.community');
-
-    Route::get('standard-stories', [StoriesController::class, 'standardStories'])->name('stories.standard');
-    // Route::get('community-stories', [StoriesController::class, 'communityStories'])->name('stories.community');
-
-    // Route::get('community', [StoriesController::class, 'communityStories'])->name('stories.community');
 
     Route::get('stories/pending', [\App\Http\Controllers\Admin\StoriesController::class, 'pending'])->name('stories.pending');
     Route::post('{story}/approve', [\App\Http\Controllers\Admin\StoriesController::class, 'approve'])->name('stories.approve');
     Route::post('{story}/reject', [\App\Http\Controllers\Admin\StoriesController::class, 'reject'])->name('stories.reject');
 });
-Route::get('/publish', function() {
+
+
+Route::get('/publish', function () {
     return Inertia::render('Publish');
 })->name('publish');
 // Route::middleware(['auth', 'admin'])->group(function () {

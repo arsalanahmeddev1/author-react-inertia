@@ -58,39 +58,29 @@ class StoriesController extends Controller
         return redirect()->back()->with('success', 'Story rejected.');
     }
 
-    public function standardStories(Request $request)
-    {
-        $query = Story::where('is_community', false);
-
-        if ($request->has('search') && !empty($request->search)) {
-            $query->where('title', 'like', "%{$request->search}%")
-                ->orWhere('description', 'like', "%{$request->search}%");
-        }
-
-        $stories = $query->latest()->paginate(10);
-
-        return Inertia::render('Admin/Stories/StandardIndex', [
-            'stories' => $stories,
-            'filters' => $request->only('search'),
-        ]);
-    }
-
     public function communityStories(Request $request)
     {
-        $query = Story::where('is_community', true);
-
-        if ($request->has('search') && !empty($request->search)) {
-            $query->where('title', 'like', "%{$request->search}%")
-                ->orWhere('description', 'like', "%{$request->search}%");
+        $query = Story::where('is_community', true)->with('user');
+    
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                  ->orWhere('content', 'like', '%' . $request->search . '%');
+            });
         }
-
-        $stories = $query->latest()->paginate(10);
-
+    
+        $stories = $query->orderByDesc('id')->paginate(10);
+    
         return Inertia::render('admin/stories/Community', [
             'stories' => $stories,
             'filters' => $request->only('search'),
+            'pageTitle' => 'Community Stories',
         ]);
     }
+
+    // public function communityStories() {
+    //     return 'arsalan';
+    // }
 
     public function create()
     {

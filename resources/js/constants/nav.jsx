@@ -65,7 +65,7 @@ const nav = [
       {
         component: CNavItem,
         name: 'Community',
-        to: '/admin/stories/community',
+        to: '/admin/community/stories',
       },
     ],
   },
