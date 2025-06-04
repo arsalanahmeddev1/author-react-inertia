@@ -37,7 +37,7 @@ export default function Index({ stories, genres, filters }) {
   // No automatic refresh on component mount
 
   return (
-    <Layout headerClass="bg-light-black py-10">
+    <Layout headerClass="inner-header">
       <Head title="Stories" />
       <section className="py-200 sec-bg">
         <div className="container">

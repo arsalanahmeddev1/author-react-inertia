@@ -19,13 +19,13 @@ const Header = ({ logoClass, headerClass }) => {
   return (
     <header className={`position-absolute top-0 w-100 z-3 ${headerClass}`}>
       <div className="container-xxl">
-        <div className="row align-items-center justify-content-between">
-          <div className="col-lg-2 col-md-2 col-3">
+        <div className="d-flex align-items-center justify-content-between">
+          <div className="">
             <div className="logo">
               <img src="/assets/images/logo.png" alt="logo" />
             </div>
           </div>
-          <div className="col-lg-6 col-md-1 col-1">
+          <div className="">
             <nav>
               <ul className={`d-flex primary-navs align-items-center justify-content-center gap-50 ${isMenuOpen ? 'active' : ''}`}>
                 <div className="close-menu d-flex d-lg-none" onClick={toggleMenu}><Icons.Cross /></div>
@@ -43,7 +43,7 @@ const Header = ({ logoClass, headerClass }) => {
               </ul>
             </nav>
           </div>
-          <div className="col-lg-4 col-md-6 col-8">
+          <div className="">
             <div className={`d-none d-lg-flex  align-items-center gap-20 justify-content-end ${auth?.user ? 'justify-content-center' : 'justify-content-end'} ${isMenuOpen ? 'active' : ''}`}>
               {!auth?.user ? (
                 <>

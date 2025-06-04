@@ -786,6 +786,13 @@ span.fs-54 {
 .bg-light-black {
     background-color: #202020;
 }
+.inner-header {
+    padding: 20px 0;
+    background-color: #202020;
+}
+.logo img {
+    max-width: 200px;
+}
 /* responsive */
 @media (min-width: 1560px) {
     .container {

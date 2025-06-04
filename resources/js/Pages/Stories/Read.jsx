@@ -112,7 +112,7 @@ export default function Read({ story, auth }) {
   }, [story.id, showCover]);
 
   return (
-    <Layout headerClass="bg-light-black py-10">
+    <Layout headerClass="inner-header">
       <Head title={`Reading: ${story.title}`} />
 
       {/* Book Cover Overlay */}

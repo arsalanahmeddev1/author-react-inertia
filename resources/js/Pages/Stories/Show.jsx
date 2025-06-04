@@ -70,7 +70,7 @@ export default function Show({ story }) {
   };
 
   return (
-    <Layout headerClass="bg-light-black py-10">
+    <Layout headerClass="inner-header">
       <Head title={story.title} />
 
       <section className="pt-200 pb-100 sec-bg">

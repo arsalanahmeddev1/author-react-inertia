@@ -26,7 +26,7 @@ export default function CustomAuthenticatedLayout({ children, title }) {
 
   return (
     <div className="min-vh-100 d-flex flex-column">
-      <Header headerClass="bg-light-black py-10" />
+      <Header headerClass="inner-header" />
       
 
       {/* Page Title */}

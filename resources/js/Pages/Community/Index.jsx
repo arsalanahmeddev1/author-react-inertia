@@ -37,7 +37,7 @@ export default function CommunityIndex({ stories, genres, filters }) {
   // No automatic refresh on component mount
 
   return (
-    <Layout headerClass="bg-light-black py-10">
+    <Layout headerClass="inner-header">
       <Head title="Community Stories" />
 
       <section className="pt-200 pb-100 sec-bg">
