@@ -7,6 +7,8 @@ import { FaArrowRight } from "react-icons/fa6";
 import { IoMdSend } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 import { CiMenuFries } from "react-icons/ci";
+import { BsMagic } from "react-icons/bs";
+
 
 
 
@@ -23,4 +25,5 @@ export const Icons = {
   Send: IoMdSend,
   Cross: RxCross1,
   Menu: CiMenuFries,
+  Magic: BsMagic,
 }
