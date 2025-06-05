@@ -4,9 +4,9 @@ import Layout from '@/Layouts/Layout';
 
 const PendingApproval = ({story}) => {
   return (
-    <Layout>
+    <Layout headerClass="inner-header">
       <Head title="Pending Approval Stories" />
-      <section className="py-100">
+      <section className="py-200 ">
         <div className="container mx-auto">
           <div className="mt-16 px-4 text-center">
             <h1 className="text-[60px] font-bold mb-4 text-primary-theme">Story Under Review</h1>

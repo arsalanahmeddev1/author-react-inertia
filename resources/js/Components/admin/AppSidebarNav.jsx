@@ -43,7 +43,8 @@ export const AppSidebarNav = ({ items }) => {
           </CNavLink>
         ) : rest.href ? (
           <CNavLink
-            href={rest.href}
+            component={Link}
+            href={rest.to}
             target="_blank"
             rel="noopener noreferrer"
             {...rest}

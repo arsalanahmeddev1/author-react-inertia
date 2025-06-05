@@ -15,10 +15,16 @@ import {
   cilStar,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
-
+import { Link } from '@inertiajs/react'
+const InertiaNavItem = ({ name, to, icon }) => (
+  <CNavItem component={Link} to={to}>
+    {icon}
+    {name}
+  </CNavItem>
+)
 const nav = [
   {
-    component: CNavItem,
+    component: InertiaNavItem,
     name: 'Dashboard',
     to: '/admin',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
@@ -28,14 +34,14 @@ const nav = [
     // },
   },
 
-   {
+  {
     component: CNavGroup,
     name: 'Users',
     to: '/admin/users',
     icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
     items: [
       {
-        component: CNavItem,
+        component: InertiaNavItem,
         name: 'List',
         to: '/admin/users',
       },
@@ -46,7 +52,7 @@ const nav = [
       // },
     ],
   },
-   {
+  {
     component: CNavGroup,
     name: 'Stories',
     to: '/admin/stories',
@@ -69,7 +75,7 @@ const nav = [
       },
     ],
   },
-   {
+  {
     component: CNavGroup,
     name: 'Analytics',
     to: '/buttons',
