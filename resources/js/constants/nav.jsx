@@ -28,13 +28,6 @@ const nav = [
     name: 'Dashboard',
     to: '/admin',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    // items: [
-    //   {
-    //     component: InertiaNavItem,
-    //     name: 'List',
-    //     to: '/admin/users',
-    //   },
-    // ],
   },
 
   {
@@ -70,24 +63,6 @@ const nav = [
         component: CNavItem,
         name: 'Community',
         to: '/admin/community/stories',
-      },
-    ],
-  },
-  {
-    component: CNavGroup,
-    name: 'Analytics',
-    to: '/buttons',
-    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Engagement',
-        to: '/buttons/buttons',
-      },
-      {
-        component: CNavItem,
-        name: 'Activity',
-        to: '/buttons/button-groups',
       },
     ],
   },
