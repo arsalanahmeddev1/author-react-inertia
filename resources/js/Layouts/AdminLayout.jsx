@@ -1,7 +1,8 @@
 import React from 'react'
 import { AppSidebar, AppFooter, AppHeader } from '../Components/admin/index'
-import '../assets/admin/scss/style.scss'
-import { CContainer } from '@coreui/react'
+import '../assets/admin/scss/style.scss';
+import '../assets/dashboard/css/dashboard.css';
+import { CContainer } from '@coreui/react';
 
 const DefaultLayout = ({ children }) => {
   return (

@@ -1,0 +1,10 @@
+.sidebar-nav .nav-group:hover,
+.sidebar-nav .nav-item:hover {
+  background-color: #202020;
+}
+.sidebar-nav .simplebar-content {
+  padding: 10px 0 !important;
+}
+.sidebar-nav .nav-item {
+  padding: 0 !important;
+} 

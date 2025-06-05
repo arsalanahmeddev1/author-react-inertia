@@ -1,79 +1,74 @@
 import React from 'react'
-import { Link } from '@inertiajs/react'
+import { Link, usePage } from '@inertiajs/react'
 import PropTypes from 'prop-types'
 
 import SimpleBar from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
 
-import { CBadge, CNavLink, CSidebarNav } from '@coreui/react'
+import { CBadge, CSidebarNav, CNavGroup, CNavItem } from '@coreui/react'
 
 export const AppSidebarNav = ({ items }) => {
-  const navLink = (name, icon, badge, indent = false) => {
+  const { url } = usePage()
+
+  const renderLink = (name, to, icon, badge, indent = false) => {
     return (
-      <>
+      <Link
+        href={to}
+        className={`nav-link ${url.startsWith(to)}`}
+      >
         {icon
           ? icon
           : indent && (
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-            )}
-        {name && name}
+            <span className="nav-icon">
+              <span className="nav-icon-bullet"></span>
+            </span>
+          )}
+        {name}
         {badge && (
           <CBadge color={badge.color} className="ms-auto" size="sm">
             {badge.text}
           </CBadge>
         )}
-      </>
+      </Link>
     )
   }
 
-  const navItem = (item, index, indent = false) => {
-    const { component, name, badge, icon, ...rest } = item
-    const Component = component
+  const renderItem = (item, index, indent = false) => {
+    const { name, to, icon, badge } = item
+
     return (
-      <Component as="div" key={index}>
-        {rest.to ? (
-          <CNavLink
-            href={rest.to}
-            component={Link}
-            {...rest}
-          >
-            {navLink(name, icon, badge, indent)}
-          </CNavLink>
-        ) : rest.href ? (
-          <CNavLink
-            component={Link}
-            href={rest.to}
-            target="_blank"
-            rel="noopener noreferrer"
-            {...rest}
-          >
-            {navLink(name, icon, badge, indent)}
-          </CNavLink>
-        ) : (
-          navLink(name, icon, badge, indent)
-        )}
-      </Component>
+      <CNavItem key={index} className="px-3">
+        {renderLink(name, to, icon, badge, indent)}
+      </CNavItem>
     )
   }
 
-  const navGroup = (item, index) => {
-    const { component, name, icon, items, to, ...rest } = item
-    const Component = component
+  const renderGroup = (item, index) => {
+    const { name, icon, items } = item
+
     return (
-      <Component compact as="div" key={index} toggler={navLink(name, icon)} {...rest}>
-        {items?.map((item, index) =>
-          item.items ? navGroup(item, index) : navItem(item, index, true),
-        )}
-      </Component>
+      <CNavGroup
+        key={index}
+        toggler={
+          <>
+            {icon}
+            {name}
+          </>
+        }
+      >
+        {items &&
+          items.map((child, i) =>
+            child.items ? renderGroup(child, i) : renderItem(child, i, true),
+          )}
+      </CNavGroup>
     )
   }
 
   return (
     <CSidebarNav as={SimpleBar}>
-      {items &&
-        items.map((item, index) => (item.items ? navGroup(item, index) : navItem(item, index)))}
+      {items.map((item, index) =>
+        item.items ? renderGroup(item, index) : renderItem(item, index),
+      )}
     </CSidebarNav>
   )
 }
