@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
-import AdminLayout from '../../../Layouts/AdminLayout';
+import DashboardLayout from '../../../Layouts/DashboardLayout';
 import {
   CButton,
   CCard,
@@ -117,7 +117,7 @@ const Edit = ({ story }) => {
   ];
 
   return (
-    <AdminLayout>
+    <DashboardLayout>
       <Head title="Edit Story" />
       <CRow>
         <CCol xs={12}>
@@ -337,7 +337,7 @@ const Edit = ({ story }) => {
           </CCard>
         </CCol>
       </CRow>
-    </AdminLayout>
+    </DashboardLayout>
   );
 };
 

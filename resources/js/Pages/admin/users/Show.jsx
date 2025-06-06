@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
-import AdminLayout from '../../../Layouts/AdminLayout';
+import DashboardLayout from '../../../Layouts/DashboardLayout';
 import {
   CCard,
   CCardBody,
@@ -21,7 +21,7 @@ const themeColors = {
 
 const Show = ({ user }) => {
   return (
-    <AdminLayout>
+    <DashboardLayout>
       <Head title={`User: ${user.name}`} />
       <CRow>
         <CCol xs={12}>
@@ -81,7 +81,7 @@ const Show = ({ user }) => {
           </CCard>
         </CCol>
       </CRow>
-    </AdminLayout>
+    </DashboardLayout>
   );
 };
 

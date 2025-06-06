@@ -1,5 +1,5 @@
 import React from 'react'
-import AdminLayout from '../../Layouts/AdminLayout'
+import DashboardLayout from '../../Layouts/DashboardLayout'
 import classNames from 'classnames'
 import { usePage } from '@inertiajs/react';
 import {
@@ -85,7 +85,7 @@ const Dashboard = () => {
     { title: 'New Users', value: metrics.newUsers, getPercentage, color: 'danger' },
   ]
   return (
-    <AdminLayout>
+    <DashboardLayout>
 
 
       <>
@@ -131,7 +131,7 @@ const Dashboard = () => {
           </CCardFooter>
         </CCard>
       </>
-    </AdminLayout>
+    </DashboardLayout>
   )
 }
 

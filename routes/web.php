@@ -78,7 +78,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/drafts/{draft}', [StoryDraftsController::class, 'destroy'])->name('drafts.destroy');
 });
 
-// Dashboard route removed - redirecting to home instead
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -88,7 +87,7 @@ Route::middleware('auth')->group(function () {
 
 
 // Admin Routes
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+Route::prefix('admin-dashboard')->name('admin-dashboard.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->middleware(['auth']);
 
     Route::resource('users', UserController::class);
@@ -101,26 +100,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('{story}/reject', [\App\Http\Controllers\Admin\StoriesController::class, 'reject'])->name('stories.reject');
 });
 
+Route::prefix('user-dashboard')->name('user-dashboard.')->middleware(['auth', 'user'])->group(function() {
+    Route::get('/', [DashboardController::class, 'index'])->name('index');
+});
+
 
 Route::get('/publish', function () {
     return Inertia::render('Publish');
 })->name('publish');
-// Route::middleware(['auth', 'admin'])->group(function () {
-//     Route::resource('users', UserController::class);
-
-//     // Story routes - use resource for standard CRUD operations
-//     Route::resource('stories', \App\Http\Controllers\Admin\StoriesController::class);
-
-//     // Additional custom story routes (these should be defined BEFORE the resource route)
-//     Route::get('standard-stories', [\App\Http\Controllers\Admin\StoriesController::class, 'standardStories'])
-//         ->name('stories.standard');
-
-//     Route::get('community-stories', [\App\Http\Controllers\Admin\StoriesController::class, 'communityStories'])
-//         ->name('stories.community');
-
-//     Route::get('stories/pending', [\App\Http\Controllers\Admin\StoriesController::class, 'pending'])->name('stories.pending');
-//     Route::post('{story}/approve', [\App\Http\Controllers\Admin\StoriesController::class, 'approve'])->name('stories.approve');
-//     Route::post('{story}/reject', [\App\Http\Controllers\Admin\StoriesController::class, 'reject'])->name('stories.reject');
-// });
 
 require __DIR__ . '/auth.php';

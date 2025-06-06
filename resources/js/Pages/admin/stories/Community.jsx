@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Head, router } from '@inertiajs/react'
-import AdminLayout from '../../../Layouts/AdminLayout';
+import DashboardLayout from '../../../Layouts/DashboardLayout';
 import { Icons } from '../../../utils/icons';
 import {
   CButton,
@@ -59,7 +59,7 @@ const Community = ({ stories }) => {
   // }
 
   return (
-    <AdminLayout>
+    <DashboardLayout>
       <Head title="Story Management" />
       <CRow>
         <CCol xs={12}>
@@ -214,7 +214,7 @@ const Community = ({ stories }) => {
           </CButton>
         </CModalFooter>
       </CModal>
-    </AdminLayout>
+    </DashboardLayout>
   )
 }
 

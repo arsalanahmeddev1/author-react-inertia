@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Head, Link, router } from '@inertiajs/react'
-import AdminLayout from '../../../Layouts/AdminLayout'
+import DashboardLayout from '../../../Layouts/DashboardLayout'
 import {
   CCard,
   CCardBody,
@@ -52,7 +52,7 @@ const UserIndex = ({ users, flash }) => {
   }
 
   return (
-    <AdminLayout>
+    <DashboardLayout>
       <Head title="User Management" />
       <CRow>
         <CCol xs={12}>
@@ -196,7 +196,7 @@ const UserIndex = ({ users, flash }) => {
           </CButton>
         </CModalFooter>
       </CModal>
-    </AdminLayout>
+    </DashboardLayout>
   )
 }
 

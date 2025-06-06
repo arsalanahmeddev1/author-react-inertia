@@ -1,6 +1,6 @@
 import React from 'react'
 import { Head, Link, router } from '@inertiajs/react'
-import AdminLayout from '../../../Layouts/AdminLayout'
+import DashboardLayout from '../../../Layouts/DashboardLayout'
 import {
   CButton,
   CCard,
@@ -34,7 +34,7 @@ const Show = ({ story }) => {
   }
 
   return (
-    <AdminLayout>
+    <DashboardLayout>
       <Head title={`Story: ${story.title}`} />
       <CRow>
         <CCol xs={12}>
@@ -96,7 +96,7 @@ const Show = ({ story }) => {
           </CCard>
         </CCol>
       </CRow>
-    </AdminLayout>
+    </DashboardLayout>
   )
 }
 
