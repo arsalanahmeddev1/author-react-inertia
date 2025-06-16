@@ -1,6 +1,6 @@
 import React from 'react'
 import { Head } from '@inertiajs/react'
-import AdminLayout from '../../../Layouts/DashboardLayout'
+import DashboardLayout from '../../../Layouts/DashboardLayout'
 import {
   CCard,
   CCardBody,
@@ -22,7 +22,7 @@ const Index = () => {
   };
 
   return (
-    <AdminLayout>
+    <DashboardLayout>
       <Head title="User Management" />
       <CRow>
         <CCol xs={12}>
@@ -67,7 +67,7 @@ const Index = () => {
           </CCard>
         </CCol>
       </CRow>
-    </AdminLayout>
+    </DashboardLayout>
   )
 }
 

@@ -49,15 +49,6 @@ const Index = ({ stories }) => {
     }
   }
 
-  // const formatDate = (dateString) => {
-  //   if (!dateString) return 'N/A'
-  //   try {
-  //     return format(new Date(dateString), 'MMM d, yyyy')
-  //   } catch (e) {
-  //     return dateString
-  //   }
-  // }
-
   return (
     <DashboardLayout>
       <Head title="Story Management" />

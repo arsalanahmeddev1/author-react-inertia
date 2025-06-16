@@ -27,8 +27,8 @@ const Show = ({ story }) => {
 
   const handleDelete = () => {
     if (confirm(`Are you sure you want to delete "${story.title}"? This action cannot be undone.`)) {
-      router.delete(route('admin.stories.destroy', story.id), {
-        onSuccess: () => router.visit(route('admin.stories.index')),
+      router.delete(route('admin-dashboard.stories.destroy', story.id), {
+        onSuccess: () => router.visit(route('admin-dashboard.stories.index')),
       })
     }
   }
@@ -41,7 +41,7 @@ const Show = ({ story }) => {
           <CCard className="mb-4">
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center">
-                <Link href={route('admin.stories.index')}>
+                <Link href={route('admin-dashboard.stories.index')}>
                   <CButton color="primary" size="sm" variant="outline" className="me-2">
                     <CIcon icon={cilArrowLeft} />
                   </CButton>

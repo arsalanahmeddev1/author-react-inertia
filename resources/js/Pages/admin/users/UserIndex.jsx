@@ -32,6 +32,14 @@ const themeColors = {
 }
 
 const UserIndex = ({ users, flash }) => {
+  const toggleUserStatus = (userId) => {
+    if (confirm('Are you sure you want to toggle this user\'s status?')) {
+      router.post(route('admin.users.toggle-status', userId), {}, {
+        preserveScroll: true,
+      });
+    }
+  };
+  
   const [deleteModal, setDeleteModal] = useState(false)
   const [userToDelete, setUserToDelete] = useState(null)
 
@@ -61,7 +69,7 @@ const UserIndex = ({ users, flash }) => {
               <strong className="d-flex align-items-center">
                 <FaUserCircle className="me-2" /> Users
               </strong>
-              <Link href={route('admin.users.create')}>
+              <Link href={route('admin-dashboard.users.create')}>
                 <CButton 
                   style={{ backgroundColor: themeColors.primary, borderColor: themeColors.primary }}
                   className="d-flex align-items-center" 
@@ -97,7 +105,7 @@ const UserIndex = ({ users, flash }) => {
                         <CTableDataCell>
                           <div className="d-flex gap-2">
                             <CTooltip content="View User">
-                              <Link href={route('admin.users.show', user.id)}>
+                              <Link href={route('admin-dashboard.users.show', user.id)}>
                                 <CButton 
                                   style={{ 
                                     color: themeColors.primary, 
@@ -112,7 +120,7 @@ const UserIndex = ({ users, flash }) => {
                               </Link>
                             </CTooltip>
                             <CTooltip content="Edit User">
-                              <Link href={route('admin.users.edit', user.id)}>
+                              <Link href={route('admin-dashboard.users.edit', user.id)}>
                                 <CButton 
                                   style={{ 
                                     color: themeColors.secondary, 

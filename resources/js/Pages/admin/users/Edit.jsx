@@ -50,7 +50,7 @@ const Edit = ({ user }) => {
               <div className="d-flex align-items-center">
                 <strong><FaUserCircle className="me-2" /> Edit User</strong>
               </div>
-              <Link href={route('admin.users.index')}>
+              <Link href={route('admin-dashboard.users.index')}>
                 <CButton 
                   style={{ 
                     color: themeColors.primary, 

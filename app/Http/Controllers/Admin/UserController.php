@@ -48,7 +48,7 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return redirect()->route('admin.users.index')
+        return redirect()->route('admin-dashboard.users.index')
             ->with('success', 'User created successfully.');
     }
 
@@ -94,7 +94,7 @@ class UserController extends Controller
 
         $user->update($userData);
 
-        return redirect()->route('admin.users.index')
+        return redirect()->route('admin-dashboard.users.index')
             ->with('success', 'User updated successfully.');
     }
 
@@ -105,7 +105,16 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('admin.users.index')
+        return redirect()->route('admin-dashboard.users.index')
             ->with('success', 'User deleted successfully.');
     }
-} 
+
+
+    public function toggleStatus(User $user)
+    {
+        $user->is_active = !$user->is_active;
+        $user->save();
+
+        return redirect()->back()->with('success', 'User status updated.');
+    }
+}

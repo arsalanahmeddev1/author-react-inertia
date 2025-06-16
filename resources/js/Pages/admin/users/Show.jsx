@@ -31,7 +31,7 @@ const Show = ({ user }) => {
                 <strong className='d-flex align-items-center'><FaUserCircle className="me-2" /> User Details</strong>
               </div>
               <div className="d-flex gap-2">
-                <Link href={route('admin.users.index')}>
+                <Link href={route('admin-dashboard.users.index')}>
                   <CButton 
                     style={{ 
                       color: themeColors.primary, 
@@ -44,7 +44,7 @@ const Show = ({ user }) => {
                     <FaArrowLeft className="me-1" /> Back to Users
                   </CButton>
                 </Link>
-                <Link href={route('admin.users.edit', user.id)}>
+                <Link href={route('admin-dashboard.users.edit', user.id)}>
                   <CButton 
                     style={{ 
                       color: themeColors.secondary, 

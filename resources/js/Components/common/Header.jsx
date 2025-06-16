@@ -43,30 +43,32 @@ const Header = ({ logoClass, headerClass }) => {
               </ul>
             </nav>
           </div>
-          <div className="">
-            <div className={`d-none d-lg-flex  align-items-center gap-20 justify-content-end ${auth?.user ? 'justify-content-center' : 'justify-content-end'} ${isMenuOpen ? 'active' : ''}`}>
-              {!auth?.user ? (
-                <>
-                  <Link href="/login" className='text-primary text-18'>Sign in </Link>
-                  <div className="text-primary fs-25">/</div>
-                  <Link href="/register" className='text-primary text-18'>Sign Up</Link>
-                  <Link href="/guest-login" className='btn btn-primary text-18'>Guest Login</Link>
-                </>
-              ) : auth?.user?.is_guest ? (
-                <div className="d-flex align-items-center gap-2">
+          <div
+            className={`d-none d-lg-flex align-items-center gap-20 justify-content-end ${auth?.user ? 'justify-content-center' : 'justify-content-end'} ${isMenuOpen ? 'active' : ''}`}
+          >
+            {!auth?.user ? (
+              <>
+                <Link href="/login" className="text-primary text-18">Sign in</Link>
+                <div className="text-primary fs-25">/</div>
+                <Link href="/register" className="text-primary text-18">Sign Up</Link>
+                <Link href="/guest-login" className="btn btn-primary text-18">Guest Login</Link>
+              </>
+            ) : (
+              <>
+                {auth.user.is_guest && (
                   <span className="btn btn-secondary d-none d-sm-block">Guest</span>
-                  <Link href="/logout" method="post" as="button" className="btn btn-primary text-white btn-sm d-none d-sm-block">
-                    <i className="fas fa-sign-out-alt"></i>
-                  </Link>
-                </div>
-              ) : (
+                )}
                 <UserAvatar user={auth.user} className="d-none d-sm-block" />
-              )}
-            </div>
-            <div className="fs-30 d-lg-none" onClick={toggleMenu}>
-              <div className='fs-30 text-white d-flex justify-content-end'><Icons.Menu /></div>
-            </div>
+               
+
+                {/* Logout button */}
+                <Link href="/logout" method="post" as="button" className="btn btn-primary text-white btn-sm d-none d-sm-block">
+                  <i className="fas fa-sign-out-alt"></i>
+                </Link>
+              </>
+            )}
           </div>
+
         </div>
       </div>
     </header>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import { usePage } from '@inertiajs/react'
 import {
   CCloseButton,
   CSidebar,
@@ -16,9 +16,12 @@ import { logo } from '../../assets/admin/brand/logo';
 import { sygnet } from '../../assets/admin/brand/sygnet'
 
 // sidebar nav config
-import navigation from '../../constants/nav';
+import { getNavItems } from '../../constants/nav'
 
 const AppSidebar = () => {
+  const {
+    auth: { user },
+  } = usePage().props;
   const [sidebarShow, setSidebarShow] = useState(true)
   const [unfoldable, setUnfoldable] = useState(false)
 
@@ -44,7 +47,7 @@ const AppSidebar = () => {
           onClick={() => setSidebarShow(false)}
         />
       </CSidebarHeader>
-      <AppSidebarNav items={navigation} />
+      <AppSidebarNav items={getNavItems(user?.role)} />
       <CSidebarFooter className="border-top d-none d-lg-flex">
         <CSidebarToggler
           onClick={() => setUnfoldable(!unfoldable)}

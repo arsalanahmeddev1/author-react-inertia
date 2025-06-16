@@ -9,7 +9,7 @@
     "@headlessui/react": "^2.0.0",
     "@inertiajs/react": "^2.0.0",
     "@tailwindcss/forms": "^0.5.3",
-    "@tailwindcss/vite": "^4.0.0",
+    "@tailw indcss/vite": "^4.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.0.1",

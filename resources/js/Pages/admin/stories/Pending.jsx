@@ -2,11 +2,11 @@ import { router } from '@inertiajs/react';
 
 export default function Pending({ stories }) {
   const approveStory = (id) => {
-    router.post(route('admin.stories.approve', id));
+    router.post(route('admin-dashboard.stories.approve', id));
   };
 
   const rejectStory = (id) => {
-    router.post(route('admin.stories.reject', id));
+    router.post(route('admin-dashboard.stories.reject', id));
   };
 
   return (

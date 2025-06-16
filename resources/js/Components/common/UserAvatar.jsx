@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from '@inertiajs/react';
-
+import { Link, usePage } from '@inertiajs/react';
+import { Icons } from '../../utils/icons';
 const UserAvatar = ({ user, className = '' }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const avatarRef = useRef(null);
 
+  const { auth } = usePage().props;
   // Get first letter of user's name
   const firstLetter = user?.name?.charAt(0).toUpperCase() || 'U';
 
@@ -57,9 +58,20 @@ const UserAvatar = ({ user, className = '' }) => {
         </div>
         <div className="user-dropdown-body">
           <Link href={route('profile.edit')} className="user-dropdown-item">
-            <i className="fas fa-user"></i> Profile
+            <Icons.Profile /> <span className='pl-10'>Profile</span>
           </Link>
 
+          <div className="user-dropdown-divider"></div>
+          {auth.user?.role === 'admin' && (
+            <Link href="/admin-dashboard" className="user-dropdown-item">
+              <Icons.Dashboard /> <span className='pl-10'>Dashboard</span>
+            </Link>
+          )}
+          {auth.user?.role === 'user' && (
+            <Link href="/user-dashboard" className="user-dropdown-item">
+              <Icons.Dashboard /> <span className='pl-10'>Dashboard</span>
+            </Link>
+          )}
           <div className="user-dropdown-divider"></div>
 
           <Link
@@ -68,7 +80,7 @@ const UserAvatar = ({ user, className = '' }) => {
             as="button"
             className="user-dropdown-item w-100 text-start bg-transparent border-0"
           >
-            <i className="fas fa-sign-out-alt"></i> Logout
+            <Icons.Logout /> <span className='pl-10'>Logout</span>
           </Link>
         </div>
       </div>

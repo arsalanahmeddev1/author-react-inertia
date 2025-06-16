@@ -53,20 +53,25 @@ class StoriesController extends Controller
 
     public function store(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect()->back()->with('error', 'You must be logged in to submit a story.');
+        }
+
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
-
+        dd(Auth::user()->id);
         Story::create([
             'title' => $request->title,
             'content' => $request->content,
+
             'user_id' => Auth::id(),
-            'status' => 'pending', // ← This sets the initial status
+            'status' => 'pending',
             'read_count' => 0,
             'likes_count' => 0,
             'comment_count' => 0,
-            'is_community' => false, // Or true, depending on your logic
+            'is_community' => false,
         ]);
 
         return redirect()->back()->with('success', 'Story submitted for approval.');

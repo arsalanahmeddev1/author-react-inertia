@@ -8,6 +8,9 @@ import { IoMdSend } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 import { CiMenuFries } from "react-icons/ci";
 import { BsMagic } from "react-icons/bs";
+import { RiDashboardLine } from "react-icons/ri";
+import { CgProfile } from "react-icons/cg";
+import { IoIosLogOut } from "react-icons/io";
 
 
 
@@ -26,4 +29,7 @@ export const Icons = {
   Cross: RxCross1,
   Menu: CiMenuFries,
   Magic: BsMagic,
+  Dashboard: RiDashboardLine,
+  Profile: CgProfile,
+  Logout: IoIosLogOut,
 }

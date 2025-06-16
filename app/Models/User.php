@@ -23,7 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_guest',
+        'user_group',
+        'role',
     ];
 
     /**
@@ -47,17 +48,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_guest' => 'boolean',
+            'role' => 'string',
         ];
     }
 
-    /**
-     * Check if the user is a guest user.
-     *
-     * @return bool
-     */
-    public function isGuest(): bool
+    public function isAdmin()
     {
-        return $this->is_guest;
+        return $this->role === 'admin';
+    }
+    public function isUser()
+    {
+        return $this->role === 'user';
+    }
+    public function isGuest()
+    {
+        return $this->role === 'guest';
     }
 
     /**
@@ -91,11 +96,6 @@ class User extends Authenticatable
     public function storyDrafts(): HasMany
     {
         return $this->hasMany(StoryDraft::class);
-    }
-
-    public function isAdmin(): bool
-    {
-        return $this->is_admin === 1; // or simply: (bool) $this->isAdmin;
     }
 
     public static function monthlyRegistrations($year = null)

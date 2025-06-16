@@ -23,7 +23,7 @@ const AppBreadcrumb = () => {
       const name = part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' ');
 
       // Build the path up to this point
-      const path = '/admin/' + parts.slice(0, index + 1).join('/');
+      const path = '/' + parts.slice(0, index + 1).join('/');
 
       return {
         name,
@@ -37,7 +37,7 @@ const AppBreadcrumb = () => {
 
   return (
     <CBreadcrumb className="my-0">
-      <CBreadcrumbItem href="/admin">Dashboard</CBreadcrumbItem>
+      <CBreadcrumbItem href="/admin-dashboard">Dashboard</CBreadcrumbItem>
       {breadcrumbs.map((breadcrumb, index) => (
         <CBreadcrumbItem
           {...(breadcrumb.active ? { active: true } : { href: breadcrumb.path })}

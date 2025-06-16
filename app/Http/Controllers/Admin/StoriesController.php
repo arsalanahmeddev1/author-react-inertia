@@ -137,7 +137,7 @@ class StoriesController extends Controller
             }
         }
 
-        return redirect()->route('admin.stories.index')
+        return redirect()->route('admin-dashboard.stories.index')
             ->with('success', 'Story created successfully.');
     }
 
@@ -236,7 +236,7 @@ class StoriesController extends Controller
             }
         }
 
-        return redirect()->route('admin.stories.index')
+        return redirect()->route('admin-dashboard.stories.index')
             ->with('success', 'Story updated successfully.');
     }
 
@@ -258,7 +258,7 @@ class StoriesController extends Controller
 
         $story->delete();
 
-        return redirect()->route('admin.stories.index')
+        return redirect()->route('admin-dashboard.stories.index')
             ->with('success', 'Story deleted successfully.');
     }
 }

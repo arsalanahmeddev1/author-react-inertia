@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\GuestAuthController;
 use App\Http\Controllers\Admin\StoriesController as AdminStoriesController;
+use App\Http\Controllers\User\StoriesController as UserStoriesController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\CommentsController;
@@ -16,13 +17,10 @@ use App\Http\Controllers\StoryDraftsController;
 use App\Http\Controllers\StoryLikesController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
-
-
-
+use App\Http\Controllers\User\UserDashboardController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
@@ -98,10 +96,12 @@ Route::prefix('admin-dashboard')->name('admin-dashboard.')->middleware(['auth', 
     Route::get('stories/pending', [\App\Http\Controllers\Admin\StoriesController::class, 'pending'])->name('stories.pending');
     Route::post('{story}/approve', [\App\Http\Controllers\Admin\StoriesController::class, 'approve'])->name('stories.approve');
     Route::post('{story}/reject', [\App\Http\Controllers\Admin\StoriesController::class, 'reject'])->name('stories.reject');
+    Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
 });
 
 Route::prefix('user-dashboard')->name('user-dashboard.')->middleware(['auth', 'user'])->group(function() {
-    Route::get('/', [DashboardController::class, 'index'])->name('index');
+    Route::get('/', [UserDashboardController::class, 'index'])->name('user.dashboard');
+    Route::resource('stories', UserStoriesController::class);
 });
 
 

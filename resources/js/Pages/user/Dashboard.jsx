@@ -1,11 +1,23 @@
 import React from 'react'
+import DashboardLayout from '../../Layouts/DashboardLayout'
+import { usePage } from '@inertiajs/react'
+import { CCard, CCardBody, CRow, CCol } from '@coreui/react'
 
-const Dashboard = () => {
+const UserDashboard = () => {
+  
+  // const { user, metrics } = usePage().props
+
   return (
-    <div>
-      <h1>user Dashboard</h1>
-    </div>
+    <DashboardLayout>
+      <CCard className="mb-4">
+        <CCardBody>
+          
+        </CCardBody>
+      </CCard>
+
+      {/* Add more sections: recent stories, profile links, etc. */}
+    </DashboardLayout>
   )
 }
 
-export default Dashboard
+export default UserDashboard

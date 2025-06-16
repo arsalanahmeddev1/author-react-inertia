@@ -17,10 +17,6 @@ class LogVisit
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->isAdmin()) {
-            return $next($request); // skip logging
-        }
-        
         Visit::create([
             'user_id' => Auth::id(),
             'ip_address' => $request->ip(),

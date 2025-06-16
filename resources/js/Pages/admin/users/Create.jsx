@@ -53,7 +53,7 @@ const Create = () => {
               <div className="d-flex align-items-center">
                 <strong className='d-flex align-items-center'><FaUserPlus className="me-2" /> Create New User</strong>
               </div>
-              <Link href={route('admin.users.index')}>
+              <Link href={route('admin-dashboard.users.index')}>
                 <CButton 
                   style={{ 
                     color: themeColors.primary, 

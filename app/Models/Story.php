@@ -128,7 +128,7 @@ class Story extends Model
 
     public function getCreatedAtFormattedAttribute()
     {
-        return $this->created_at->format('d M Y'); // e.g., "20 May 2025"
+        return $this->created_at->format('d M Y');
     }
 
     public function user()

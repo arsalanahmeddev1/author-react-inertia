@@ -38,10 +38,10 @@ const StoryTable = ({ title, stories }) => (
               <CTableDataCell>
                 <div className="d-flex gap-2">
                   <CTooltip content="View Story">
-                    <CButton color="info" size="sm" onClick={() => router.visit(route('admin.stories.show', story.id))}><Icons.View /></CButton>
+                    <CButton color="info" size="sm" onClick={() => router.visit(route('admin-dashboard.stories.show', story.id))}><Icons.View /></CButton>
                   </CTooltip>
                   <CTooltip content="Edit Story">
-                    <CButton color="warning" size="sm" onClick={() => router.visit(route('admin.stories.edit', story.id))}><Icons.Edit /></CButton>
+                    <CButton color="warning" size="sm" onClick={() => router.visit(route('admin-dashboard.stories.edit', story.id))}><Icons.Edit /></CButton>
                   </CTooltip>
                   <CTooltip content="Delete Story">
                     <CButton color="danger" size="sm" onClick={() => confirmDelete(story)}><Icons.Delete /></CButton>
@@ -49,10 +49,10 @@ const StoryTable = ({ title, stories }) => (
                   {story.is_community && story.status === 'pending' && (
                     <>
                       <CTooltip content="Approve Story">
-                        <CButton color="success" size="sm" onClick={() => router.post(route('admin.stories.approve', story.id))}>✅</CButton>
+                        <CButton color="success" size="sm" onClick={() => router.post(route('admin-dashboard.stories.approve', story.id))}>✅</CButton>
                       </CTooltip>
                       <CTooltip content="Reject Story">
-                        <CButton color="warning" size="sm" onClick={() => router.post(route('admin.stories.reject', story.id))}>❌</CButton>
+                        <CButton color="warning" size="sm" onClick={() => router.post(route('admin-dashboard.stories.reject', story.id))}>❌</CButton>
                       </CTooltip>
                     </>
                   )}
