@@ -108,5 +108,8 @@ Route::prefix('user-dashboard')->name('user-dashboard.')->middleware(['auth', 'u
 Route::get('/publish', function () {
     return Inertia::render('Publish');
 })->name('publish');
+Route::get('/about-us', function () {
+    return Inertia::render('About');
+})->name('about-us');
 
 require __DIR__ . '/auth.php';
