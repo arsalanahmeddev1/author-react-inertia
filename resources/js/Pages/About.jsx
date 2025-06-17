@@ -2,7 +2,7 @@ import React from 'react'
 import Layout from '@/Layouts/Layout'
 import aboutLeft from '../assets/images/about-left.png'
 import aboutRight from '../assets/images/about-right.png'
-// about page
+// about page new 
 const About = () => {
   return (
     <Layout headerClass="inner-header">
