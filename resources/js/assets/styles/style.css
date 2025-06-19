@@ -814,6 +814,11 @@ span.fs-54 {
 .publish-card-img img {
     max-height: 250px;
 }
+.about-sec-02 {
+    background-color: #202020;
+    padding: 100px 0;
+    color: #fff;
+}
 /* responsive */
 @media (min-width: 1560px) {
     .container {

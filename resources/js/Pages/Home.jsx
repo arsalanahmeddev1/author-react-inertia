@@ -18,8 +18,8 @@ const Home = () => {
               Join our creative community. Explore, interact, and create your own version of timeless tales.
             </p>
             <div className="d-flex gap-20 mb-20">
-              <Button className="btn btn-primary">Continue Story At Your Own Way</Button>
-              <Button className="btn btn-secondary">View Stories</Button>
+              <Button className="btn btn-primary">Continue Story in Your Own Way</Button>
+              <a href='/stories' className="btn btn-secondary">View Stories</a>
             </div>
           </div>
           <div className="d-flex align-items-center justify-content-center position-relative">
