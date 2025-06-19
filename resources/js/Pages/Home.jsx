@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '../Components/common/Button'
 import Layout from '@/Layouts/Layout'
-import { Link } from '@inertiajs/react'
+import { Link, Head } from '@inertiajs/react'
 import StoryOfTheMonth from '@/Components/StoryOfTheMonth'
 import Testimonials from '@/Components/Testimonials'
 const Home = () => {
@@ -9,6 +9,7 @@ const Home = () => {
 
   return (
     <Layout headerClass="pt-30">
+       <Head title="Home" />
       <section className='hero-banner overflow-hidden z-2'>
         <div className="container-xxl">
           <div className="d-flex justify-content-center align-items-center flex-column">
@@ -152,6 +153,7 @@ const Home = () => {
   )
 }
 
+Home.title = "Home";
 
 
 export default Home

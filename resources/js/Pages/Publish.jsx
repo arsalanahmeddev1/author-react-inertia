@@ -1,11 +1,12 @@
 import React from 'react'
 import Layout from '@/Layouts/Layout'
-import { Link } from '@inertiajs/react'
+import { Link, Head } from '@inertiajs/react'
 import { Icons } from '@/utils/icons'
 import Button from '@/Components/common/Button'
 const Publish = () => {
   return (
     <Layout headerClass="inner-header">
+      <Head title="Publish" />
       <main className='py-200'>
         <div className="container">
           <div className="row mb-50 flex-column align-items-center text-center">
