@@ -34,7 +34,7 @@ const Header = ({ logoClass, headerClass }) => {
                 <li><Link href="/stories">Stories</Link></li>
                 <li><Link href="/community">Community</Link></li>
                 <li><Link href="/publish">Publish</Link></li>
-                <li><Link href="/about-us">About Us</Link></li>
+                <li><Link href="/about">About</Link></li>
                 <div className="d-flex d-lg-none flex-column align-items-center gap-20 justify-content-end justify-content-lg-start">
                   <Link href="/login" className='text-white text-18'>Sign in </Link>
                   <Link href="/register" className='text-white text-18'>Sign Up</Link>

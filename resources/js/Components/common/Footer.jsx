@@ -17,7 +17,7 @@ const Footer = () => {
                 <li><Link href="/">Home</Link></li>
                 <li><Link href="/">Stories</Link></li>
                 <li><Link href="/">Publish</Link></li>
-                <li><Link href="/">About Us</Link></li>
+                <li><Link href="/about">About</Link></li>
               </ul>
             </div>
             <div className="col-lg-2">

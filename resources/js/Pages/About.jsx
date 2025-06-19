@@ -8,7 +8,7 @@ const About = () => {
     <Layout headerClass="inner-header">
       <main className="py-200">
         <div className="container">
-          <h1 className="text-black text-center fs-40 fw-500 mb-80 secondry-font">About Us</h1>
+          <h1 className="text-black text-center fs-40 fw-500 mb-80 secondry-font">About</h1>
 
           {/* Section 1 */}
           <div className="row align-items-center mb-100">
@@ -33,6 +33,11 @@ const About = () => {
               <img src={aboutRight} alt="Workspace Image" className="img-fluid rounded shadow" style={{ maxWidth: '480px' }} />
             </div>
             <div className="col-lg-6">
+            <h2 className="text-black fs-30 fw-600 mb-20 secondry-font">
+            We believe great stories come from real people — not machines.
+            But sometimes, even the most creative minds need a little help.
+            </h2>
+
               <p className="mb-20">
                 “You don't have to use AI. But if you're like me — someone who struggles to write well, or who’s tried to draw or paint (I’ve tried!) — then consider AI as a tool.
                 Not to write the entire story, but to spark inspiration. To help with grammar. To gently guide your ideas into focus.”
