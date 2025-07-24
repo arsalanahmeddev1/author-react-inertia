@@ -135,7 +135,7 @@ export default function Show({ story }) {
                   </div>
                   <div className="col-md-8">
                     <h1 className="heading mb-3">{story.title}</h1>
-                    <h4 className="fs-24 text-primary-theme mb-3">By {story.author}</h4>
+                    {/* <h4 className="fs-24 text-primary-theme mb-3">By {story.author}</h4> */}
                     <div className="story-description secondry-font fs-20 mb-4">
                       {story.description.split('\n').map((paragraph, index) => (
                         <p key={index} className="mb-3">{paragraph}</p>
