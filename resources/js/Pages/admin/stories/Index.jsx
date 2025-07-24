@@ -40,7 +40,7 @@ const Index = ({ stories }) => {
 
   const handleDelete = () => {
     if (storyToDelete) {
-      router.delete(route('admin.stories.destroy', storyToDelete.id), {
+      router.delete(route('admin-dashboard.stories.destroy', storyToDelete.id), {
         onSuccess: () => {
           setDeleteModal(false)
           setStoryToDelete(null)
@@ -106,7 +106,7 @@ const Index = ({ stories }) => {
                                 <CButton
                                   color="info"
                                   size="sm"
-                                  onClick={() => router.visit(route('admin.stories.show', story.id))}
+                                  onClick={() => router.visit(route('admin-dashboard.stories.show', story.id))}
                                 >
                                   {/* <CIcon icon={cilEye} /> View */}
                                   <Icons.View />
@@ -116,7 +116,7 @@ const Index = ({ stories }) => {
                                 <CButton
                                   color="warning"
                                   size="sm"
-                                  onClick={() => router.visit(route('admin.stories.edit', story.id))}
+                                  onClick={() => router.visit(route('admin-dashboard.stories.edit', story.id))}
                                 >
                                   <Icons.Edit />
                                 </CButton>
@@ -136,7 +136,7 @@ const Index = ({ stories }) => {
                                     <CButton
                                       color="success"
                                       size="sm"
-                                      onClick={() => router.post(route('admin.stories.approve', story.id))}
+                                      onClick={() => router.post(route('admin-dashboard.stories.approve', story.id))}
                                     >
                                       ✅
                                     </CButton>
@@ -145,7 +145,7 @@ const Index = ({ stories }) => {
                                     <CButton
                                       color="warning"
                                       size="sm"
-                                      onClick={() => router.post(route('admin.stories.reject', story.id))}
+                                      onClick={() => router.post(route('admin-dashboard.stories.reject', story.id))}
                                     >
                                       ❌
                                     </CButton>

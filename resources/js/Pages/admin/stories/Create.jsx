@@ -41,7 +41,7 @@ const Create = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    post(route('admin.stories.store'), {
+    post(route('admin-dashboard.stories.store'), {
       preserveScroll: true,
       onSuccess: () => {
         reset();

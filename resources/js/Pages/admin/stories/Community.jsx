@@ -154,7 +154,7 @@ const Community = ({ stories }) => {
                                     <CButton
                                       color="warning"
                                       size="sm"
-                                      onClick={() => router.post(route('admin.stories.reject', story.id))}
+                                      onClick={() => router.post(route('admin-dashboard.stories.reject', story.id))}
                                     >
                                       ❌
                                     </CButton>

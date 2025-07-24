@@ -45,7 +45,7 @@ const Edit = ({ story }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    post(route('admin.stories.update', story.id), {
+    post(route('admin-dashboard.stories.update', story.id), {
       preserveScroll: true,
       onSuccess: () => {
         setSuccessMessage('Story updated successfully!');
