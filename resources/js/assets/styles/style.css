@@ -179,18 +179,23 @@
     background-color: var(--secondry-theme);
     border-radius: var(--text-10);
 }
+
 .primary-font {
     font-family: var(--primary-font);
 }
+
 .tertiary-font {
     font-family: var(--tertiary-font);
 }
+
 .secondry-font {
     font-family: var(--secondry-font);
 }
+
 .primary-navs a {
     color: #fff;
 }
+
 .text-20 {
     font-size: 20px;
 }
@@ -198,14 +203,17 @@
 .collection-sec {
     padding: 150px 0 200px 0;
 }
+
 .story-month {
     padding-bottom: 150px 0;
 }
+
 .collection-card-img {
     position: relative;
     z-index: 1;
     border: 7px solid #d9d9d9;
 }
+
 .story-month-bg {
     background-image: url("/public/assets/images/story-month-bg.png");
     background-size: cover;
@@ -214,6 +222,7 @@
     padding: 150px 0;
     position: relative;
 }
+
 /* globals start */
 html,
 body {
@@ -275,8 +284,7 @@ p {
 }
 
 /* header */
-.header {
-}
+.header {}
 
 .secondary-nav a,
 .primary-navs a {
@@ -312,8 +320,9 @@ a:hover {
 .btn-primary {
     background-color: var(--primary-theme);
 }
+
 .btn:first-child:active,
-:not(.btn-check) + .btn:active,
+:not(.btn-check)+.btn:active,
 .btn-primary:active,
 .btn-primary:hover {
     background-color: var(--secondry-theme);
@@ -322,8 +331,9 @@ a:hover {
 .btn-secondary {
     background-color: var(--secondry-theme);
 }
+
 .btn:first-child:active,
-:not(.btn-check) + .btn:active,
+:not(.btn-check)+.btn:active,
 .btn-secondary:active,
 .btn-secondary:focus,
 .btn-secondary:hover {
@@ -365,6 +375,7 @@ a:hover {
     font-family: var(--tertiary-font);
     font-weight: 400;
 }
+
 .heading span {
     font-size: var(--text-84);
 }
@@ -407,6 +418,7 @@ span.fs-54 {
     background-position: center;
     background-repeat: no-repeat;
 }
+
 .footer-content {
     padding: 150px 0;
 }
@@ -522,24 +534,30 @@ span.fs-54 {
 .sec-3-right-area {
     z-index: -1;
 }
+
 .comment-modal-delete-btn:hover {
     background-color: var(--primary-theme);
 }
+
 .comment-modal-cencel-btn {
     background-color: var(--primary-theme);
 }
+
 .comment-modal-cencel-btn:hover {
     background-color: var(--secondry-theme);
     color: #fff;
 }
+
 .pt-42 {
     padding-top: var(--text-42);
 }
+
 .story-title {
     font-size: var(--text-29);
     font-weight: 600;
     max-width: 32rem;
 }
+
 .sec-5 {
     background-image: url("../../../../public/assets/images/sec-5-bg.png");
     background-size: cover;
@@ -576,6 +594,7 @@ span.fs-54 {
 .ql-editor {
     min-height: 300px;
 }
+
 /* home revamp */
 .hero-banner {
     background-color: #202020;
@@ -586,18 +605,23 @@ span.fs-54 {
     background-repeat: no-repeat;
     max-height: 980px;
 }
+
 .btn-primary {
     background-color: #fea257 !important;
 }
+
 .btn-secondary {
     background-color: #fff;
 }
+
 .btn {
     color: #202020;
 }
+
 .para-dark {
     color: #7b7b7b;
 }
+
 .text-primary {
     color: #fea257 !important;
 }
@@ -605,23 +629,28 @@ span.fs-54 {
 .fearured-stories {
     padding: 150px 0;
 }
+
 .text-sm {
     font-weight: 700;
     font-size: 18px;
     color: #202020;
 }
+
 .hd-md {
     color: #202020;
     font-weight: 700;
     font-size: 48px;
 }
+
 .featured-sub-title {
     font-size: 24px;
 }
+
 .para-mid {
     color: #6b6b6b;
     font-size: 18px;
 }
+
 .signin-bg {
     background-image: url("/public/assets/images/signin-bg.png");
     background-size: cover;
@@ -629,6 +658,7 @@ span.fs-54 {
     background-repeat: no-repeat;
     padding: 153px 0;
 }
+
 .signin-book {
     top: -104px;
     right: 520px;
@@ -639,23 +669,29 @@ span.fs-54 {
     0% {
         transform: translatey(0);
     }
+
     50% {
         transform: translatey(-30px);
     }
+
     100% {
         transform: translatey(0);
     }
 }
+
 .text-30-bold {
     font-size: 30px;
     font-weight: 700;
 }
+
 .story-month-right {
     margin-top: -310px;
 }
+
 .story-month .slick-list {
     overflow: visible;
 }
+
 /* .story-month-custom-arrows {
     justify-content: space-between;
     position: absolute;
@@ -674,29 +710,37 @@ span.fs-54 {
     cursor: pointer;
     color: #fff;
 }
+
 .dot-number {
     width: 40px;
 }
+
 .story-month-dots li.slick-active {
     background-color: #fea257;
 }
+
 .testi-card {
     background-color: #f5f5f5;
     padding: 50px;
 }
+
 .text-light-grey {
     color: #868686;
 }
+
 .testimonials-sec .slick-slide {
     padding: 0 10px;
 }
+
 .footer-nav li {
     margin-bottom: 10px;
 }
+
 .footer-nav a {
     font-size: 20px;
     color: #fff;
 }
+
 .field-wrapper .btn-primary {
     border-radius: 100%;
     width: 50px;
@@ -707,69 +751,85 @@ span.fs-54 {
     border: none;
     right: 10px;
 }
+
 .field-wrapper .input-field {
     color: 333333;
     padding: 20px;
 }
+
 .field-wrapper .input-field::placeholder {
     font-family: var(--secondry-font);
     color: 333333;
 }
+
 .bottom-bar {
     background-color: #FF8E15;
     padding: 10px 0;
 }
+
 .footer-content .logo img {
     width: 100%;
 }
+
 .testimonials-sec {
     padding: 153px 0;
 }
+
 .image-left-container {
     left: -290px;
     z-index: -1;
     bottom: -80px;
 }
+
 .image-right-container {
     right: -310px;
     z-index: -1;
     width: 100%;
     bottom: -80px;
 }
+
 .fearured-stories-card-inner:hover {
     transform: scale(1.05);
     transition: all 0.6s ease-in-out;
 }
+
 .hd-lg {
     font-size: 70px;
 }
+
 .para {
     font-size: 18px;
 }
+
 .story-month-custom-arrows .prev-arrow {
     top: 50%;
     position: absolute;
     left: -60px;
 }
+
 .testi-custom-arrows .prev-arrow,
 .testi-custom-arrows .next-arrow,
 .story-month-custom-arrows .prev-arrow,
 .story-month-custom-arrows .next-arrow {
     cursor: pointer;
 }
+
 .story-month-custom-arrows .next-arrow {
     top: 50%;
     position: absolute;
     right: -37px;
     z-index: 1;
 }
+
 .container-xxl {
     padding-left: 2rem;
     padding-right: 2rem;
 }
+
 .fsc-image {
     width: 100%;
 }
+
 .close-menu {
     display: flex;
     position: absolute;
@@ -783,22 +843,28 @@ span.fs-54 {
     justify-content: center;
     font-size: 16px;
 }
+
 .py-200 {
     padding: 200px 0;
 }
+
 .pt-200 {
     padding-top: 200px;
 }
+
 .bg-light-black {
     background-color: #202020;
 }
+
 .inner-header {
     padding: 20px 0;
     background-color: #202020;
 }
+
 .logo img {
     max-width: 200px;
 }
+
 .publish-card {
     background-color: #fff;
     padding: 30px;
@@ -807,6 +873,7 @@ span.fs-54 {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     height: 100%;
 }
+
 .publish-card-img {
     margin: 0 auto;
     display: flex;
@@ -818,14 +885,37 @@ span.fs-54 {
     align-items: center;
     height: 100%;
 }
+
 .publish-card-img img {
     max-height: 250px;
 }
+
 .about-sec-02 {
     background-color: #202020;
     padding: 100px 0;
     color: #fff;
 }
+
+.google-signin-btn {
+    background-color: #fff;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    color: #3c4043;
+    font-family: 'Google Sans, Roboto, Arial, sans-serif';
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    letter-spacing: 0.25px;
+    padding: 0 12px;
+    position: relative;
+    text-align: center;
+    transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
+    vertical-align: middle;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
 /* responsive */
 @media (min-width: 1560px) {
     .container {
@@ -878,15 +968,19 @@ span.fs-54 {
         width: var(--text-60);
         height: var(--text-60);
     }
+
     .signin-right {
         max-width: 740px;
     }
+
     .signin-book {
         right: 260px;
     }
+
     .hd-lg {
         font-size: 60px;
     }
+
     .footer-content,
     .testimonials-sec,
     .story-month-bg,
@@ -895,9 +989,11 @@ span.fs-54 {
     .fearured-stories {
         padding: 100px 0;
     }
+
     .hero-banner {
         padding-top: 228px;
     }
+
     /* .story-month-custom-arrows {
         max-width: 680px; 
     } */
@@ -905,11 +1001,13 @@ span.fs-54 {
         margin-left: -56px;
     } */
 }
+
 @media (min-width: 1400px) {
     .container-xxl {
         max-width: 1600px;
     }
 }
+
 @media (max-width: 1366px) {
     :root {
         font-size: 58%;
@@ -932,9 +1030,11 @@ span.fs-54 {
     .sec-3-cover-2 {
         right: -4rem !important;
     }
+
     .signin-book {
         right: 190px;
     }
+
     .signin-right {
         max-width: 670px;
     }
@@ -952,13 +1052,16 @@ span.fs-54 {
     .big-img-cover-wrapper:hover {
         transform: translate(1%, -50%) scale(1.2);
     }
+
     .btn {
         padding: 13px 26px;
         font-size: 16px;
     }
+
     .hd-md {
         font-size: 44px;
     }
+
     .hd-lg {
         font-size: 50px;
     }
@@ -968,9 +1071,11 @@ span.fs-54 {
     .signin-book {
         right: 120px;
     }
+
     .signin-right {
         max-width: 600px;
     }
+
     :root {
         font-size: 50%;
     }
@@ -995,25 +1100,31 @@ span.fs-54 {
     .sec-3-cover-2 {
         right: 2rem !important;
     }
+
     .hero-banner {
         max-height: 880px;
     }
 }
+
 @media (max-width: 992px) {
+
     .signin-right,
     .signin-book {
         display: none;
     }
+
     .signin-bg p,
     .signin-bg .hd-md {
         max-width: 100% !important;
     }
+
     .story-month-right {
         margin-top: 0;
     }
 }
 
 @media (max-width: 991px) {
+
     /* <---------mobile menu----------> */
     .close-icon i,
     .menu-icon i {
@@ -1083,6 +1194,7 @@ span.fs-54 {
         margin: 0 auto;
     }
 }
+
 @media (max-width: 575px) {
     .header .logo img {
         max-width: 12rem;
@@ -1124,14 +1236,17 @@ span.fs-54 {
     .big-img-cover-wrapper .btn {
         opacity: 1;
     }
+
     .sec-3-cover-2:hover,
     .sec-3-cover-1:hover {
         transform: translate(8rem, -70%) scale(1);
     }
+
     .btn {
         padding: 13px 10px;
         font-size: 13px;
     }
+
     .image-right-container {
         right: -130px;
         z-index: -1;
@@ -1139,12 +1254,14 @@ span.fs-54 {
         bottom: -40px;
         max-width: 190px;
     }
+
     .image-left-container {
         left: -130px;
         z-index: -1;
         bottom: -80px;
         max-width: 190px;
     }
+
     .hero-banner-center-img {
         max-width: 150px;
     }

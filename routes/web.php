@@ -26,9 +26,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
 
 
-Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
-Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
-
+Route::middleware('web')->group(function () {
+    Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.redirect');
+    Route::get('/auth/google/callback', [GoogleController::class, 'callback']);
+});
 
 // Route::get('/auth/facebook/redirect', [FacebookController::class, 'redirect'])->name('facebook.redirect');
 // Route::get('/auth/facebook/callback', [FacebookController::class, 'callback'])->name('facebook.callback');
