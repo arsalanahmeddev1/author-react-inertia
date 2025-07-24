@@ -96,6 +96,12 @@ export default function CommunityShow({ story }) {
                       <Link href={route('community.index')} className="btn btn-secondary d-flex align-items-center gap-1 story-btn back-btn">
                         <i className="fas fa-arrow-left me-2"></i> Back to Stories
                       </Link>
+                      <Link
+                        href={route('stories.read', story.id)}
+                        className="btn btn-primary d-flex align-items-center gap-1 story-btn read-btn"
+                      >
+                        <i className="fas fa-book me-2"></i> Read Story
+                      </Link>
                     </div>
                   </div>
                 </div>

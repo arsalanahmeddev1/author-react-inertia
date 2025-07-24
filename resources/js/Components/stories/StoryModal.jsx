@@ -265,11 +265,7 @@ const StoryModal = ({ show, onHide, story }) => {
     setIsLoading(true);
 
     // Simulate API call
-    setTimeout(() => {
-      alert('Your story has been published!');
-      setIsLoading(false);
-      onHide();
-    }, 500);
+    
   };
 
 
