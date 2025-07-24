@@ -15,8 +15,9 @@ const Footer = () => {
               <h4 className='fs-36 secondry-font text-primary fw-600 mb-10'>Quick Links</h4>
               <ul className='footer-nav secondry-font'>
                 <li><Link href="/">Home</Link></li>
-                <li><Link href="/">Stories</Link></li>
-                <li><Link href="/">Publish</Link></li>
+                <li><Link href="/stories">Stories</Link></li>
+                <li><Link href="/community">Community</Link></li>
+                <li><Link href="/publish">Publish</Link></li>
                 <li><Link href="/about">About</Link></li>
               </ul>
             </div>

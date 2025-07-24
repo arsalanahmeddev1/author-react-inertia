@@ -108,7 +108,7 @@ export default function Index({ stories, genres, filters }) {
                         <span className="pl-10">{story.comment_count}</span>
                       </div>
                     </div>
-                    <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">{story.author}</h4>
+                    {/* <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">{story.author}</h4> */}
                     <div className="d-flex justify-content-between align-items-center mb-20 pl-10">
                       <div className='d-flex align-items-center'>
                         <i className="fas fa-eye text-primary-theme me-2"></i>

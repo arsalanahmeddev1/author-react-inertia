@@ -751,10 +751,17 @@ span.fs-54 {
     position: absolute;
     left: -60px;
 }
+.testi-custom-arrows .prev-arrow,
+.testi-custom-arrows .next-arrow,
+.story-month-custom-arrows .prev-arrow,
+.story-month-custom-arrows .next-arrow {
+    cursor: pointer;
+}
 .story-month-custom-arrows .next-arrow {
     top: 50%;
     position: absolute;
     right: -37px;
+    z-index: 1;
 }
 .container-xxl {
     padding-left: 2rem;

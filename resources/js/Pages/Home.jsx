@@ -103,7 +103,7 @@ const Home = () => {
                 </div>
                 <div>
                   <h4 className='text-30-bold mb-10' style={{ maxWidth: "195px" }}>Death At Fallow End</h4>
-                  <span className="text-primary secondary-font text-20 ">Anne Rice</span>
+                  {/* <span className="text-primary secondary-font text-20 ">Anne Rice</span> */}
                   <p className='text-black secondary-font mb-20 mt-10'>
                     95 People Read This Story
                   </p>
@@ -119,7 +119,7 @@ const Home = () => {
                 </div>
                 <div>
                   <h4 className='text-30-bold mb-10' style={{ maxWidth: "195px" }}>Death At Fallow End</h4>
-                  <span className="text-primary secondary-font text-20 ">Victoria Saccenti</span>
+                  {/* <span className="text-primary secondary-font text-20 ">Victoria Saccenti</span> */}
                   <p className='text-black secondary-font mb-20 mt-10'>
                   62 People Read This Story
                   </p>
@@ -135,7 +135,7 @@ const Home = () => {
                 </div>
                 <div>
                   <h4 className='text-30-bold mb-10' style={{ maxWidth: "195px" }}>Death At Fallow End</h4>
-                  <span className="text-primary secondary-font text-20 ">Martha Grimes</span>
+                  {/* <span className="text-primary secondary-font text-20 ">Martha Grimes</span> */}
                   <p className='text-black secondary-font mb-20 mt-10'>
                   36 People Read This Story
                   </p>
