@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Story;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use App\Models\PublishRequest;
 
 class StoriesController extends Controller
 {
@@ -165,5 +167,78 @@ class StoriesController extends Controller
         ]);
     }
 
-    
+    public function storeDraftSession(Request $request)
+    {
+        session()->put('story_publish_data', $request->only(['story_id', 'character_name', 'content']));
+        return redirect()->route('stories.publish.packages');
+    }
+
+    public function showPublishForm(Story $story)
+    {
+        $prefill = session('story_publish_data');
+        $story = $story;
+
+        return Inertia::render('Stories/Publish/Form', [
+            'prefill' => $prefill,
+            'story' => $story
+        ]);
+    }
+
+    public function showPackages()
+    {
+        $session = session('story_publish_data');
+
+        if (!$session || !isset($session['story_id'])) {
+            return redirect()->route('stories.index')->with('error', 'Story session data not found.');
+        }
+
+        // ✅ Fetch story from DB using story_id from session
+        $story = Story::find($session['story_id']);
+
+        if (!$story) {
+            return redirect()->route('stories.index')->with('error', 'Story not found.');
+        }
+
+        return Inertia::render('Stories/Publish/Packages', [
+            'story' => $story,
+        ]);
+    }
+
+    public function storePublishRequest(Request $request)
+    {
+        try {
+            $request->validate([
+                'story_id' => 'required|exists:stories,id',
+                'character' => 'required',
+                'content' => 'required',
+                'title' => 'required',
+                'genre' => 'required',
+            ]);
+
+            $publishRequest = PublishRequest::create([
+                'user_id' => auth()->id(),
+                'story_id' => $request->story_id,
+                'title' => $request->title,
+                'character' => $request->character,
+                'genre' => $request->genre,
+                'content' => $request->content,
+                'status' => 'pending',
+            ]);
+
+            Log::info('Publish request created successfully', [
+                'publish_request_id' => $publishRequest->id,
+                'user_id' => auth()->id(),
+                'story_id' => $request->story_id,
+            ]);
+
+            return response()->json(['status' => 'success', 'message' => 'Publish request created successfully']);
+        } catch (\Exception $e) {
+            Log::error('Error creating publish request', [
+                'error' => $e->getMessage(),
+                'request_data' => $request->all(),
+            ]);
+            
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Tab, Nav } from 'react-bootstrap';
-import { usePage } from '@inertiajs/react';
+import { usePage, router } from '@inertiajs/react';
 import axios from 'axios';
 
 const StoryModal = ({ show, onHide, story }) => {
@@ -261,12 +261,16 @@ const StoryModal = ({ show, onHide, story }) => {
 
   // Publish story from editor
   const handlePublish = () => {
-    // This would connect to your backend in a real implementation
-    setIsLoading(true);
-
-    // Simulate API call
-    
-  };
+    setIsLoading(true)
+  
+    router.post(route('story.draft.session'), {
+      story_id: story.id,
+      character_name: characterDetails.name,
+      content: storyContent,
+    }, {
+      onFinish: () => setIsLoading(false),
+    })
+  }
 
 
 

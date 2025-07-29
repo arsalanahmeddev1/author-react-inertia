@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\StoriesController as MainStoriesController;
+use App\Http\Controllers\StripeController;
 use App\Http\Controllers\User\UserDashboardController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -83,6 +85,26 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Route::get('/packages', [PackagesController::class, 'index'])->name('packages.index');
+Route::get('/stories/publish/packages', [StoriesController::class, 'showPackages'])->name('stories.publish.packages');
+
+Route::post('/story/publish-request', [MainStoriesController::class, 'storePublishRequest'])->name('story.publish.request');
+
+// Route::post('/stripe/checkout', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
+// Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
+// Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
+
+Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
+
+// Route::get('/stories/publish/form', function () {
+//     return Inertia::render('Stories/Publish/Form');
+// })->name('stories.publish.form');
+
+Route::get('/stories/publish/form/{story}', [MainStoriesController::class, 'showPublishForm'])->name('stories.publish.form');
+
+Route::post('/story/store-draft-session', [MainStoriesController::class, 'storeDraftSession'])->name('story.draft.session');
+
 
 
 // Admin Routes

@@ -78,10 +78,6 @@ class StoriesController extends Controller
         ]);
     }
 
-    // public function communityStories() {
-    //     return 'arsalan';
-    // }
-
     public function create()
     {
         return Inertia::render('admin/stories/Create');

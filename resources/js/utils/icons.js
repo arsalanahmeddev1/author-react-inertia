@@ -11,6 +11,8 @@ import { BsMagic } from "react-icons/bs";
 import { RiDashboardLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
+import { MdOutlineWorkspacePremium } from "react-icons/md";
+
 
 
 
@@ -32,4 +34,5 @@ export const Icons = {
   Dashboard: RiDashboardLine,
   Profile: CgProfile,
   Logout: IoIosLogOut,
+  Premium: MdOutlineWorkspacePremium,
 }
