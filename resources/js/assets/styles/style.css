@@ -947,6 +947,9 @@ span.fs-54 {
     color: #fea257;
     margin-bottom: 10px;
 }
+.swal2-icon {
+    border-color: transparent !important;
+}
 /* responsive */
 @media (min-width: 1560px) {
     .container {

@@ -76,7 +76,7 @@ const Packages = ({ story }) => {
                     fontSize: '48px',
                     fontWeight: '700',
                     color: '#fea257'
-                  }}>$19.99</span>
+                  }}>$19</span>
                   <span style={{
                     fontSize: '18px',
                     color: '#6b6b6b',

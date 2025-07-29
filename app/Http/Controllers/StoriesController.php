@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Story;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -50,6 +51,10 @@ class StoriesController extends Controller
             'stories' => $stories,
             'genres' => $genres,
             'filters' => $request->only(['search', 'genre']),
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error'),
+            ],
         ]);
     }
 
@@ -215,8 +220,12 @@ class StoriesController extends Controller
                 'genre' => 'required',
             ]);
 
+            // Get the story to access its cover_image
+            $story = Story::findOrFail($request->story_id);
+
             $publishRequest = PublishRequest::create([
-                'user_id' => auth()->id(),
+                'user_id' => Auth::id(),
+                'cover_image' => $story->cover_image, // Get cover_image from the story
                 'story_id' => $request->story_id,
                 'title' => $request->title,
                 'character' => $request->character,
@@ -225,20 +234,32 @@ class StoriesController extends Controller
                 'status' => 'pending',
             ]);
 
+            // Create a payment record for the successful payment
+            Payment::create([
+                'user_id' => Auth::id(),
+                'publish_request_id' => $publishRequest->id,
+                'stripe_payment_intent_id' => 'manual_' . time(), // Since we don't have the actual payment intent ID here
+                'amount' => 19.00, // Fixed amount for publishing
+                'currency' => 'USD',
+                'status' => 'succeeded',
+                'payment_method' => 'card',
+                'description' => 'Story Publishing Package - ' . $request->title,
+            ]);
+
             Log::info('Publish request created successfully', [
                 'publish_request_id' => $publishRequest->id,
-                'user_id' => auth()->id(),
+                'user_id' => Auth::id(),
                 'story_id' => $request->story_id,
             ]);
 
-            return response()->json(['status' => 'success', 'message' => 'Publish request created successfully']);
+            return redirect()->route('stories.index')->with('success', 'Your book is now in the publishing process!');
         } catch (\Exception $e) {
             Log::error('Error creating publish request', [
                 'error' => $e->getMessage(),
                 'request_data' => $request->all(),
             ]);
             
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+            return redirect()->back()->with('error', 'Failed to create publish request. Please try again.');
         }
     }
 }

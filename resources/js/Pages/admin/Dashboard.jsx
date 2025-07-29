@@ -89,7 +89,17 @@ const Dashboard = () => {
 
 
       <>
-        <WidgetsDropdown className="mb-4" communityStoriesCount={metrics.communityStoriesCount}  usersCount={metrics.totalUsers} labels={metrics.userCountsByMonth} adminStoriesCount={metrics.adminStoriesCount} userCountsByMonth={metrics.userCountsByMonth} />
+        <WidgetsDropdown 
+          className="mb-4" 
+          communityStoriesCount={metrics.communityStoriesCount}  
+          usersCount={metrics.totalUsers} 
+          labels={metrics.userCountsByMonth} 
+          adminStoriesCount={metrics.adminStoriesCount} 
+          userCountsByMonth={metrics.userCountsByMonth}
+          monthlyIncome={metrics.monthlyIncome}
+          totalIncome={metrics.totalIncome}
+          monthlyPaymentData={metrics.monthlyPaymentData}
+        />
         <CCard className="mb-4">
           <CCardBody>
             <CRow>

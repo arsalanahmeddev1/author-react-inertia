@@ -58,6 +58,7 @@
     "redux": "5.0.1",
     "simplebar-react": "^3.3.0",
     "slick-carousel": "^1.8.1",
+    "sweetalert2": "^11.22.2",
     "ziggy-js": "^2.5.2"
   }
 }

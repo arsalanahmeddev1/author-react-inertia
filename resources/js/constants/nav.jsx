@@ -73,6 +73,12 @@ const adminNav = [
       },
     ],
   },
+  {
+    component: CNavItem,
+    name: 'Publish Requests',
+    to: '/admin-dashboard/publish-requests',
+    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+  }
 ]
 
 const userNav = [

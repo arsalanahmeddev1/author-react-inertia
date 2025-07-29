@@ -12,10 +12,27 @@ class PublishRequest extends Model
     protected $fillable = [
         'user_id',
         'story_id',
+        'cover_image',
         'title',
         'character',
         'genre',
         'content',
         'status',
     ];
+
+    /**
+     * Get the user that owns the publish request.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the story that owns the publish request.
+     */
+    public function story()
+    {
+        return $this->belongsTo(Story::class);
+    }
 }

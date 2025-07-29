@@ -4,6 +4,7 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import { loadStripe } from '@stripe/stripe-js';
 import { Head, router } from '@inertiajs/react'
 import TextInput from '@/Components/TextInput';
+import Swal from 'sweetalert2';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
@@ -30,7 +31,42 @@ const CheckoutForm = ({ story, character, storyText }) => {
     e.preventDefault();
     if (!stripe || !elements) return;
 
+    // Show confirmation dialog first
+    const confirmResult = await Swal.fire({
+      title: 'Confirm Publication',
+      text: 'Are you sure you want to publish your book? This will process your payment and submit your book for review.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Publish My Book!',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#fea257',
+      cancelButtonColor: '#6c757d',
+      background: '#fff',
+      customClass: {
+        popup: 'swal-custom-popup',
+        title: 'swal-custom-title',
+        content: 'swal-custom-content'
+      }
+    });
+
+    if (!confirmResult.isConfirmed) {
+      return;
+    }
+
     setLoading(true);
+    
+    // Show loading alert
+    Swal.fire({
+      title: 'Processing Payment...',
+      text: 'Please wait while we process your payment and publish request.',
+      icon: 'info',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
 
     const result = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
@@ -39,28 +75,50 @@ const CheckoutForm = ({ story, character, storyText }) => {
     });
 
     if (result.error) {
-      alert(result.error.message);
+      Swal.close(); // Close loading alert
+      Swal.fire({
+        title: 'Payment Error!',
+        text: result.error.message,
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#dc3545',
+        background: '#fff'
+      });
       setLoading(false);
       return;
     }
 
     if (result.paymentIntent.status === 'succeeded') {
-      // 1. Payment done
-      // 2. Save data to backend using Inertia router
+      Swal.close(); // Close loading alert
+    
       router.post('/story/publish-request', {
         story_id: story.id,
         character: character,
         content: storyText,
         title: story.title,
         genre: story.genre,
+        cover_image: story.cover_image,
       }, {
         onSuccess: () => {
-          alert("Payment and publish request successful!");
-          window.location.href = "/stories"; // ya success page
+          Swal.fire({
+            title: 'Success!',
+            text: 'Your story has been submitted for publishing.',
+            icon: 'success',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#fea257',
+            background: '#fff',
+          }).then(() => {
+            router.visit('/stories'); // ya koi success page
+          });
         },
-        onError: (errors) => {
-          alert("Payment done, but failed to save publish request!");
-          console.error('Publish request errors:', errors);
+        onError: () => {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Payment done, but failed to submit publish request.',
+            icon: 'error',
+            confirmButtonColor: '#dc3545',
+            background: '#fff',
+          });
         }
       });
     }
@@ -74,7 +132,7 @@ const CheckoutForm = ({ story, character, storyText }) => {
         <CardElement options={{ hidePostalCode: true }} />
       </div>
       <button type="submit" disabled={!stripe || loading} className="btn btn-primary mt-4">
-        {loading ? 'Processing...' : 'Publish'}
+        {loading ? 'Processing...' : 'Publish Your Book'}
       </button>
     </form >
   );
@@ -112,6 +170,10 @@ const Form = ({ prefill, story }) => {
               <div className="row justify-content-center publish-form-wrapper">
                 <div className="col-md-12">
                   <div className="field-wrapper">
+                    <label className='label-field d-block' htmlFor="title">Cover Image</label>
+                    <img src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'} alt="" className='img-fluid object-fit-cover' style={{ maxHeight: '100px' }} />
+                  </div>
+                  <div className="field-wrapper">
                     <label className='label-field' htmlFor="title">Title</label>
                     <TextInput type="text" className="input-field" id="title" name="title" value={story.title} readOnly
                     // onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -137,13 +199,6 @@ const Form = ({ prefill, story }) => {
                     character={character}
                     storyText={storyText}
                   />
-                  {/* <button
-                      type="button"
-                      className="btn btn-primary story-btn secondry-font"
-                    >
-                      <i className="fas fa-paper-plane me-2"></i>
-                      Publish & Pay
-                    </button> */}
                 </div>
               </div>
             </div>

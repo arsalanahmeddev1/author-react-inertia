@@ -15,7 +15,7 @@ import { CChartBar, CChartLine } from '@coreui/react-chartjs'
 import CIcon from '@coreui/icons-react'
 import { cilArrowBottom, cilArrowTop, cilOptions } from '@coreui/icons'
 
-const WidgetsDropdown = ({ usersCount, adminStoriesByMonth, totalUsers, communityStoriesByMonth, communityStoriesCount, adminStoriesCount, userCountsByMonth, className, props }) => {
+const WidgetsDropdown = ({ usersCount, adminStoriesByMonth, totalUsers, communityStoriesByMonth, communityStoriesCount, adminStoriesCount, userCountsByMonth, totalIncome, monthlyIncome, monthlyPaymentData, className, props }) => {
   const widgetChartRef1 = useRef(null)
   const widgetChartRef2 = useRef(null)
   const labels = userCountsByMonth.map(item => item.month)
@@ -152,40 +152,39 @@ const WidgetsDropdown = ({ usersCount, adminStoriesByMonth, totalUsers, communit
       </CCol>
       <CCol sm={6} xl={4} xxl={3}>
         <CWidgetStatsA
-          color="info"
+          color="success"
           value={
             <>
-              600$
+              ${(parseFloat(totalIncome) || 0).toFixed(2)}
             </>
           }
-          title="Income"
+          title="Total Income"
+          subtitle={`$${(parseFloat(monthlyIncome) || 0).toFixed(2)} this month`}
           action={
             <CDropdown alignment="end">
               <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
                 <CIcon icon={cilOptions} />
               </CDropdownToggle>
               <CDropdownMenu>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another action</CDropdownItem>
-                <CDropdownItem>Something else here...</CDropdownItem>
-                <CDropdownItem disabled>Disabled action</CDropdownItem>
+                <CDropdownItem>View Details</CDropdownItem>
+                <CDropdownItem>Export Data</CDropdownItem>
+                <CDropdownItem>Settings</CDropdownItem>
               </CDropdownMenu>
             </CDropdown>
           }
           chart={
             <CChartLine
-              ref={widgetChartRef2}
               className="mt-3 mx-3"
               style={{ height: '70px' }}
               data={{
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: monthlyPaymentData?.map(item => item.month) || [],
                 datasets: [
                   {
-                    label: 'My First dataset',
+                    label: 'Monthly Income',
                     backgroundColor: 'transparent',
                     borderColor: 'rgba(255,255,255,.55)',
-                    pointBackgroundColor: getStyle('--cui-info'),
-                    data: [1, 18, 9, 17, 34, 22, 11],
+                    pointBackgroundColor: getStyle('--cui-success'),
+                    data: monthlyPaymentData?.map(item => parseFloat(item.amount) || 0) || [],
                   },
                 ],
               }}
@@ -210,8 +209,6 @@ const WidgetsDropdown = ({ usersCount, adminStoriesByMonth, totalUsers, communit
                     },
                   },
                   y: {
-                    min: -9,
-                    max: 39,
                     display: false,
                     grid: {
                       display: false,
@@ -396,6 +393,7 @@ const WidgetsDropdown = ({ usersCount, adminStoriesByMonth, totalUsers, communit
           }
         />
       </CCol>
+      
     </CRow>
   )
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Visit;
+use App\Models\Payment;
 use Inertia\Inertia;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
@@ -25,6 +26,37 @@ class DashboardController extends Controller
         $pageviews = $visits;
         $newUsers = User::where('created_at', '>=', $startOfMonth)->count();
 
+        // Payment metrics - Only real payments (with publish_request_id)
+        $totalIncome = (float) Payment::where('status', 'succeeded')
+            ->whereNotNull('publish_request_id')
+            ->sum('amount');
+        $monthlyIncome = (float) Payment::where('status', 'succeeded')
+            ->whereNotNull('publish_request_id')
+            ->where('created_at', '>=', $startOfMonth)
+            ->sum('amount');
+        $totalPayments = Payment::where('status', 'succeeded')
+            ->whereNotNull('publish_request_id')
+            ->count();
+        $monthlyPayments = Payment::where('status', 'succeeded')
+            ->whereNotNull('publish_request_id')
+            ->where('created_at', '>=', $startOfMonth)
+            ->count();
+
+        // Monthly payment data for chart - Only real payments
+        $monthlyPaymentData = Payment::where('status', 'succeeded')
+            ->whereNotNull('publish_request_id')
+            ->where('created_at', '>=', $now->copy()->subMonths(6))
+            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(amount) as total_amount')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'month' => Carbon::createFromFormat('Y-m', $item->month)->format('M Y'),
+                    'amount' => (float) $item->total_amount,
+                ];
+            });
+
         return Inertia::render('admin/Dashboard', [
             'metrics' => [
                 'visits' => $visits,
@@ -38,6 +70,12 @@ class DashboardController extends Controller
                 'userCountsByMonth' => User::monthlyRegistrations(),
                 'communityStoriesByMonth' => Story::monthlyCountsByType('community'),
                 'adminStoriesByMonth' => Story::monthlyCountsByType('admin'),
+                // Payment metrics
+                'totalIncome' => $totalIncome,
+                'monthlyIncome' => $monthlyIncome,
+                'totalPayments' => $totalPayments,
+                'monthlyPayments' => $monthlyPayments,
+                'monthlyPaymentData' => $monthlyPaymentData,
             ],
         ]);
     }

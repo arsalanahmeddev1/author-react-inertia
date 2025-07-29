@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\admin\PublishRequestController;
 use App\Http\Controllers\StoriesController as MainStoriesController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\User\UserDashboardController;
@@ -96,6 +97,7 @@ Route::post('/story/publish-request', [MainStoriesController::class, 'storePubli
 // Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
 
 Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
+Route::post('/stripe/webhook', [StripeController::class, 'webhook']);
 
 // Route::get('/stories/publish/form', function () {
 //     return Inertia::render('Stories/Publish/Form');
@@ -120,6 +122,9 @@ Route::prefix('admin-dashboard')->name('admin-dashboard.')->middleware(['auth', 
     Route::post('{story}/approve', [\App\Http\Controllers\Admin\StoriesController::class, 'approve'])->name('stories.approve');
     Route::post('{story}/reject', [\App\Http\Controllers\Admin\StoriesController::class, 'reject'])->name('stories.reject');
     Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
+
+    Route::get('publish-requests', [PublishRequestController::class, 'index'])->name('publish-requests');
+    Route::patch('publish-requests/{publishRequest}/status', [PublishRequestController::class, 'updateStatus'])->name('admin.publish-requests.update-status');
 });
 
 Route::prefix('user-dashboard')->name('user-dashboard.')->middleware(['auth', 'user'])->group(function() {

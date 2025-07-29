@@ -3,9 +3,10 @@ import { Head, Link, router } from '@inertiajs/react';
 import Layout from '@/Layouts/Layout';
 import LikeCount from '@/Components/stories/LikeCount';
 import { debounce } from 'lodash';
+import Swal from 'sweetalert2';
 import '@/assets/styles/stories.css';
 
-export default function Index({ stories, genres, filters }) {
+export default function Index({ stories, genres, filters, flash }) {
   const [search, setSearch] = useState(filters.search || '');
   const [genre, setGenre] = useState(filters.genre || 'all');
 
@@ -33,6 +34,67 @@ export default function Index({ stories, genres, filters }) {
       debouncedSearch.cancel();
     };
   }, []);
+
+  // Show success message with SweetAlert2 if flash success exists
+  useEffect(() => {
+    if (flash?.success) {
+      Swal.fire({
+        title: 'Success!',
+        text: flash.success,
+        icon: 'success',
+        confirmButtonText: 'Continue',
+        confirmButtonColor: '#fea257',
+        background: '#fff',
+        customClass: {
+          popup: 'swal-custom-popup',
+          title: 'swal-custom-title',
+          content: 'swal-custom-content'
+        },
+        didOpen: () => {
+          // Replace the icon with a proper success checkmark
+          setTimeout(() => {
+            const iconElement = document.querySelector('.swal2-icon');
+            if (iconElement) {
+              // Clear existing content
+              iconElement.innerHTML = '';
+              iconElement.className = 'swal2-icon';
+              
+              // Create custom success icon
+              const successIcon = document.createElement('div');
+              successIcon.style.cssText = `
+                width: 100%;
+                height: 100%;
+                border: 4px solid #fea257;
+                border-radius: 50%;
+                position: relative;
+                margin: 0 auto;
+                background: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+              `;
+              
+              // Create checkmark
+              const checkmark = document.createElement('div');
+              checkmark.style.cssText = `
+                width: 30px;
+                height: 20px;
+                border: 4px solid #fea257;
+                border-top: none;
+                border-right: none;
+                transform: rotate(-45deg);
+                margin-top: -5px;
+              `;
+              
+              successIcon.appendChild(checkmark);
+              iconElement.appendChild(successIcon);
+            }
+          }, 50);
+        }
+      });
+    }
+  }, [flash?.success]);
 
   // No automatic refresh on component mount
 
