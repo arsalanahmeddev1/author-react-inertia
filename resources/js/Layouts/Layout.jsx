@@ -7,6 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../../js/assets/styles/utilities.css';
 import '../../js/assets/styles/style.css';
+import Chatbot from '../Components/Chatbot';
+
 
 export default function Layout({ children, headerClass }) {
   useEffect(() => {
@@ -30,6 +32,7 @@ export default function Layout({ children, headerClass }) {
     <>
       <Header headerClass={headerClass} />
       <main>{children}</main>
+      <Chatbot />
       <Footer />
     </>
   );

@@ -62,9 +62,9 @@ const Header = ({ logoClass, headerClass }) => {
                
 
                 {/* Logout button */}
-                <Link href="/logout" method="post" as="button" className="btn btn-primary text-white btn-sm d-none d-sm-block">
+                {/* <Link href="/logout" method="post" as="button" className="btn btn-primary text-white btn-sm d-none d-sm-block">
                   <i className="fas fa-sign-out-alt"></i>
-                </Link>
+                </Link> */}
               </>
             )}
           </div>

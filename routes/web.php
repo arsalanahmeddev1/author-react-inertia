@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\PublishRequestController;
 use App\Http\Controllers\StoriesController as MainStoriesController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\User\UserDashboardController;
+use App\Http\Controllers\ChatbotController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
@@ -139,5 +140,8 @@ Route::get('/publish', function () {
 Route::get('/about', function () {
     return Inertia::render('About');
 })->name('about');
+
+Route::post('/chatgpt/send', [ChatbotController::class, 'send']);
+
 
 require __DIR__ . '/auth.php';
