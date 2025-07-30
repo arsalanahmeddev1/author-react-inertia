@@ -11,7 +11,7 @@ const DefaultLayout = ({ children }) => {
       <div className="wrapper d-flex flex-column min-vh-100">
         <AppHeader />
         <div className="body flex-grow-1">
-          <CContainer className="px-4" fluid>
+          <CContainer style={{ padding: '16px' }} className="" fluid>
             {children}
           </CContainer>
         </div>
