@@ -950,6 +950,9 @@ span.fs-54 {
 .swal2-icon {
     border-color: transparent !important;
 }
+.swal2-actions {
+    flex-direction: column;
+}
 /* responsive */
 @media (min-width: 1560px) {
     .container {
