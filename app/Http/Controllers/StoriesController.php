@@ -68,7 +68,6 @@ class StoriesController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
-        dd(Auth::user()->id);
         Story::create([
             'title' => $request->title,
             'content' => $request->content,
