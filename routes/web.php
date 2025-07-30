@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\admin\PublishRequestController;
+use App\Http\Controllers\Admin\PublishRequestController;
 use App\Http\Controllers\StoriesController as MainStoriesController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\User\UserDashboardController;

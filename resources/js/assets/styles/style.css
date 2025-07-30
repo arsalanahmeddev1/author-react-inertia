@@ -953,6 +953,16 @@ span.fs-54 {
 .swal2-actions {
     flex-direction: column;
 }
+.footer-logos {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px    ;
+}
+.footer-logos img {
+    width: 100%;
+    max-width: 150px;
+    object-fit: contain;
+}
 /* responsive */
 @media (min-width: 1560px) {
     .container {

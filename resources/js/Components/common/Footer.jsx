@@ -37,6 +37,10 @@ const Footer = () => {
                   <button type='submit' className='btn-primary position-absolute translate-middle-y top-50'><Icons.Send className='text-white fs-25' /></button>
                 </div>
               </form>
+              <div className="footer-logos">
+                <img src="/assets/images/dmc-icon.png" alt="dmc" />
+                <img src="/assets/images/pci.svg" alt="pci" />
+              </div>
             </div>
           </div>
         </div>
