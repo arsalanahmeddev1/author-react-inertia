@@ -19,8 +19,7 @@ import {
   CInputGroup,
   CInputGroupText,
 } from '@coreui/react';
-import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill-new';
 
 const Create = () => {
   const { data, setData, post, processing, errors, reset } = useForm({

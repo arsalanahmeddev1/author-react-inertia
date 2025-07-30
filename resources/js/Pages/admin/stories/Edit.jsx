@@ -19,7 +19,7 @@ import {
   CInputGroup,
   CInputGroupText,
 } from '@coreui/react';
-import ReactQuill from 'react-quill';
+import ReactQuill from 'react-quill-new';
 // import 'react-quill/dist/quill.snow.css';
 
 const Edit = ({ story }) => {
