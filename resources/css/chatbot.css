@@ -60,6 +60,9 @@
     margin: 5px 0;
 }
 
+#robot-chatbox .chat-message {
+    text-transform: none !important;
+  }
 
 /* Chat Bot Button */
 .robot-chat-bot-button {

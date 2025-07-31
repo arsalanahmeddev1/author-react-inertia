@@ -55,6 +55,16 @@ export default function Chatbot() {
       
   };
 
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      #robot-chatbox .chat-message, 
+      #userInput {
+        text-transform: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }, []);
   const getContextMessage = (userMessage) => {
     return `Context: Site Name: ${siteContext.name}
 Description: ${siteContext.description}
@@ -69,6 +79,7 @@ User: ${userMessage}`;
 
   const sendMessage = async () => {
     const message = inputRef.current.value.trim();
+    
     if (!message) return;
 
     appendMessage('You', message);
@@ -84,7 +95,6 @@ User: ${userMessage}`;
         },
         body: JSON.stringify({ message: contextMessage })
       });
-
       const data = await res.json();
       appendMessage('Assistant', data.response || 'No response');
     } catch {

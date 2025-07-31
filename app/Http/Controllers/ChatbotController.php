@@ -20,10 +20,8 @@ class ChatbotController extends Controller
                 ['role' => 'user', 'content' => $message]
             ]
         ]);
-
         return response()->json([
             'response' => $response->json()['choices'][0]['message']['content'] ?? 'No response from AI',
         ]);
     }
 }
-
