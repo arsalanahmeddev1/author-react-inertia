@@ -30,7 +30,7 @@ export const packagesData = [
     {
         id: 2,
         badge: "Standard",
-        title: " Premium Package",
+        title: " Standard Package",
         price: "$19",
         monthlyAnualy: "Monthly",
         icon: "Premium",
@@ -88,7 +88,7 @@ export const packagesData = [
     {
         id: 4,
         badge: "Pro",
-        title: " Premium Package",
+        title: " Pro Package",
         price: "$190",
         monthlyAnualy: "Yearly",
         icon: "Premium",
@@ -117,7 +117,7 @@ export const packagesData = [
     {
         id: 5,
         badge: "Pro",
-        title: " Premium Package",
+        title: " Pro Package",
         price: "$380",
         monthlyAnualy: "Yearly",
         icon: "Premium",
