@@ -11,7 +11,7 @@ const About = () => {
       <main className="">
         <section className='about-sec-01 pt-200'>
           <div className="container">
-            <h1 className="text-black text-center fs-70 fw-500 mb-80">About</h1>
+          <h1 className="text-black text-center fs-70 fw-500 mb-80">Our Packages</h1>
 
             {/* Section 1 */}
             <div className="row align-items-center mb-100">
@@ -19,13 +19,12 @@ const About = () => {
                 <img src={aboutLeft} alt="Team Image" className="img-fluid rounded shadow" style={{ maxWidth: '480px' }} />
               </div>
               <div className="col-lg-6">
-                <h2 className="text-black fs-30 fw-600 mb-20">Where stories begin — and grow.</h2>
+                <h2 className="text-black fs-30 fw-600 mb-20">Craft Your Story, Choose Your Package</h2>
                 <p className="mb-20">
-                  This isn’t a static platform — many things are coming down the line. We’re building a living space where writers of all levels can explore, create, and grow.
+                  Whether you're here to simply write, or you want to explore a more professional space for publishing and collaboration, we have a package to fit your needs.
                 </p>
                 <p>
-                  This platform was born from a mind full of creativity and ideas — a passion for stories, characters, and worlds waiting to be written.
-                  And like many of you, I’ve often felt the ideas racing ahead while the words struggled to keep up.
+                  From **community-driven packages** that allow you to collaborate with other writers, to **premium packages** with extra perks, we offer a variety of options for every storyteller.
                 </p>
               </div>
             </div>

@@ -141,6 +141,9 @@ Route::get('/about', function () {
     return Inertia::render('About');
 })->name('about');
 
+Route::get('/packages', function () {
+    return Inertia::render('Packages');
+})->name('packages');
 Route::post('/chatgpt/send', [ChatbotController::class, 'send']);
 
 
