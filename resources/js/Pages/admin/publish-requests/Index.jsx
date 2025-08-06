@@ -157,7 +157,7 @@ function Index({ publishRequests, flash }) {
                                                             {updatingStatus[request.id] ? (
                                                                 <CBadge color="info">Updating...</CBadge>
                                                             ) : (
-                                                                getStatusBadge(request.status)
+                                                                ''
                                                             )}
                                                         </div>
                                                     </div>

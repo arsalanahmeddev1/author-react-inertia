@@ -88,9 +88,6 @@ class StoriesController extends Controller
      */
     public function show(Story $story)
     {
-        // Increment the read count
-        $story->increment('read_count');
-
         // Load the characters for this story
         $story->load('characters');
 
@@ -104,11 +101,22 @@ class StoriesController extends Controller
      */
     public function read(Story $story)
     {
-        // Increment the read count
-        $story->increment('read_count');
+        // Only increment read count for non-admin users (including guests)
+        if (Auth::check() && Auth::user()->role !== 'admin') {
+            // Check if this user has already read this story
+            $existingRead = \App\Models\StoryRead::where('story_id', $story->id)
+                ->where('user_id', Auth::id())
+                ->first();
 
-        // Track the read in the story_reads table
-        $this->trackStoryRead($story);
+            // Only increment if this is a new read
+            if (!$existingRead) {
+                // Increment the read count
+                $story->increment('read_count');
+
+                // Track the read in the story_reads table
+                $this->trackStoryRead($story);
+            }
+        }
 
         return Inertia::render('Stories/Read', [
             'story' => $story,
@@ -123,15 +131,18 @@ class StoriesController extends Controller
      */
     private function trackStoryRead(Story $story)
     {
-        // Create a new StoryRead record
-        $storyRead = new \App\Models\StoryRead([
-            'story_id' => $story->id,
-            'user_id' => Auth::id(),
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-        ]);
+        // Track reads for logged-in non-admin users (including guests)
+        if (Auth::check() && Auth::user()->role !== 'admin') {
+            // Create a new StoryRead record
+            $storyRead = new \App\Models\StoryRead([
+                'story_id' => $story->id,
+                'user_id' => Auth::id(),
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
 
-        $storyRead->save();
+            $storyRead->save();
+        }
     }
 
     /**

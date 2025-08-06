@@ -62,11 +62,6 @@ class CommunityController extends Controller
                 'story' => $story,
             ]);
         }
-        // Increment the read count
-        $story->increment('read_count');
-
-        // Track the read in the story_reads table
-        $this->trackStoryRead($story);
 
         return Inertia::render('Community/Show', [
             'story' => $story,
@@ -81,14 +76,17 @@ class CommunityController extends Controller
      */
     private function trackStoryRead(Story $story)
     {
-        // Create a new StoryRead record
-        $storyRead = new \App\Models\StoryRead([
-            'story_id' => $story->id,
-            'user_id' => Auth::id(),
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-        ]);
+        // Only track reads for logged-in non-admin users
+        if (Auth::check() && Auth::user()->role !== 'admin') {
+            // Create a new StoryRead record
+            $storyRead = new \App\Models\StoryRead([
+                'story_id' => $story->id,
+                'user_id' => Auth::id(),
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
 
-        $storyRead->save();
+            $storyRead->save();
+        }
     }
 }

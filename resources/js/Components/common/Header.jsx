@@ -22,7 +22,7 @@ const Header = ({ logoClass, headerClass }) => {
         <div className="d-flex align-items-center justify-content-between">
           <div className="">
             <div className="logo">
-              <img src="/assets/images/logo.png" alt="logo" />
+              <Link href="/"><img src="/assets/images/logo.png" alt="logo" /></Link>
             </div>
           </div>
           <div className="">
@@ -67,6 +67,17 @@ const Header = ({ logoClass, headerClass }) => {
                 </Link> */}
               </>
             )}
+          </div>
+
+          {/* Mobile menu toggle button */}
+          <div className="d-lg-none">
+            <button 
+              className="btn btn-link text-white p-0" 
+              onClick={toggleMenu}
+              aria-label="Toggle mobile menu"
+            >
+              <Icons.Menu size={24} />
+            </button>
           </div>
 
         </div>

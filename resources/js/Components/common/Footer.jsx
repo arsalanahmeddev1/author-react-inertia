@@ -10,6 +10,10 @@ const Footer = () => {
               <div className="logo">
                 <img src="/assets/images/logo.png" alt="logo" />
               </div>
+              <div className="footer-logos">
+                <img src="/assets/images/dmc-icon.png" alt="dmc" />
+                <img src="/assets/images/pci.png" alt="pci" />
+              </div>
             </div>
             <div className="col-lg-2">
               <h4 className='fs-36 secondry-font text-primary fw-600 mb-10'>Quick Links</h4>
@@ -37,10 +41,6 @@ const Footer = () => {
                   <button type='submit' className='btn-primary position-absolute translate-middle-y top-50'><Icons.Send className='text-white fs-25' /></button>
                 </div>
               </form>
-              <div className="footer-logos">
-                <img src="/assets/images/dmc-icon.png" alt="dmc" />
-                <img src="/assets/images/pci.svg" alt="pci" />
-              </div>
             </div>
           </div>
         </div>

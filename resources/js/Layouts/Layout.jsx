@@ -11,7 +11,7 @@ import Chatbot from '../Components/Chatbot';
 import UserWayWidget from '../Components/UserWayWidget';
 
 
-export default function Layout({ children, headerClass }) {
+export default function Layout({ children, headerClass, mainClass }) {
   useEffect(() => {
     // Initialize AOS
     if (window.innerWidth < 1025) {
@@ -32,7 +32,7 @@ export default function Layout({ children, headerClass }) {
   return (
     <>
       <Header headerClass={headerClass} />
-      <main>{children}</main>
+      <main className={mainClass}>{children}</main>
       <Chatbot />
       <Footer />
       <UserWayWidget />

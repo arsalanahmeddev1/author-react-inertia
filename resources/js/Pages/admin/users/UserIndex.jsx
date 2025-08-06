@@ -50,7 +50,7 @@ const UserIndex = ({ users, flash }) => {
 
   const handleDelete = () => {
     if (userToDelete) {
-      router.delete(route('admin.users.destroy', userToDelete.id), {
+      router.delete(route('admin-dashboard.users.destroy', userToDelete.id), {
         onSuccess: () => {
           setDeleteModal(false)
           setUserToDelete(null)

@@ -375,7 +375,7 @@ const StoryModal = ({ show, onHide, story }) => {
           <div className="story-modal-body">
             <Tab.Content>
               <Tab.Pane eventKey="continue">
-                <div className="mb-4">
+                <div className="mb-20">
                   <label className="form-label secondry-font fs-18">Select Character</label>
                   <select
                     className="form-select character-select mb-3"
@@ -398,9 +398,9 @@ const StoryModal = ({ show, onHide, story }) => {
                   )}
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-20">
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <label className="form-label secondry-font fs-18 mb-0">Your Story</label>
+                    <label className="form-label secondry-font fs-18 mb-10">Your Story</label>
                     <div className="word-count">
                       <span className="fs-16 text-muted">{wordCount} words</span>
                     </div>
@@ -444,7 +444,7 @@ const StoryModal = ({ show, onHide, story }) => {
                   </div>
                 </div>
 
-                <div className="d-flex justify-content-end gap-3">
+                <div className="d-flex justify-content-end gap-3 pb-20">
                   <button
                     className="btn btn-secondary story-btn secondry-font"
                     onClick={handleSaveDraft}
@@ -494,13 +494,13 @@ const StoryModal = ({ show, onHide, story }) => {
                         <p className="draft-preview">{draft.content.substring(0, 150)}...</p>
                         <div className="draft-actions">
                           <button
-                            className="btn btn-sm btn-outline-secondary secondry-font"
+                            className="btn btn-secondary story-btn secondry-font"
                             onClick={() => handleEditDraft(draft)}
                           >
                             <i className="fas fa-edit me-1"></i> Edit
                           </button>
                           <button
-                            className="btn btn-sm btn-outline-primary secondry-font"
+                            className="btn btn-primary story-btn secondry-font"
                             onClick={() => handlePublishDraft(draft)}
                             disabled={isLoading || (!draft.content && !draft.characterId)}
                           >
@@ -508,7 +508,7 @@ const StoryModal = ({ show, onHide, story }) => {
                             Publish
                           </button>
                           <button
-                            className="btn btn-sm btn-outline-success secondry-font"
+                            className="btn btn-success story-btn secondry-font"
                             onClick={() => handleAddToCommunityFromDraft(draft)}
                             disabled={isLoading || (!draft.content && !draft.characterId)}
                           >
@@ -516,7 +516,7 @@ const StoryModal = ({ show, onHide, story }) => {
                             Add to Community
                           </button>
                           <button
-                            className="btn btn-sm btn-outline-danger secondry-font"
+                            className="btn btn-sm btn-danger secondry-font"
                             onClick={() => handleDeleteDraft(draft.id)}
                             disabled={isLoading}
                           >

@@ -12,7 +12,7 @@ const LoginPromptModal = ({ show, onHide }) => {
       <div className="story-modal-content login-prompt-modal" onClick={e => e.stopPropagation()}>
         <div className="story-modal-header">
           <h3 className="mb-0 primary-font">Login Required</h3>
-          <button className="close-btn" onClick={onHide}>
+          <button className="close-btn text-white" onClick={onHide}>
             <i className="fas fa-times"></i>
           </button>
         </div>
@@ -42,7 +42,7 @@ const LoginPromptModal = ({ show, onHide }) => {
                 <a href="/login" className="btn btn-primary secondry-font">
                   <i className="fas fa-sign-in-alt me-2"></i> Login
                 </a>
-                <a href="/register" className="btn btn-secondary secondry-font" onClick={(e) => {
+                <a href="/register" className="btn btn-primary btn-outline-primary secondry-font" onClick={(e) => {
                   e.preventDefault();
                   window.location.href = '/register';
                 }}>
@@ -50,7 +50,7 @@ const LoginPromptModal = ({ show, onHide }) => {
                 </a>
               </div>
               <div className="mt-3">
-                <a href="/guest-login" className="btn btn-outline-primary secondry-font">
+                <a href="/guest-login" className="btn btn-primary btn-outline-primary secondry-font">
                   <i className="fas fa-user-clock me-2"></i> Continue as Guest
                 </a>
               </div>

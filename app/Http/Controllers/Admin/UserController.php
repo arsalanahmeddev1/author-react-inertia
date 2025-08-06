@@ -16,11 +16,32 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        // Clean up old guest users (older than 24 hours)
+        $this->cleanupOldGuestUsers();
+        
+        // Get regular users (non-guest) for admin panel
+        $users = User::where('is_guest', false)
+                    ->latest()
+                    ->paginate(10);
+
+        // Get guest users count for admin info
+        $guestUsersCount = User::where('is_guest', true)->count();
 
         return Inertia::render('admin/users/UserIndex', [
             'users' => $users,
+            'guestUsersCount' => $guestUsersCount,
         ]);
+    }
+
+    /**
+     * Clean up old guest users (older than 24 hours)
+     */
+    private function cleanupOldGuestUsers()
+    {
+        // Delete guest users older than 24 hours
+        User::where('is_guest', true)
+            ->where('created_at', '<', now()->subHours(24))
+            ->delete();
     }
 
     /**

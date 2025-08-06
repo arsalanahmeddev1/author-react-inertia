@@ -17,6 +17,16 @@ class LogVisit
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip logging for admin dashboard routes and admin-related actions
+        if ($request->is('admin-dashboard*') || 
+            $request->is('admin*') || 
+            $request->is('*admin*') ||
+            $request->is('*approve*') ||
+            $request->is('*reject*') ||
+            $request->is('*toggle-status*')) {
+            return $next($request);
+        }
+
         Visit::create([
             'user_id' => Auth::id(),
             'ip_address' => $request->ip(),
@@ -24,7 +34,6 @@ class LogVisit
             'url' => $request->fullUrl(),
             'visited_at' => now(),
         ]);
-
 
         return $next($request);
     }

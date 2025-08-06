@@ -1,15 +1,18 @@
 import React from 'react'
 import Button from '../Components/common/Button'
 import Layout from '@/Layouts/Layout'
-import { Link, Head } from '@inertiajs/react'
+import { Link, Head, usePage } from '@inertiajs/react'
 import StoryOfTheMonth from '@/Components/StoryOfTheMonth'
-import Testimonials from '@/Components/Testimonials'
+import Testimonials from '@/Components/Testimonials';
+
+
 const Home = () => {
+  const { auth, latestStories } = usePage().props;
 
 
   return (
-    <Layout headerClass="pt-30">
-       <Head title="Home" />
+    <Layout headerClass="pt-30 home-page-wrapper" mainClass="home-page-wrapper">
+      <Head title="Home" />
       <section className='hero-banner overflow-hidden z-2'>
         <div className="container-xxl">
           <div className="d-flex justify-content-center align-items-center flex-column">
@@ -17,7 +20,7 @@ const Home = () => {
             <p className='para-dark mb-20 text-center'>
               Join our creative community. Explore, interact, and create your own version of timeless tales.
             </p>
-            <div className="d-flex gap-20 mb-20">
+            <div className="d-flex flex-column flex-md-row gap-20 mb-20 ">
               <Button className="btn btn-primary">Continue Story in Your Own Way</Button>
               <a href='/stories' className="btn btn-secondary">View Stories</a>
             </div>
@@ -76,74 +79,81 @@ const Home = () => {
       </section>
       <section className="signin-bg position-relative">
         <div className="container-xxl">
-          <img src="/assets/images/signin-book.png" alt="signin-book" className='signin-book position-absolute'/>
+          <img src="/assets/images/signin-book.png" alt="signin-book" className='signin-book position-absolute' />
           <img src="/assets/images/signin-right.png" alt="signin-right" className='signin-right position-absolute bottom-0 end-0' />
           <div className="row text-center text-lg-start">
             <div className="col-lg-7">
-              <h2 className='hd-md mb-20 text-white' style={{ maxWidth: "770px" }}>Sign In to Continue Crafting the Story Your Way</h2>
-              <p className='text-white mb-20' style={{ maxWidth: "840px" }}>
+              <h2 className="hd-md mb-20 text-white" style={{ maxWidth: "770px" }}>
+                {auth?.user ? (
+                  <>Welcome back, {auth.user.name}! Craft your story your way.</>
+                ) : (
+                  <>Sign In to Continue Crafting the Story Your Way</>
+                )}
+              </h2>
+
+              <p className="text-white mb-20" style={{ maxWidth: "840px" }}>
                 Take the reins and let your imagination run wild! Log in to pick up where the story left off or create your own twists and turns. Your words, your world—continue the adventure as you see fit.
               </p>
+
               <div className="d-flex gap-20 justify-content-center justify-content-lg-start">
+                {!auth?.user && (
+                  <>
+                    <Link href="/login" className="btn btn-primary">Sign In</Link>
+                    <Link  href="/stories" className="btn btn-secondary">Read A Sample</Link>
+                  </>
+                )}
+
+                {auth?.user?.role === 'admin' && (
+                  <a className="btn btn-secondary" href="/admin-dashboard/stories/create">
+                    Write A New Story
+                  </a>
+                )}
+
+                {auth?.user && auth?.user?.role !== 'admin' && (
+                  <Link href="/stories" className="btn btn-secondary">Read A Sample</Link>
+                )}
+              </div>
+              {/* <div className="d-flex gap-20 justify-content-center justify-content-lg-start">
                 <Button className="btn btn-primary">Sign In</Button>
                 <Button className="btn btn-secondary">Read A Sample</Button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       </section>
       <section className='collection-sec'>
         <div className="container-xxl">
-            <h2 className='hd-md mb-20 mb-70 uppercase text-center' style={{ fontWeight: "400" }}>Our Collection</h2>
+          <h2 className='hd-md mb-20 mb-70 uppercase text-center' style={{ fontWeight: "400" }}>Our Collection</h2>
           <div className="row justify-content-center row-gap-40">
-            <div className="col-lg-6 col-xl-4 col-md-6">
-              <div className="collection-card d-flex justify-content-center align-items-center gap-20" >
-                <div className="collection-card-img" >
-                  <img src="/assets/images/collection-01.png" alt="collection-01" />
-                </div>
-                <div>
-                  <h4 className='text-30-bold mb-10' style={{ maxWidth: "195px" }}>Death At Fallow End</h4>
-                  {/* <span className="text-primary secondary-font text-20 ">Anne Rice</span> */}
-                  <p className='text-black secondary-font mb-20 mt-10'>
-                    95 People Read This Story
-                  </p>
-                  <Button className='btn btn-primary text-white'>Story Detail</Button>
-
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-6 col-xl-4 col-md-6">
-              <div className="collection-card d-flex justify-content-center align-items-center gap-20" >
-                <div className="collection-card-img" >
-                  <img src="/assets/images/collection-02.png" alt="collection-01" />
-                </div>
-                <div>
-                  <h4 className='text-30-bold mb-10' style={{ maxWidth: "195px" }}>Death At Fallow End</h4>
-                  {/* <span className="text-primary secondary-font text-20 ">Victoria Saccenti</span> */}
-                  <p className='text-black secondary-font mb-20 mt-10'>
-                  62 People Read This Story
-                  </p>
-                  <Button className='btn btn-primary text-white'>Story Detail</Button>
-
+            {latestStories && latestStories.slice(0, 3).map((story, index) => (
+              <div key={story.id} className="col-lg-6 col-xl-4 col-md-6">
+                <div className="collection-card d-flex justify-content-center align-items-center gap-20" >
+                  <div className="collection-card-img" >
+                    <img 
+                      src={story.cover_image ? `/storage/${story.cover_image}` : `/assets/images/collection-0${index + 1}.png`} 
+                      alt={story.title} 
+                    />
+                  </div>
+                  <div>
+                    <h4 className='text-30-bold mb-10' style={{ maxWidth: "195px" }}>{story.title}</h4>
+                    {/* {story.author && (
+                      <span className="text-primary secondary-font text-20">{story.author}</span>
+                    )} */}
+                    <p className='text-black secondary-font mb-20 mt-10'>
+                       {story.read_count || 0} People Read This Story
+                    </p>
+                    {/* {story.genre && (
+                      <div className="mb-3">
+                        <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
+                          {story.genre}
+                        </span>
+                      </div>
+                    )} */}
+                    <Link href={`/stories/${story.id}`} className='btn btn-primary text-white'>Story Detail</Link>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-lg-6 col-xl-4 col-md-6">
-              <div className="collection-card d-flex justify-content-center align-items-center gap-20" >
-                <div className="collection-card-img" >
-                  <img src="/assets/images/collection-03.png" alt="collection-01" />
-                </div>
-                <div>
-                  <h4 className='text-30-bold mb-10' style={{ maxWidth: "195px" }}>Death At Fallow End</h4>
-                  {/* <span className="text-primary secondary-font text-20 ">Martha Grimes</span> */}
-                  <p className='text-black secondary-font mb-20 mt-10'>
-                  36 People Read This Story
-                  </p>
-                  <Button className='btn btn-primary text-white'>Story Detail</Button>
-
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

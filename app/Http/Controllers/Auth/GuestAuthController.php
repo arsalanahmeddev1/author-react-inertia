@@ -17,12 +17,15 @@ class GuestAuthController extends Controller
      */
     public function guestLogin(Request $request): RedirectResponse
     {
+        // Clean up old guest users first
+        $this->cleanupOldGuestUsers();
+
         // Check if there's already a guest user in the session
         if ($request->session()->has('guest_user_id')) {
             $guestUserId = $request->session()->get('guest_user_id');
             $guestUser = User::find($guestUserId);
 
-            if ($guestUser) {
+            if ($guestUser && $guestUser->is_guest) {
                 Auth::login($guestUser);
                 return redirect()->intended(route('home', absolute: false));
             }
@@ -34,6 +37,7 @@ class GuestAuthController extends Controller
             'email' => 'guest_' . Str::random(8) . '@example.com',
             'password' => Hash::make(Str::random(16)),
             'is_guest' => true,
+            'is_active' => false, // Guest users should be inactive
         ]);
 
         // Store the guest user ID in the session
@@ -67,5 +71,16 @@ class GuestAuthController extends Controller
 
         // Redirect to register page
         return redirect('/register');
+    }
+
+    /**
+     * Clean up old guest users (older than 24 hours)
+     */
+    private function cleanupOldGuestUsers()
+    {
+        // Delete guest users older than 24 hours using query builder
+        User::where('is_guest', true)
+            ->where('created_at', '<', now()->subHours(24))
+            ->delete();
     }
 }

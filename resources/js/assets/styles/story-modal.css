@@ -105,6 +105,9 @@
   padding: 1.5rem;
   overflow-y: auto;
   flex: 1;
+  height: 100%;
+  display: flex;
+ 
 }
 
 /* Form elements */
@@ -345,7 +348,15 @@
 .login-icon {
   color: var(--primary-theme);
 }
-
+.story-modal-content.login-prompt-modal {
+  height: 440px;
+}
+.story-modal-content.login-prompt-modal .story-modal-body {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
 /* Responsive adjustments */
 @media (max-width: 576px) {
   .story-modal-header h3 {

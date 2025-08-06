@@ -84,7 +84,7 @@ const StoryOfTheMonth = () => {
                     <h3 className="mb-20 fs-40 secondry-font text-white">
                       {story.title}
                     </h3>
-                    <h5 className="fs-24 text-primary mb-20">{story.subtitle}</h5>
+                    {/* <h5 className="fs-24 text-primary mb-20">{story.subtitle}</h5> */}
                     <p className="text-white mb-30 secondry-font text-20">
                       {story.description}
                     </p>
