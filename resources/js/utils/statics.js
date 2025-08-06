@@ -20,7 +20,7 @@ export const packagesData = [
             },
             {
                 text: "Do not need to login login as a guest account",
-                isNegative: true
+                isNegative: false
             },
         ],
         ctaText: "Get Started Now",
