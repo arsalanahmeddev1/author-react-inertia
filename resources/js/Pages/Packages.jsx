@@ -46,7 +46,7 @@ const Packages = () => {
 
                                     {/* Price */}
                                     <div className="mb-30">
-                                        <span className="package-price">{packageItem.price}  <span className='monthly-anualy'>/ {packageItem.monthlyAnualy}</span></span>
+                                        <span className="package-price">{packageItem.price} {packageItem.monthlyAnualy ? <span className='monthly-anualy'>/ {packageItem.monthlyAnualy}</span> : ''}</span>
                                     </div>
 
                                     {/* Features List */}
