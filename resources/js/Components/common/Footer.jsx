@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="footer-content">
           <div className="row justify-content-between row-gap-40">
             <div className="col-lg-2">
-              <div className="logo">
+              <div className="logo mb-40">
                 <img src="/assets/images/logo.png" alt="logo" />
               </div>
               <div className="footer-logos">
@@ -34,7 +34,7 @@ const Footer = () => {
               </ul>
             </div>
             <div className="col-lg-4">
-              <h4 className='fs-36 secondry-font text-white fw-500 mb-20'>Subscribe To Our Newsletter</h4>
+              <h4 className='fs-36 secondry-font footer-newsletter-hd text-white fw-500 mb-20'>Subscribe To Our Newsletter</h4>
               <form action="">
                 <div className="field-wrapper position-relative">
                   <input type="text" className='input-field' placeholder='Enter Your Email  Address' />

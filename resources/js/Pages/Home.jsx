@@ -16,12 +16,12 @@ const Home = () => {
       <section className='hero-banner overflow-hidden z-2'>
         <div className="container-xxl">
           <div className="d-flex justify-content-center align-items-center flex-column">
-            <h1 className='hd-lg mb-20 text-center text-white'>Where Every Story Leaves a Mark</h1>
+            <h1 className='hd-lg fw-400 mb-20 text-center text-white'>Where Every Story Leaves a Mark</h1>
             <p className='para-dark mb-20 text-center'>
               Join our creative community. Explore, interact, and create your own version of timeless tales.
             </p>
             <div className="d-flex flex-column flex-md-row gap-20 mb-20 ">
-              <Button className="btn btn-primary">Continue Story in Your Own Way</Button>
+              <Button className="btn btn-primary">Continue Your Story in Your Own Way</Button>
               <a href='/stories' className="btn btn-secondary">View Stories</a>
             </div>
           </div>
@@ -42,7 +42,7 @@ const Home = () => {
         <div className="container-xxl">
           <div className="row row-gap-40">
             <div className="col-lg-6">
-              <h2 className='hd-lg mb-40 text-center text-lg-start'>Featured Stories</h2>
+              <h2 className='hd-lg fw-400 mb-40 text-center text-lg-start'>Featured Stories</h2>
               <div className="fearured-stories-card">
                 <div className="row justify-content-center row-gap-40">
                   <div className="col-lg-4 col-md-6 fearured-stories-card-inner">
@@ -63,7 +63,7 @@ const Home = () => {
             </div>
             <div className="col-lg-6">
               <div className="mt-20 text-center text-lg-start">
-                <h2 className='hd-md text-uppercase'>Death at Fallow End</h2>
+                <h2 className='hd-md fw-700 mb-20 text-uppercase'>Death at Fallow End</h2>
                 <h4 className='text-primary font-medium featured-sub-title secondry-font mb-20'>Fallow End had the perfume of rot beneath roses.</h4>
                 <p className='para-mid mb-30'>
                   It masqueraded as a village of perfect English serenity—an illusion spun from moss-draped eaves, honeyed stone walls, and the gentle sigh of hedgerows whispering against flaking garden gates. But if one stayed still long enough in its meadows, one would hear it: the creak of something ancient refusing to die, and the hush of secrets wound tight as ivy around the bones of Halverton House.
@@ -91,7 +91,7 @@ const Home = () => {
                 )}
               </h2>
 
-              <p className="text-white mb-20" style={{ maxWidth: "840px" }}>
+              <p className="text-white fw-400 mb-20" style={{ maxWidth: "840px" }}>
                 Take the reins and let your imagination run wild! Log in to pick up where the story left off or create your own twists and turns. Your words, your world—continue the adventure as you see fit.
               </p>
 
@@ -123,7 +123,7 @@ const Home = () => {
       </section>
       <section className='collection-sec'>
         <div className="container-xxl">
-          <h2 className='hd-md mb-20 mb-70 uppercase text-center' style={{ fontWeight: "400" }}>Our Collection</h2>
+          <h2 className='hd-md fw-400 mb-70 uppercase text-center'>Our Collection</h2>
           <div className="row justify-content-center row-gap-40">
             {latestStories && latestStories.slice(0, 3).map((story, index) => (
               <div key={story.id} className="col-lg-6 col-xl-4 col-md-6">

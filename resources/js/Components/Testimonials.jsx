@@ -54,7 +54,7 @@ const Testimonials = () => {
         <div className='row row-gap-40 justify-content-center justify-content-lg-start'>
           <div className='col-lg-4'>
             <div className='testimonials-title'>
-              <h2 className='hd-lg fs-60 text-center text-lg-start'>What Our Readers Said About Us</h2>
+              <h2 className='hd-lg fw-400 fs-60 text-center text-lg-start'>What Our Readers Said About Us</h2>
             </div>
           </div>
           <div className="col-md-8">

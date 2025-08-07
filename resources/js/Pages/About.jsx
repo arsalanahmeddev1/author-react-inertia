@@ -11,7 +11,7 @@ const About = () => {
       <main className="">
         <section className='about-sec-01 pt-200'>
           <div className="container">
-          <h1 className="text-black text-center fs-70 fw-500 mb-80">Our Packages</h1>
+          <h1 className="text-black text-center fs-70 fw-500 mb-80">About</h1>
 
             {/* Section 1 */}
             <div className="row align-items-center mb-100">

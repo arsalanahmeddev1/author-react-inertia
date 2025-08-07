@@ -103,9 +103,7 @@ const Index = ({ stories }) => {
                           <div className="d-flex gap-2">
                             {[
                               <CTooltip key="view" content="View Story">
-                                <CButton
-                                  color="info"
-                                  size="sm"
+                                <CButton className='btn-icon-size'
                                   onClick={() => router.visit(route('admin-dashboard.stories.show', story.id))}
                                 >
                                   {/* <CIcon icon={cilEye} /> View */}
@@ -113,18 +111,14 @@ const Index = ({ stories }) => {
                                 </CButton>
                               </CTooltip>,
                               <CTooltip key="edit" content="Edit Story">
-                                <CButton
-                                  color="warning"
-                                  size="sm"
+                                <CButton className='btn-icon-size'
                                   onClick={() => router.visit(route('admin-dashboard.stories.edit', story.id))}
                                 >
                                   <Icons.Edit />
                                 </CButton>
                               </CTooltip>,
                               <CTooltip key="delete" content="Delete Story">
-                                <CButton
-                                  color="danger"
-                                  size="sm"
+                                <CButton className='btn-icon-size'  
                                   onClick={() => confirmDelete(story)}
                                 >
                                   <Icons.Delete />
@@ -133,9 +127,7 @@ const Index = ({ stories }) => {
                               story.is_community && story.status === 'pending' && (
                                 <>
                                   <CTooltip key="approve" content="Approve Story">
-                                    <CButton
-                                      color="success"
-                                      size="sm"
+                                    <CButton className='btn-icon-size'
                                       onClick={() => router.post(route('admin-dashboard.stories.approve', story.id))}
                                     >
                                       ✅
@@ -143,7 +135,6 @@ const Index = ({ stories }) => {
                                   </CTooltip>
                                   <CTooltip key="reject" content="Reject Story">
                                     <CButton
-                                      color="warning"
                                       size="sm"
                                       onClick={() => router.post(route('admin-dashboard.stories.reject', story.id))}
                                     >
@@ -200,7 +191,7 @@ const Index = ({ stories }) => {
           <CButton color="secondary" onClick={() => setDeleteModal(false)}>
             Cancel
           </CButton>
-          <CButton color="danger" onClick={handleDelete}>
+          <CButton className='primary-theme-color' onClick={handleDelete}>
             Delete
           </CButton>
         </CModalFooter>
