@@ -1,3 +1,4 @@
+// app.jsx file
 import '../css/app.css';
 // Import Bootstrap JS for dropdowns
 // import 'bootstrap/dist/js/bootstrap.bundle.min.js';
