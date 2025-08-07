@@ -16,7 +16,7 @@ const Home = () => {
       <section className='hero-banner overflow-hidden z-2'>
         <div className="container-xxl">
           <div className="d-flex justify-content-center align-items-center flex-column">
-            <h1 className='hd-lg fw-400 mb-20 text-center text-white'>Where Every Story Leaves a Mark</h1>
+            <h1 className='hd-lg fw-500 mb-20 text-center text-white'>Where Every Story Leaves a Mark</h1>
             <p className='para-dark mb-20 text-center'>
               Join our creative community. Explore, interact, and create your own version of timeless tales.
             </p>
@@ -42,7 +42,7 @@ const Home = () => {
         <div className="container-xxl">
           <div className="row row-gap-40">
             <div className="col-lg-6">
-              <h2 className='hd-lg fw-400 mb-40 text-center text-lg-start'>Featured Stories</h2>
+              <h2 className='hd-lg fw-500 mb-40 text-center text-lg-start'>Featured Stories</h2>
               <div className="fearured-stories-card">
                 <div className="row justify-content-center row-gap-40">
                   <div className="col-lg-4 col-md-6 fearured-stories-card-inner">
@@ -123,7 +123,7 @@ const Home = () => {
       </section>
       <section className='collection-sec'>
         <div className="container-xxl">
-          <h2 className='hd-md fw-400 mb-70 uppercase text-center'>Our Collection</h2>
+          <h2 className='hd-md fw-500 mb-70 uppercase text-center'>Our Collection</h2>
           <div className="row justify-content-center row-gap-40">
             {latestStories && latestStories.slice(0, 3).map((story, index) => (
               <div key={story.id} className="col-lg-6 col-xl-4 col-md-6">
