@@ -1021,6 +1021,7 @@ span.fs-54 {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
+
 .public-card-badge {
     position: absolute;
     top: 20px;
@@ -1034,6 +1035,7 @@ span.fs-54 {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
 .package-icon {
     width: 80px;
     height: 80px;
@@ -1045,17 +1047,20 @@ span.fs-54 {
     margin: 0 auto 30px auto;
     box-shadow: 0 10px 25px rgba(254, 162, 87, 0.3);
 }
+
 .price-tag {
     font-size: 48px;
     font-weight: 700;
     color: #fea257;
 }
+
 .package-features-list {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
     padding: 0 20px;
 }
+
 .publish-card.package-card .hd-md {
     font-size: 30px;
 
@@ -1169,6 +1174,7 @@ span.fs-54 {
     width: 12px;
     height: 12px;
 }
+
 .publish-card.package-card .package-cta-button {
     position: absolute;
     bottom: 13px;
@@ -1177,15 +1183,19 @@ span.fs-54 {
     max-width: 390px;
     margin: 0 auto;
 }
+
 .footer-newsletter-hd {
     font-size: 24px;
 }
+
 .hd-md.fw-400 {
     font-weight: 400;
 }
+
 .footer .field-wrapper .input-field {
-   padding: 20px 40px;
+    padding: 20px 40px;
 }
+
 /* responsive */
 @media (min-width: 1560px) {
     .container {
@@ -1376,22 +1386,29 @@ span.fs-54 {
     .hero-banner {
         max-height: 880px;
     }
-}
 
-@media (max-width: 992px) {
 
-    .signin-right,
-    .signin-book {
-        display: none;
+    .collection-sec .collection-card-img img {
+        width: 100%;
     }
 
-    .signin-bg p,
-    .signin-bg .hd-md {
+    .collection-sec .collection-card-img {
+        width: 100%;
+        max-width: 100%;
+        max-width: 580px;
+    }
+
+    .collection-sec .collection-card {
+        flex-direction: column;
+    }
+
+    .collection-sec .collection-card .text-30-bold {
+        font-size: 40px;
         max-width: 100% !important;
     }
 
-    .story-month-right {
-        margin-top: 0;
+    .collection-card-content {
+        text-align: center;
     }
 }
 
@@ -1457,6 +1474,34 @@ span.fs-54 {
     .sec-2 .img-wrapper {
         max-width: 65rem;
     }
+
+
+
+    .signin-right,
+    .signin-book {
+        display: none;
+    }
+
+    .signin-bg p,
+    .signin-bg .hd-md {
+        max-width: 100% !important;
+    }
+
+    .story-month-right {
+        margin-top: 0;
+    }
+
+    .fearured-stories-card .text-sm {
+        font-size: 38px;
+    }
+
+    .fearured-stories .row-gap-40 {
+        row-gap: 80px;
+    }
+
+    .story-month-bg .row-gap-40 {
+        row-gap: 80px;
+    }
 }
 
 @media (max-width: 767px) {
@@ -1487,6 +1532,15 @@ span.fs-54 {
 
     .sec-3-cover-1 {
         left: -7rem;
+    }
+
+    .collection-sec .collection-card .text-30-bold,
+    .fearured-stories-card .text-sm {
+        font-size: 19px;
+    }
+
+    .story-month-right img {
+        max-width: 300px;
     }
 }
 

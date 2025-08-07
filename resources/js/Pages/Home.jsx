@@ -45,16 +45,16 @@ const Home = () => {
               <h2 className='hd-lg fw-500 mb-40 text-center text-lg-start'>Featured Stories</h2>
               <div className="fearured-stories-card">
                 <div className="row justify-content-center row-gap-40">
-                  <div className="col-lg-4 col-md-6 fearured-stories-card-inner">
+                  <div className="col-lg-4 fearured-stories-card-inner">
                     <img src="/assets/images/featured-01.png" className='mb-10 fsc-image' alt="featured-stories-card-01" />
                     <h6 className='text-sm text-uppercase text-center' >Death at Fallow End</h6>
                   </div>
-                  <div className="col-lg-4 col-md-6 fearured-stories-card-inner">
+                  <div className="col-lg-4 fearured-stories-card-inner">
                     <img src="/assets/images/featured-02.png" className='mb-10 fsc-image' alt="featured-stories-card-02 " />
                     <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>
 
                   </div>
-                  <div className="col-lg-4 col-md-6 fearured-stories-card-inner">
+                  <div className="col-lg-4 fearured-stories-card-inner">
                     <img src="/assets/images/featured-03.png" className='mb-10 fsc-image' alt="featured-stories-card-03" />
                     <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>
                   </div>
@@ -126,7 +126,7 @@ const Home = () => {
           <h2 className='hd-md fw-500 mb-70 uppercase text-center'>Our Collection</h2>
           <div className="row justify-content-center row-gap-40">
             {latestStories && latestStories.slice(0, 3).map((story, index) => (
-              <div key={story.id} className="col-lg-6 col-xl-4 col-md-6">
+              <div key={story.id} className="col-12 col-lg-12 col-xl-4">
                 <div className="collection-card d-flex justify-content-center align-items-center gap-20" >
                   <div className="collection-card-img" >
                     <img 
@@ -134,7 +134,7 @@ const Home = () => {
                       alt={story.title} 
                     />
                   </div>
-                  <div>
+                  <div className='collection-card-content'>
                     <h4 className='text-30-bold mb-10' style={{ maxWidth: "195px" }}>{story.title}</h4>
                     {/* {story.author && (
                       <span className="text-primary secondary-font text-20">{story.author}</span>

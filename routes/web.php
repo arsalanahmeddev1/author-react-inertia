@@ -146,5 +146,9 @@ Route::get('/packages', function () {
 })->name('packages');
 Route::post('/chatgpt/send', [ChatbotController::class, 'send']);
 
+// new dashboard implementation
+Route::get('/dashboard-new', function () {
+    return Inertia::render('admin/DashboardNew');
+})->name('dashboardNew');
 
 require __DIR__ . '/auth.php';

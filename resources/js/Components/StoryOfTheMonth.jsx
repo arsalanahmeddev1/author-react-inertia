@@ -58,7 +58,7 @@ const StoryOfTheMonth = () => {
     <section className="story-month">
       <div className="container">
         <div className="col-lg-8">
-          <h2 className="hd-lg fw-500 mb-20 text-uppercase">Story of the Month</h2>
+          <h2 className="hd-lg fw-500 mb-20 text-center text-lg-start text-uppercase">Story of the Month</h2>
         </div>
       </div>
 
@@ -95,7 +95,7 @@ const StoryOfTheMonth = () => {
 
             {/* Right Column with Image */}
             <div className="col-lg-4">
-              <div className="story-month-right d-flex justify-content-end">
+              <div className="story-month-right d-flex justify-content-center justify-content-lg-end">
                 {/* You may move image out of the map and show current story based on index if needed */}
                 <img src={stories[0]?.image} alt={`story`} />
               </div>
