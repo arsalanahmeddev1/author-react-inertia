@@ -1,8 +1,11 @@
 import React from 'react'
+import DashboardLayoutNew from '../../Layouts/DashboardLayoutNew';
 
 const DashboardNew = () => {
   return (
-    <div>Dashboard-new</div>
+    <DashboardLayoutNew title="Dashboard" description="Dashboard">
+      <div>Dashboard-new</div>
+    </DashboardLayoutNew>
   )
 }
 

@@ -1,4 +1,3 @@
-// app.jsx file
 import '../css/app.css';
 // Import Bootstrap JS for dropdowns
 // import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -11,6 +10,8 @@ import 'react-quill-new/dist/quill.snow.css';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
+// Import HelmetProvider
+import { HelmetProvider } from 'react-helmet-async';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -24,7 +25,12 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            // Wrap the entire App with HelmetProvider
+            <HelmetProvider>
+                <App {...props} />
+            </HelmetProvider>
+        );
     },
     progress: {
         color: '#4B5563',
