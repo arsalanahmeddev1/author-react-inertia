@@ -3,12 +3,14 @@ import Slider from 'react-slick'
 import { Icons } from '../utils/icons';
 const testimonials = [
   {
+    id: 1,
     image: "/assets/images/testi-img-01.png",
     name: "Eleanor Hart",
     designation: "Mystery Book Club President",
     description: "A chilling, atmospheric mystery that kept me guessing until the final page. 'Death At Fallow End' is a must-read for fans of classic British crime fiction.",
   },
   {
+    id: 2,
     image: "/assets/images/testi-img-02.png",
     name: "James Holloway",
     designation: "Author of The Ashcroft Files",
@@ -60,8 +62,8 @@ const Testimonials = () => {
           <div className="col-md-8">
             <Slider ref={sliderRef} {...settings}>
               {testimonials.map((testimonial, index) => (
+                  <div key={testimonial.id}>
                 <div className="testi-card">
-                  <div key={index}>
                     <div className="d-flex align-items-center mb-10 gap-20">
                       <div>
                         <img src={testimonial.image} alt="" />

@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../assets/styles/utilities.css';
 import '../assets/styles/style.css';
-import '../css/app.css';
 
 export default function InnerLayout({ children }) {
   useEffect(() => {
