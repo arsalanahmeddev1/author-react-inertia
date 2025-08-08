@@ -63,14 +63,14 @@ const UserAvatar = ({ user, className = '' }) => {
 
           <div className="user-dropdown-divider"></div>
           {auth.user?.role === 'admin' && (
-            <a href="/admin-dashboard" className="user-dropdown-item">
+            <Link href="/dashboard-new" className="user-dropdown-item">
               <Icons.Dashboard /> <span className='pl-10'>Dashboard</span>
-            </a>
+            </Link>
           )}
           {auth.user?.role === 'user' && (
-            <a href="/user-dashboard" className="user-dropdown-item">
+            <Link href="/user-dashboard" className="user-dropdown-item">
               <Icons.Dashboard /> <span className='pl-10'>Dashboard</span>
-            </a>
+            </Link>
           )}
           <div className="user-dropdown-divider"></div>
 

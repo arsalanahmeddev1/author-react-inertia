@@ -39,7 +39,6 @@ const HeroBanner = () => {
         pauseOnHover: false,
         pauseOnFocus: false,
         pauseOnDotsHover: false,
-        pauseOnFocus: false,
         customPaging: i => (
             <span className="dot-number">{i + 1}</span>
         ),

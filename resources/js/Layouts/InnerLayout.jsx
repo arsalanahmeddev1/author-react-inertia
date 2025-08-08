@@ -5,8 +5,9 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import '../../js/assets/styles/utilities.css';
-import '../../js/assets/styles/style.css';
+import '../assets/styles/utilities.css';
+import '../assets/styles/style.css';
+import '../css/app.css';
 
 export default function InnerLayout({ children }) {
   useEffect(() => {
