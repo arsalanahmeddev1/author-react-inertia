@@ -184,12 +184,46 @@ class StoriesController extends Controller
 
     public function storeDraftSession(Request $request)
     {
+        // Check if user is not logged in
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to publish stories.');
+        }
+
+        $user = Auth::user();
+
+        // Check if user is a guest (is_guest = 1)
+        if ($user->is_guest) {
+            return redirect()->route('register')->with('error', 'Guest users cannot publish stories. Please create a full account to continue.');
+        }
+
+        // Check if user account is inactive (is_active = 0)
+        if (!$user->is_active) {
+            return redirect()->route('login')->with('error', 'Your account is inactive. Please contact support for assistance.');
+        }
+
         session()->put('story_publish_data', $request->only(['story_id', 'character_name', 'content']));
         return redirect()->route('stories.publish.packages');
     }
 
     public function showPublishForm(Story $story)
     {
+        // Check if user is not logged in
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to publish stories.');
+        }
+
+        $user = Auth::user();
+
+        // Check if user is a guest (is_guest = 1)
+        if ($user->is_guest) {
+            return redirect()->route('register')->with('error', 'Guest users cannot publish stories. Please create a full account to continue.');
+        }
+
+        // Check if user account is inactive (is_active = 0)
+        if (!$user->is_active) {
+            return redirect()->route('login')->with('error', 'Your account is inactive. Please contact support for assistance.');
+        }
+
         $prefill = session('story_publish_data');
         $story = $story;
 
@@ -201,6 +235,23 @@ class StoriesController extends Controller
 
     public function showPackages()
     {
+        // Check if user is not logged in
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to publish stories.');
+        }
+
+        $user = Auth::user();
+
+        // Check if user is a guest (is_guest = 1)
+        if ($user->is_guest) {
+            return redirect()->route('register')->with('error', 'Guest users cannot publish stories. Please create a full account to continue.');
+        }
+
+        // Check if user account is inactive (is_active = 0)
+        if (!$user->is_active) {
+            return redirect()->route('login')->with('error', 'Your account is inactive. Please contact support for assistance.');
+        }
+
         $session = session('story_publish_data');
 
         if (!$session || !isset($session['story_id'])) {
@@ -221,6 +272,23 @@ class StoriesController extends Controller
 
     public function storePublishRequest(Request $request)
     {
+        // Check if user is not logged in
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to publish stories.');
+        }
+
+        $user = Auth::user();
+
+        // Check if user is a guest (is_guest = 1)
+        if ($user->is_guest) {
+            return redirect()->route('register')->with('error', 'Guest users cannot publish stories. Please create a full account to continue.');
+        }
+
+        // Check if user account is inactive (is_active = 0)
+        if (!$user->is_active) {
+            return redirect()->route('login')->with('error', 'Your account is inactive. Please contact support for assistance.');
+        }
+
         try {
             $request->validate([
                 'story_id' => 'required|exists:stories,id',

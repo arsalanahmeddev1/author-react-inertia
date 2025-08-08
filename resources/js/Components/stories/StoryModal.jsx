@@ -261,6 +261,27 @@ const StoryModal = ({ show, onHide, story }) => {
 
   // Publish story from editor
   const handlePublish = () => {
+    // Get user data from the auth prop
+    const user = auth.user;
+
+    // Check if user is not logged in
+    if (!user) {
+      router.visit(route('login'));
+      return;
+    }
+
+    // Check if user is a guest (is_guest = 1)
+    if (user.is_guest) {
+      router.visit(route('register'));
+      return;
+    }
+
+    // Check if user account is inactive (is_active = 0)
+    if (!user.is_active) {
+      router.visit(route('login'));
+      return;
+    }
+
     setIsLoading(true)
   
     router.post(route('story.draft.session'), {
@@ -276,6 +297,27 @@ const StoryModal = ({ show, onHide, story }) => {
 
   // Publish draft
   const handlePublishDraft = (draft) => {
+    // Get user data from the auth prop
+    const user = auth.user;
+
+    // Check if user is not logged in
+    if (!user) {
+      router.visit(route('login'));
+      return;
+    }
+
+    // Check if user is a guest (is_guest = 1)
+    if (user.is_guest) {
+      router.visit(route('register'));
+      return;
+    }
+
+    // Check if user account is inactive (is_active = 0)
+    if (!user.is_active) {
+      router.visit(route('login'));
+      return;
+    }
+
     // This would connect to your backend in a real implementation
     setIsLoading(true);
 

@@ -2,7 +2,7 @@ import Layout from '@/Layouts/Layout'
 import React, { useState, useEffect } from 'react';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { Head, router } from '@inertiajs/react'
+import { Head, router, usePage } from '@inertiajs/react'
 import TextInput from '@/Components/TextInput';
 import Swal from 'sweetalert2';
 
@@ -139,6 +139,7 @@ const CheckoutForm = ({ story, character, storyText }) => {
 };
 
 const Form = ({ prefill, story }) => {
+  const { auth } = usePage().props;
   const [character, setCharacter] = useState('');
   const [storyText, setStoryText] = useState('');
   const [formData, setFormData] = useState({
@@ -147,6 +148,30 @@ const Form = ({ prefill, story }) => {
     character: prefill.character_name || '',
     content: prefill.content || '',
   });
+
+  // Check user validation on component mount
+  useEffect(() => {
+    const user = auth.user;
+
+    // Check if user is not logged in
+    if (!user) {
+      router.visit(route('login'));
+      return;
+    }
+
+    // Check if user is a guest (is_guest = 1)
+    if (user.is_guest) {
+      router.visit(route('register'));
+      return;
+    }
+
+    // Check if user account is inactive (is_active = 0)
+    if (!user.is_active) {
+      router.visit(route('login'));
+      return;
+    }
+  }, [auth.user]);
+
   useEffect(() => {
     if (prefill) {
       setCharacter(prefill.character_name || '');

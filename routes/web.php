@@ -89,9 +89,10 @@ Route::middleware('auth')->group(function () {
 });
 
 // Route::get('/packages', [PackagesController::class, 'index'])->name('packages.index');
-Route::get('/stories/publish/packages', [StoriesController::class, 'showPackages'])->name('stories.publish.packages');
-
-Route::post('/story/publish-request', [MainStoriesController::class, 'storePublishRequest'])->name('story.publish.request');
+Route::middleware('auth')->group(function () {
+    Route::get('/stories/publish/packages', [StoriesController::class, 'showPackages'])->name('stories.publish.packages');
+    Route::post('/story/publish-request', [MainStoriesController::class, 'storePublishRequest'])->name('story.publish.request');
+});
 
 // Route::post('/stripe/checkout', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
 // Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
@@ -104,9 +105,10 @@ Route::post('/stripe/webhook', [StripeController::class, 'webhook']);
 //     return Inertia::render('Stories/Publish/Form');
 // })->name('stories.publish.form');
 
-Route::get('/stories/publish/form/{story}', [MainStoriesController::class, 'showPublishForm'])->name('stories.publish.form');
-
-Route::post('/story/store-draft-session', [MainStoriesController::class, 'storeDraftSession'])->name('story.draft.session');
+Route::middleware('auth')->group(function () {
+    Route::get('/stories/publish/form/{story}', [MainStoriesController::class, 'showPublishForm'])->name('stories.publish.form');
+    Route::post('/story/store-draft-session', [MainStoriesController::class, 'storeDraftSession'])->name('story.draft.session');
+});
 
 
 

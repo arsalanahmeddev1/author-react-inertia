@@ -937,6 +937,7 @@ span.fs-54 {
     padding: 15px;
     font-size: 18px;
     font-weight: 400;
+    background-color: #fff;
 }
 
 .publish-form-wrapper .field-wrapper {
@@ -946,7 +947,6 @@ span.fs-54 {
 .publish-form-wrapper .textarea-field {
     resize: none;
     height: 355px;
-
 }
 
 .pay-hd {
