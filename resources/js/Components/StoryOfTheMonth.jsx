@@ -81,7 +81,7 @@ const StoryOfTheMonth = () => {
               <Slider ref={sliderRef} {...settings}>
                 {stories.map((story, index) => (
                   <div key={index}>
-                    <h3 className="mb-20 fw-500 fs-40 secondry-font text-white">
+                    <h3 className="mb-20 fw-400 fs-40 secondry-font text-white" style={{ fontWeight: '400' }}>
                       {story.title}
                     </h3>
                     {/* <h5 className="fs-24 text-primary mb-20">{story.subtitle}</h5> */}

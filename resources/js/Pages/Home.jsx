@@ -4,6 +4,7 @@ import Layout from '@/Layouts/Layout'
 import { Link, Head, usePage } from '@inertiajs/react'
 import StoryOfTheMonth from '@/Components/StoryOfTheMonth'
 import Testimonials from '@/Components/Testimonials';
+import HeroBanner from '@/Components/home/HeroBanner'
 
 
 const Home = () => {
@@ -13,31 +14,7 @@ const Home = () => {
   return (
     <Layout headerClass="pt-30 home-page-wrapper" mainClass="home-page-wrapper">
       <Head title="Home" />
-      <section className='hero-banner overflow-hidden z-2'>
-        <div className="container-xxl">
-          <div className="d-flex justify-content-center align-items-center flex-column">
-            <h1 className='hd-lg fw-500 mb-20 text-center text-white'>Where Every Story Leaves a Mark</h1>
-            <p className='para-dark mb-20 text-center'>
-              Join our creative community. Explore, interact, and create your own version of timeless tales.
-            </p>
-            <div className="d-flex flex-column flex-md-row gap-20 mb-20 ">
-              <Button className="btn btn-primary">Continue Your Story in Your Own Way</Button>
-              <a href='/stories' className="btn btn-secondary">View Stories</a>
-            </div>
-          </div>
-          <div className="d-flex align-items-center justify-content-center position-relative">
-            <div className="image-center-container image-container position-relative z-1">
-              <div className="image-left-container position-absolute image-container-xxl">
-                <img src="/assets/images/banner-card-01.png" alt="banner-image" />
-              </div>
-              <img src="/assets/images/banner-card-02.png" className='hero-banner-center-img' alt="banner-image" />
-              <div className="image-right-container position-absolute image-container-xxl">
-                <img src="/assets/images/banner-card-03.png" alt="banner-image" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroBanner />  
       <section className='fearured-stories'>
         <div className="container-xxl">
           <div className="row row-gap-40">
@@ -85,7 +62,13 @@ const Home = () => {
             <div className="col-lg-7">
               <h2 className="hd-md mb-20 text-white" style={{ maxWidth: "770px" }}>
                 {auth?.user ? (
-                  <>Welcome back, {auth.user.name}! Craft your story your way.</>
+                  <>
+                    {auth.user.is_guest ? (
+                      <>Welcome Guest! Craft your story in your own way.</>
+                    ) : (
+                      <>Welcome back, {auth.user.name}! Craft your story in your own way.</>
+                    )}
+                  </>
                 ) : (
                   <>Sign In to Continue Crafting the Story Your Way</>
                 )}
@@ -99,7 +82,7 @@ const Home = () => {
                 {!auth?.user && (
                   <>
                     <Link href="/login" className="btn btn-primary">Sign In</Link>
-                    <Link  href="/stories" className="btn btn-secondary">Read A Sample</Link>
+                    <Link href="/stories" className="btn btn-secondary">Read A Sample</Link>
                   </>
                 )}
 
@@ -129,9 +112,9 @@ const Home = () => {
               <div key={story.id} className="col-12 col-lg-12 col-xl-4">
                 <div className="collection-card d-flex justify-content-center align-items-center gap-20" >
                   <div className="collection-card-img" >
-                    <img 
-                      src={story.cover_image ? `/storage/${story.cover_image}` : `/assets/images/collection-0${index + 1}.png`} 
-                      alt={story.title} 
+                    <img
+                      src={story.cover_image ? `/storage/${story.cover_image}` : `/assets/images/collection-0${index + 1}.png`}
+                      alt={story.title}
                     />
                   </div>
                   <div className='collection-card-content'>
@@ -140,7 +123,7 @@ const Home = () => {
                       <span className="text-primary secondary-font text-20">{story.author}</span>
                     )} */}
                     <p className='text-black secondary-font mb-20 mt-10'>
-                       {story.read_count || 0} People Read This Story
+                      {story.read_count || 0} People Read This Story
                     </p>
                     {/* {story.genre && (
                       <div className="mb-3">

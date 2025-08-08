@@ -40,7 +40,7 @@ export default function CommunityIndex({ stories, genres, filters }) {
     <Layout headerClass="inner-header">
       <Head title="Community Stories" />
 
-      <section className="pt-200 pb-100 sec-bg">
+      <section className="community-sec pt-200 pb-100 sec-bg">
         <div className="container">
           <div className="row text-center mb-70">
             <div className="col-12" data-aos-duration="3000" data-aos="fade-down">
@@ -57,7 +57,7 @@ export default function CommunityIndex({ stories, genres, filters }) {
           {/* Search and Filter Section */}
           <div className="row mb-50">
             <div className="col-md-8 col-lg-6 mx-auto">
-              <div className="d-flex flex-column flex-md-row gap-3 justify-content-center">
+              <div className="d-flex flex-column flex-md-row gap-10 justify-content-center">
                 <div className="flex-grow-1">
                   <div className="input-group">
                     <span className="input-group-text text-white">
@@ -112,8 +112,10 @@ export default function CommunityIndex({ stories, genres, filters }) {
                     />
                     <div className="d-flex align-items-center justify-content-between mb-10">
                       <h4 className="light-black story-title">{story.title}</h4>
-                      <div className='d-flex align-items-center'>
-                        <img src="/assets/images/comments.svg" className="" alt="comments" />
+                      <div className='d-flex align-items-center gap-10'>
+                        <span className='fs-18 text-primary-theme'>
+                        <i class="fa-solid fa-comment"></i>
+                        </span>
                         <span className="pl-10">{story.comment_count || 0}</span>
                       </div>
                     </div>
@@ -125,7 +127,7 @@ export default function CommunityIndex({ stories, genres, filters }) {
                         <h6 className="text-black fs-18 mb-0">{story.read_count || 0} People Read This Story</h6>
                       </div>
                       <div>
-                        <LikeCount storyId={story.id} />
+                        <LikeCount className='gap-10' storyId={story.id} />
                       </div>
                     </div>
                     <div className="d-flex justify-content-between align-items-center mb-20 pl-10">

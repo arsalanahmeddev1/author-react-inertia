@@ -58,7 +58,7 @@ export default function Index({ stories, genres, filters, flash }) {
               // Clear existing content
               iconElement.innerHTML = '';
               iconElement.className = 'swal2-icon';
-              
+
               // Create custom success icon
               const successIcon = document.createElement('div');
               successIcon.style.cssText = `
@@ -74,7 +74,7 @@ export default function Index({ stories, genres, filters, flash }) {
                 justify-content: center;
 
               `;
-              
+
               // Create checkmark
               const checkmark = document.createElement('div');
               checkmark.style.cssText = `
@@ -86,7 +86,7 @@ export default function Index({ stories, genres, filters, flash }) {
                 transform: rotate(-45deg);
                 margin-top: -5px;
               `;
-              
+
               successIcon.appendChild(checkmark);
               iconElement.appendChild(successIcon);
             }
@@ -101,7 +101,7 @@ export default function Index({ stories, genres, filters, flash }) {
   return (
     <Layout headerClass="inner-header">
       <Head title="Stories" />
-      <section className="py-200 sec-bg">
+      <section className="stories-sec py-200 sec-bg">
         <div className="container">
           <div className="row text-center mb-70">
             <div className="col-12" data-aos-duration="3000" data-aos="fade-down">
@@ -118,7 +118,7 @@ export default function Index({ stories, genres, filters, flash }) {
           {/* Search and Filter Section */}
           <div className="row mb-50">
             <div className="col-md-8 col-lg-6 mx-auto">
-              <div className="d-flex flex-column flex-md-row gap-3 justify-content-center">
+              <div className="d-flex flex-column flex-md-row gap-10 justify-content-center">
                 <div className="flex-grow-1">
                   <div className="input-group">
                     <span className="input-group-text text-white">
@@ -165,22 +165,22 @@ export default function Index({ stories, genres, filters, flash }) {
                     />
                     <div className="d-flex align-items-center justify-content-between mb-10">
                       <h4 className="light-black fs-36 fw-600">{story.title}</h4>
-                      <div className='d-flex align-items-center'>
-                        <img src="/assets/images/comments.svg" className="" alt="comments" />
-                        <span className="pl-10">{story.comment_count}</span>
+                      <div className='d-flex align-items-center gap-10'>
+                        <span className='fs-18 text-primary-theme'>
+                          <i className="fas fa-comment me-2 text-primary-theme"></i>
+                        </span>
+                        <span className="">{story.comment_count}</span>
                       </div>
                     </div>
                     {/* <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">{story.author}</h4> */}
-                    <div className="d-flex justify-content-between align-items-center mb-20 pl-10">
-                      <div className='d-flex align-items-center'>
-                        <i className="fas fa-eye text-primary-theme me-2"></i>
+                    <div className="d-flex justify-content-between align-items-center mb-20">
+                      <div className='d-flex align-items-center gap-10'>
+                        <i className="fas fa-eye text-primary-theme"></i>
                         <h6 className="text-black fs-18 mb-0">{story.read_count} People Read This Story</h6>
                       </div>
-                      <div>
-                        <LikeCount storyId={story.id} />
-                      </div>
+                        <LikeCount className='gap-10' storyId={story.id} />
                     </div>
-                    <div className="d-flex justify-content-between align-items-center mb-20 pl-10">
+                    <div className="d-flex justify-content-between align-items-center mb-20">
                       <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
                         {story.genre}
                       </span>
