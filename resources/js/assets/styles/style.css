@@ -215,7 +215,7 @@
 .collection-card-img {
     position: relative;
     z-index: 1;
-    border: 7px solid #d9d9d9;
+    /* border: 7px solid #d9d9d9; */
 }
 
 .story-month-bg {

@@ -2,7 +2,7 @@ import { Link } from '@inertiajs/react';
 import { Icons } from '../../utils/icons';
 const Footer = () => {
   return (
-    <footer className='footer'>
+    <footer className='web-footer'>
       <div className="container-xxl">
         <div className="footer-content">
           <div className="row justify-content-between row-gap-40">

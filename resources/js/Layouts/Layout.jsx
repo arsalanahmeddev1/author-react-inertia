@@ -29,7 +29,7 @@ export default function Layout({ children, headerClass, mainClass }) {
   return (
     <>
       <Header headerClass={headerClass} />
-      <main className={mainClass}>{children}</main>
+      <main className={`${mainClass} web-main`}>{children}</main>
       <Chatbot />
       <Footer />
       <UserWayWidget />

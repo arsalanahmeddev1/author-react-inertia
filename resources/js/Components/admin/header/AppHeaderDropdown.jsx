@@ -74,15 +74,23 @@ const AppHeaderDropdown = () => {
         
         <CDropdownDivider />
         
-        <CDropdownItem 
-          href={route('logout')} 
-          method="post" 
+        <Link
+          href={route('logout')}
+          method="post"
           as="button"
-          className="text-danger"
+          className="dropdown-item text-danger"
+          style={{
+            background: 'none',
+            border: 'none',
+            width: '100%',
+            textAlign: 'left',
+            padding: '0.5rem 1rem',
+            cursor: 'pointer'
+          }}
         >
           <CIcon icon={cilAccountLogout} className="me-2" />
           Logout
-        </CDropdownItem>
+        </Link>
       </CDropdownMenu>
     </CDropdown>
   )

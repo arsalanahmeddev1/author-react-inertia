@@ -38,12 +38,12 @@ const AppHeader = () => {
     })
 
     // Apply the theme
-    document.body.classList.remove('light-theme', 'dark-theme');
-    if (colorMode === 'dark') {
-      document.body.classList.add('dark-theme');
-    } else {
-      document.body.classList.add('light-theme');
-    }
+    // document.body.classList.remove('light-theme', 'dark-theme');
+    // if (colorMode === 'dark') {
+    //   document.body.classList.add('dark-theme');
+    // } else {
+    //   document.body.classList.add('light-theme');
+    // }
 
     // Save the theme preference
     localStorage.setItem('theme', colorMode);
