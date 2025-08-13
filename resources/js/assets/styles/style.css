@@ -1198,6 +1198,13 @@ span.fs-54 {
 header .btn.btn-link:active {
     background-color: transparent !important;
 }
+.btn-icon-size-sm svg {
+    width: 10px;
+    height: 10px;
+}
+.pagination.dashboard-pagination .page-item .page-link {
+    border: none !important;
+}
 /* responsive */
 @media (min-width: 1560px) {
     .container {

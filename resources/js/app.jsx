@@ -10,7 +10,6 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 // Import HelmetProvider
 import { HelmetProvider } from 'react-helmet-async';
-import { Helmet } from 'react-helmet-async';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

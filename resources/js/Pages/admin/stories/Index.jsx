@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Head, router } from '@inertiajs/react'
 import DashboardLayout from '../../../Layouts/DashboardLayout';
 import { Icons } from '../../../utils/icons';
+import Swal from 'sweetalert2';
 import {
   CButton,
   CCard,
@@ -18,11 +19,6 @@ import {
   CTableHeaderCell,
   CTableRow,
   CTooltip,
-  CModal,
-  CModalHeader,
-  CModalTitle,
-  CModalBody,
-  CModalFooter,
   CBadge,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
@@ -30,23 +26,25 @@ import CIcon from '@coreui/icons-react'
 // import { format } from 'date-fns'
 
 const Index = ({ stories }) => {
-  const [deleteModal, setDeleteModal] = useState(false)
-  const [storyToDelete, setStoryToDelete] = useState(null)
-
   const confirmDelete = (story) => {
-    setStoryToDelete(story)
-    setDeleteModal(true)
-  }
-
-  const handleDelete = () => {
-    if (storyToDelete) {
-      router.delete(route('admin-dashboard.stories.destroy', storyToDelete.id), {
-        onSuccess: () => {
-          setDeleteModal(false)
-          setStoryToDelete(null)
-        }
-      })
-    }
+    Swal.fire({
+      title: 'Confirm Delete',
+      html: `Are you sure you want to delete the story: <strong>${story.title}</strong>?<br><br>This action cannot be undone and will remove all associated comments and likes.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#fea257',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        confirmButton: 'swal2-confirm',
+        cancelButton: 'swal2-cancel'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.delete(route('admin-dashboard.stories.destroy', story.id))
+      }
+    })
   }
 
   return (
@@ -103,7 +101,7 @@ const Index = ({ stories }) => {
                           <div className="d-flex gap-2">
                             {[
                               <CTooltip key="view" content="View Story">
-                                <CButton className='btn-icon-size'
+                                <CButton className='btn-icon-size p-0'
                                   onClick={() => router.visit(route('admin-dashboard.stories.show', story.id))}
                                 >
                                   {/* <CIcon icon={cilEye} /> View */}
@@ -111,14 +109,14 @@ const Index = ({ stories }) => {
                                 </CButton>
                               </CTooltip>,
                               <CTooltip key="edit" content="Edit Story">
-                                <CButton className='btn-icon-size'
+                                <CButton className='btn-icon-size p-0'
                                   onClick={() => router.visit(route('admin-dashboard.stories.edit', story.id))}
                                 >
                                   <Icons.Edit />
                                 </CButton>
                               </CTooltip>,
                               <CTooltip key="delete" content="Delete Story">
-                                <CButton className='btn-icon-size'  
+                                <CButton className='btn-icon-size p-0'  
                                   onClick={() => confirmDelete(story)}
                                 >
                                   <Icons.Delete />
@@ -159,7 +157,7 @@ const Index = ({ stories }) => {
               </CTable>
 
               {stories.data.length > 0 && (
-                <CPagination align="center" className="mt-3">
+                <CPagination align="center" className="mt-3 dashboard-pagination">
                   {stories.links.map((link, index) => (
                     <CPaginationItem
                       key={index}
@@ -176,26 +174,6 @@ const Index = ({ stories }) => {
           </CCard>
         </CCol>
       </CRow>
-
-      {/* Delete Confirmation Modal */}
-      <CModal visible={deleteModal} onClose={() => setDeleteModal(false)}>
-        <CModalHeader onClose={() => setDeleteModal(false)}>
-          <CModalTitle>Confirm Delete</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          Are you sure you want to delete the story: <strong>{storyToDelete?.title}</strong>?
-          <br />
-          This action cannot be undone and will remove all associated comments and likes.
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setDeleteModal(false)}>
-            Cancel
-          </CButton>
-          <CButton className='primary-theme-color' onClick={handleDelete}>
-            Delete
-          </CButton>
-        </CModalFooter>
-      </CModal>
     </DashboardLayout>
   )
 }
