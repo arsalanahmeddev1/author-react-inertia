@@ -12,4 +12,6 @@ class UserDashboardController extends Controller
     {
         return Inertia::render('user/Dashboard');
     }
+
+    
 }

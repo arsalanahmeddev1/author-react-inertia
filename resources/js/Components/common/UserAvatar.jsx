@@ -63,9 +63,9 @@ const UserAvatar = ({ user, className = '' }) => {
 
           <div className="user-dropdown-divider"></div>
           {auth.user?.role === 'admin' && (
-            <Link href="/dashboard-new" className="user-dropdown-item">
+            <a href="/admin-dashboard" className="user-dropdown-item">
               <Icons.Dashboard /> <span className='pl-10'>Dashboard</span>
-            </Link>
+            </a>
           )}
           {auth.user?.role === 'user' && (
             <Link href="/user-dashboard" className="user-dropdown-item">

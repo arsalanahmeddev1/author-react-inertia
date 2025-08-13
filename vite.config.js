@@ -5,17 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [
-    laravel(
-      {
-        input: {
-          app: 'resources/js/app.jsx',
-          admin: 'resources/js/admin/DashboardNew.jsx',
-        },
-         refresh: true
-      }
-    ),
+    laravel({ input: 'resources/js/app.jsx', refresh: true }),
     tailwindcss(),
     react(),
   ],
-
 });
