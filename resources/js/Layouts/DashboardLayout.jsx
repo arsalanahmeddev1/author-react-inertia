@@ -1,5 +1,6 @@
 import React from 'react'
 import '../assets/admin/scss/style.scss';
+import '../assets/dashboard/css/dashboard.css';
 import { AppSidebar, AppFooter, AppHeader } from '../Components/admin/index'
 
 import { CContainer } from '@coreui/react';
