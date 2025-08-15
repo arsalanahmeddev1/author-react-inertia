@@ -28,6 +28,10 @@ class User extends Authenticatable
         'role',
         'is_active',
         'is_guest',
+        'stripe_id',
+        'pm_type',
+        'pm_last_four',
+        'trial_ends_at',
     ];
 
     /**

@@ -25,6 +25,7 @@ use App\Http\Controllers\StoriesController as MainStoriesController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\SubscriptionController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -106,7 +107,7 @@ Route::middleware('auth')->group(function () {
 // Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
 
 Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
-Route::post('/stripe/webhook', [StripeController::class, 'webhook']);
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
 
 
 Route::get('/billing', [StripeController::class, 'createCheckoutSession']);
@@ -162,5 +163,6 @@ Route::post('/chatgpt/send', [ChatbotController::class, 'send']);
 Route::get('/dashboard-new', function () {
     return Inertia::render('admin/DashboardNew');
 })->name('dashboardNew');
+
 
 require __DIR__ . '/auth.php';
