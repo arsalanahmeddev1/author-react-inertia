@@ -78,11 +78,13 @@ class StripeController extends Controller
 
         try {
             $event = \Stripe\Webhook::constructEvent(
-                $payload, $sig_header, $endpoint_secret
+                $payload,
+                $sig_header,
+                $endpoint_secret
             );
-        } catch(\UnexpectedValueException $e) {
+        } catch (\UnexpectedValueException $e) {
             return response()->json(['error' => 'Invalid payload'], 400);
-        } catch(\Stripe\Exception\SignatureVerificationException $e) {
+        } catch (\Stripe\Exception\SignatureVerificationException $e) {
             return response()->json(['error' => 'Invalid signature'], 400);
         }
 
@@ -126,6 +128,28 @@ class StripeController extends Controller
             'status' => $paymentIntent->status,
             'payment_method' => $paymentIntent->payment_method,
             'description' => $paymentIntent->metadata->description ?? 'Story Publishing Package',
+        ]);
+    }
+
+
+    public function createSubscriptionIntent(Request $request, Package $package)
+    {
+        // Set your Stripe Secret Key
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        // Create PaymentIntent for Subscription
+        $paymentIntent = PaymentIntent::create([
+            'amount' => $package->price_cents, // price in cents
+            'currency' => 'usd',
+            'metadata' => [
+                'user_id' => Auth::id(),
+                'description' => 'Subscription to ' . $package->name,
+            ],
+        ]);
+
+        // Return the client secret for front-end
+        return response()->json([
+            'clientSecret' => $paymentIntent->client_secret
         ]);
     }
 }

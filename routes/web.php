@@ -25,6 +25,7 @@ use App\Http\Controllers\StoriesController as MainStoriesController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\SubscriptionController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
@@ -33,6 +34,12 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::middleware('web')->group(function () {
     Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.redirect');
     Route::get('/auth/google/callback', [GoogleController::class, 'callback']);
+});
+
+
+Route::middleware('auth')->group(function () {
+    Route::post('/subscribe/{package}', [SubscriptionController::class, 'subscribe'])->name('subscribe');
+    Route::get('/subscription-success', [SubscriptionController::class, 'success'])->name('subscription.success');
 });
 
 // Route::get('/auth/facebook/redirect', [FacebookController::class, 'redirect'])->name('facebook.redirect');
@@ -100,6 +107,9 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
 Route::post('/stripe/webhook', [StripeController::class, 'webhook']);
+
+
+Route::get('/billing', [StripeController::class, 'createCheckoutSession']);
 
 // Route::get('/stories/publish/form', function () {
 //     return Inertia::render('Stories/Publish/Form');
