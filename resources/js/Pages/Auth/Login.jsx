@@ -20,7 +20,9 @@ export default function Login({ status, canResetPassword }) {
         post(route('login'), {
             onFinish: () => reset('password'),
             onSuccess: () => {
-                window.location.href = route('dashboard');
+                // Redirect to appropriate dashboard based on user role
+                // For now, redirect to home page since dashboard routes are prefixed
+                window.location.href = route('home');
             },
         });
     };

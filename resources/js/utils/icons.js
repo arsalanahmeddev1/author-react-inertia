@@ -1,5 +1,5 @@
 import { GrFormView } from "react-icons/gr";
-import { MdEdit, MdDelete  } from "react-icons/md";
+import { MdEdit, MdDelete, MdAdd } from "react-icons/md";
 import { FaHeart } from "react-icons/fa";
 import { FaComment } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa6";
@@ -19,7 +19,8 @@ import { FaUniversity } from "react-icons/fa";
 export const Icons = {
   View :GrFormView,
   Edit: MdEdit,
-  Delete: MdDelete ,
+  Delete: MdDelete,
+  Plus: MdAdd,
   Like: FaHeart ,
   Comment: FaComment ,
   ArrowLeft: FaArrowLeft,

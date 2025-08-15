@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import Layout from '@/Layouts/Layout';
 import { Head } from '@inertiajs/react';
 import { Icons } from '@/utils/icons';
-import { packagesData } from '@/utils/statics';
 import { useStripe, useElements, CardElement, Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from '@/Components/CheckoutForm';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
-const Packages = () => {
+const Packages = ({ packages = [] }) => {
   const [selectedPackageId, setSelectedPackageId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
@@ -28,7 +27,7 @@ const Packages = () => {
   const PaymentModal = () => {
     if (!showModal || !selectedPackageId) return null;
 
-    const selectedPackage = packagesData.find(pkg => pkg.id === selectedPackageId);
+    const selectedPackage = packages.find(pkg => pkg.id === selectedPackageId);
 
     const handleOverlayClick = (e) => {
       if (e.target === e.currentTarget) {
@@ -61,8 +60,11 @@ const Packages = () => {
           <div className="modal-body" style={modalBodyStyle}>
             {/* Package Summary */}
             <div className="package-summary" style={packageSummaryStyle}>
-              <h4>{selectedPackage?.title}</h4>
-              <p className="price">{selectedPackage?.price} {selectedPackage?.monthlyAnualy && `/ ${selectedPackage.monthlyAnualy}`}</p>
+              <h4>{selectedPackage?.name}</h4>
+              <p className="price">
+                {selectedPackage?.price_cents ? `$${(selectedPackage.price_cents / 100).toFixed(2)}` : 'Free'}
+                {selectedPackage?.interval && ` / ${selectedPackage.interval}`}
+              </p>
             </div>
 
             {/* Payment Method Selection */}
@@ -173,6 +175,54 @@ const Packages = () => {
     );
   };
 
+  // Transform database packages to match the expected format
+  const transformedPackages = (packages || []).map((pkg, index) => {
+    // Determine badge based on price
+    let badge = "Free";
+    if (pkg.price_cents > 0) {
+      if (pkg.price_cents >= 1900) badge = "Pro";
+      else if (pkg.price_cents >= 3800) badge = "Premium";
+      else badge = "Standard";
+    }
+
+    // Create features array from database features
+    const features = pkg.features && Array.isArray(pkg.features) ? pkg.features.map(feature => ({
+      text: feature,
+      isNegative: false
+    })) : [];
+
+    // Add default features if none exist
+    if (features.length === 0) {
+      if (pkg.price_cents === 0) {
+        features.push(
+          { text: "Can read all published stories.", isNegative: false },
+          { text: "Cannot write, publish, or contribute to stories.", isNegative: true },
+          { text: "Cannot read community stories", isNegative: true },
+          { text: "Do not need to login login as a guest account", isNegative: false }
+        );
+      } else {
+        features.push(
+          { text: "Premium features included", isNegative: false },
+          { text: "Full access to all stories", isNegative: false },
+          { text: "Community story access", isNegative: false }
+        );
+      }
+    }
+
+    return {
+      id: pkg.id,
+      badge: badge,
+      title: pkg.name,
+      price: pkg.price_cents ? `$${(pkg.price_cents / 100).toFixed(2)}` : "$0",
+      monthlyAnualy: pkg.interval || null,
+      icon: "Premium",
+      features: features,
+      ctaText: "Get Started Now",
+      ctaLink: "/register",
+      isPopular: index === 1 || index === 2 // Make 2nd and 3rd packages popular
+    };
+  });
+
   return (
     <Layout headerClass="inner-header">
       <Head title="Packages" />
@@ -231,63 +281,69 @@ const Packages = () => {
       <section className='sec-bg pb-100'>
         <div className="container">
           <div className="row row-gap-20 justify-content-center">
-            {packagesData.map((packageItem) => (
-              <div key={packageItem.id} className="col-md-4">
-                <div className="publish-card package-card">
-                  {/* Package Badge */}
-                  <div className="package-badge">
-                    {packageItem.badge}
-                  </div>
+            {transformedPackages.length > 0 ? (
+              transformedPackages.map((packageItem) => (
+                <div key={packageItem.id} className="col-md-4">
+                  <div className="publish-card package-card">
+                    {/* Package Badge */}
+                    <div className="package-badge">
+                      {packageItem.badge}
+                    </div>
 
-                  {/* Package Icon */}
-                  <div className='package-icon'>
-                    <Icons.Premium className='fs-30 text-white' />
-                  </div>
+                    {/* Package Icon */}
+                    <div className='package-icon'>
+                      <Icons.Premium className='fs-30 text-white' />
+                    </div>
 
-                  {/* Package Title */}
-                  <h2 className="hd-md mb-20 package-title">
-                    {packageItem.title}
-                  </h2>
+                    {/* Package Title */}
+                    <h2 className="hd-md mb-20 package-title">
+                      {packageItem.title}
+                    </h2>
 
-                  {/* Price */}
-                  <div className="mb-30">
-                    <span className="package-price">{packageItem.price} {packageItem.monthlyAnualy ? <span className='monthly-anualy'>/ {packageItem.monthlyAnualy}</span> : ''}</span>
-                  </div>
+                    {/* Price */}
+                    <div className="mb-30">
+                      <span className="package-price">{packageItem.price} {packageItem.monthlyAnualy ? <span className='monthly-anualy'>/ {packageItem.monthlyAnualy}</span> : ''}</span>
+                    </div>
 
-                  {/* Features List */}
-                  <div className="mb-40 package-features">
-                    {packageItem.features.map((feature, index) => (
-                      <div key={index} className="package-feature-item">
-                        <div className={`feature-check-icon ${feature.isNegative ? 'feature-cross-icon' : ''}`}>
-                          {feature.isNegative ? (
-                            <Icons.Cross className="text-white" />
-                          ) : (
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
-                              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                            </svg>
-                          )}
+                    {/* Features List */}
+                    <div className="mb-40 package-features">
+                      {packageItem.features.map((feature, index) => (
+                        <div key={index} className="package-feature-item">
+                          <div className={`feature-check-icon ${feature.isNegative ? 'feature-cross-icon' : ''}`}>
+                            {feature.isNegative ? (
+                              <Icons.Cross className="text-white" />
+                            ) : (
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                              </svg>
+                            )}
+                          </div>
+                          <span className="para-mid feature-text">
+                            {feature.text}
+                          </span>
                         </div>
-                        <span className="para-mid feature-text">
-                          {feature.text}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
 
-                  {/* CTA Button */}
-                  <div className="d-grid">
-                    <button
-                      className="btn btn-primary btn-lg package-cta-button"
-                      onClick={() => handleGetStarted(packageItem.id)}
-                    >
-                      {packageItem.ctaText}
-                    </button>
-                  </div>
+                    {/* CTA Button */}
+                    <div className="d-grid">
+                      <button
+                        className="btn btn-primary btn-lg package-cta-button"
+                        onClick={() => handleGetStarted(packageItem.id)}
+                      >
+                        {packageItem.ctaText}
+                      </button>
+                    </div>
 
-                  {/* Money Back Guarantee */}
+                    {/* Money Back Guarantee */}
+                  </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-12 text-center">
+                <p className="fs-20 text-muted">No packages available at the moment.</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>

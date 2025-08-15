@@ -27,6 +27,7 @@ use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\Admin\PackagesController as AdminPackagesController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
@@ -144,6 +145,7 @@ Route::prefix('admin-dashboard')->name('admin-dashboard.')->middleware(['auth', 
 
     Route::resource('users', UserController::class);
     Route::resource('stories', \App\Http\Controllers\Admin\StoriesController::class);
+    Route::resource('packages', \App\Http\Controllers\Admin\PackagesController::class);
     Route::get('community/stories', [AdminStoriesController::class, 'communityStories'])->name('stories.community');
 
 
@@ -170,7 +172,8 @@ Route::get('/about', function () {
 })->name('about');
 
 Route::get('/packages', function () {
-    return Inertia::render('Packages');
+    $packages = \App\Models\Package::where('is_active', true)->get();
+    return Inertia::render('Packages', ['packages' => $packages]);
 })->name('packages');
 Route::post('/chatgpt/send', [ChatbotController::class, 'send']);
 
