@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 14, 2025 at 02:05 AM
+-- Generation Time: Aug 15, 2025 at 02:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -231,7 +231,39 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (37, '2025_06_16_183634_add_is_active_to_users_table', 28),
 (38, '2025_07_28_223018_create_publish_request_table', 29),
 (40, '2025_07_29_154046_add_cover_image_column_in_to_the_publish_request_table', 30),
-(41, '2025_07_29_182128_create_payments_table', 31);
+(41, '2025_07_29_182128_create_payments_table', 31),
+(42, '2025_08_14_212449_create_customer_columns', 32),
+(43, '2025_08_14_212450_create_subscriptions_table', 32),
+(44, '2025_08_14_212451_create_subscription_items_table', 32),
+(46, '2025_08_14_214309_create_packages_table', 33),
+(47, '2025_08_14_223726_rename_price_to_price_cents_in_packages_table', 34);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `packages`
+--
+
+CREATE TABLE `packages` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `price_cents` int(11) NOT NULL DEFAULT 0,
+  `interval` enum('monthly','yearly') DEFAULT NULL,
+  `features` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`features`)),
+  `stripe_price_id` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `packages`
+--
+
+INSERT INTO `packages` (`id`, `name`, `price_cents`, `interval`, `features`, `stripe_price_id`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'Basic', 0, NULL, '{\"can_write\":false,\"daily_words\":0,\"monthly_submissions\":0,\"can_read_community\":false}', NULL, 1, '2025-08-14 17:11:52', '2025-08-14 17:11:52'),
+(2, 'Basic', 0, NULL, '{\"can_write\":false,\"daily_words\":0,\"monthly_submissions\":0,\"can_read_community\":false}', NULL, 1, '2025-08-14 17:39:43', '2025-08-14 17:39:43'),
+(3, 'Basic', 0, NULL, '{\"can_write\":false,\"daily_words\":0,\"monthly_submissions\":0,\"can_read_community\":false}', 'price_1Rw9aURpT4YVvGC7Wh2RxKQv', 1, '2025-08-14 19:53:57', '2025-08-14 19:53:57');
 
 -- --------------------------------------------------------
 
@@ -335,9 +367,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('dmUtFr2BUDb8gaSSfr49zcCiE9d8az4dzSLZ6zoK', 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiYmJ1ZVVrZmh2VW4wY3BoMklqREhHSWhCN3NlRzlmcEtmcTduVmxySSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mjc7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fX0=', 1755129107),
-('iEfcDfr0O04naTrhMqOETJdmbHsOgPxfEZNAEsLX', 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiR21iaFJXUHBCSTRNT2hrM256UmtGcTJRRUxReFVuaWxVT0RQaEVFMyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjIxOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToyNzt9', 1755127677),
-('VjXsxbSeEB15ksM1wrbicPB3Oe7641vQo7ojEQXq', 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoia1d6cmVRakhGRkJrVlJXbmJiRk0ydG5leVBoZjdIemJ3S1R5UWppWSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI3O30=', 1755129131);
+('W2r19BvEo6UOLsXBxhPF3akZDgnDzg4JLQTRcMqL', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiMHdsR0xad3V6ajdOQ1RySVNhaXdpZTFkVXNCUE01WElUdEZxOFV3bSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9sb2dpbiI7fXM6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wYWNrYWdlcyI7fX0=', 1755219268);
 
 -- --------------------------------------------------------
 
@@ -514,6 +544,43 @@ INSERT INTO `story_reads` (`id`, `story_id`, `user_id`, `ip_address`, `user_agen
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `subscriptions`
+--
+
+CREATE TABLE `subscriptions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `stripe_id` varchar(255) NOT NULL,
+  `stripe_status` varchar(255) NOT NULL,
+  `stripe_price` varchar(255) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `trial_ends_at` timestamp NULL DEFAULT NULL,
+  `ends_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subscription_items`
+--
+
+CREATE TABLE `subscription_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `subscription_id` bigint(20) UNSIGNED NOT NULL,
+  `stripe_id` varchar(255) NOT NULL,
+  `stripe_product` varchar(255) NOT NULL,
+  `stripe_price` varchar(255) NOT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -530,23 +597,27 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `is_admin` tinyint(1) NOT NULL DEFAULT 0,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `stripe_id` varchar(255) DEFAULT NULL,
+  `pm_type` varchar(255) DEFAULT NULL,
+  `pm_last_four` varchar(4) DEFAULT NULL,
+  `trial_ends_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `user_group`, `name`, `email`, `role`, `email_verified_at`, `password`, `remember_token`, `is_guest`, `created_at`, `updated_at`, `is_admin`, `is_active`) VALUES
-(24, '1', 'web engineer', 'webengineer009@gmail.com', 'user', NULL, '$2y$12$ijCNqIUeZFinK6gRrUtzK.GgXYszrmQVDAe6rSzJMPK1bXYteBQ6O', NULL, 0, '2025-05-09 13:50:06', '2025-05-09 13:50:06', 0, 1),
-(26, '1', 'oscar steve', 'oscarsteve@gmail.com', 'user', NULL, '$2y$12$VG9mrYIxc.i1bOT81AlVS./Dw..kuWti9adOjwlVkdswQJ.DUjR0O', NULL, 0, '2025-05-15 14:44:42', '2025-05-15 14:44:42', 0, 1),
-(27, '1', 'admin', 'admin@gmail.com', 'admin', NULL, '$2y$12$1HgUvn14PrpX.HVuCvk1UOrxuOTig6dK/P6XVNx9AXBC7vwjyz42y', NULL, 0, '2025-05-16 12:58:07', '2025-05-16 12:58:07', 1, 1),
-(30, '2', 'newuser', 'user@gmail.com', 'user', NULL, '$2y$12$1HgUvn14PrpX.HVuCvk1UOrxuOTig6dK/P6XVNx9AXBC7vwjyz42y', NULL, 0, '2025-06-05 18:21:28', '2025-06-05 18:21:28', 0, 1),
-(31, '1', 'mark herry', 'markherry321@gmail.com', 'user', NULL, '$2y$12$oyMOPQ06y9G11X8DxY8QFuunNI6bl7SecKdvSKoTKco4SiHEUowhW', NULL, 0, '2025-06-06 12:24:06', '2025-06-06 12:24:06', 0, 1),
-(32, '1', 'Astra Lambert', 'astra@gmail.com', 'user', NULL, '$2y$12$mUK8pb0xQfXO7p8hoOo3t.pt0j35PUFsXvVOpaXJFmU5j5sxYxjK.', NULL, 0, '2025-06-06 12:27:56', '2025-06-06 12:27:56', 0, 1),
-(33, '2', 'Sonya Kelley', 'sonya@gmail.com', 'user', NULL, '$2y$12$Rt7slJqWJBoIognybIjfBefaQxb5GFTgenFnq7rQt/kuh9.v14cu6', NULL, 0, '2025-06-06 12:36:07', '2025-06-06 12:36:07', 0, 1),
-(37, '2', 'newuser', 'newuser1@gmail.com', 'user', NULL, '$2y$12$MS9fQno5uCrivkvqgSR7zuSb3lT61GK4mt6hZUGqclvQtg9708htu', NULL, 0, '2025-07-24 18:08:11', '2025-07-24 18:08:11', 0, 1),
-(41, '2', 'newuser2', 'newuser2@gmail.com', 'user', NULL, '$2y$12$ICAHjyYzRbM2zBYNWZ2i3OsRZPCn8mSivuvj4JtIo2zAgk/x.WQF2', NULL, 0, '2025-07-30 11:30:32', '2025-07-30 11:30:32', 0, 1);
+INSERT INTO `users` (`id`, `user_group`, `name`, `email`, `role`, `email_verified_at`, `password`, `remember_token`, `is_guest`, `created_at`, `updated_at`, `is_admin`, `is_active`, `stripe_id`, `pm_type`, `pm_last_four`, `trial_ends_at`) VALUES
+(24, '1', 'web engineer', 'webengineer009@gmail.com', 'user', NULL, '$2y$12$ijCNqIUeZFinK6gRrUtzK.GgXYszrmQVDAe6rSzJMPK1bXYteBQ6O', NULL, 0, '2025-05-09 13:50:06', '2025-05-09 13:50:06', 0, 1, NULL, NULL, NULL, NULL),
+(26, '1', 'oscar steve', 'oscarsteve@gmail.com', 'user', NULL, '$2y$12$VG9mrYIxc.i1bOT81AlVS./Dw..kuWti9adOjwlVkdswQJ.DUjR0O', NULL, 0, '2025-05-15 14:44:42', '2025-05-15 14:44:42', 0, 1, NULL, NULL, NULL, NULL),
+(27, '1', 'admin', 'admin@gmail.com', 'admin', NULL, '$2y$12$1HgUvn14PrpX.HVuCvk1UOrxuOTig6dK/P6XVNx9AXBC7vwjyz42y', NULL, 0, '2025-05-16 12:58:07', '2025-05-16 12:58:07', 1, 1, NULL, NULL, NULL, NULL),
+(30, '2', 'newuser', 'user@gmail.com', 'user', NULL, '$2y$12$1HgUvn14PrpX.HVuCvk1UOrxuOTig6dK/P6XVNx9AXBC7vwjyz42y', NULL, 0, '2025-06-05 18:21:28', '2025-06-05 18:21:28', 0, 1, NULL, NULL, NULL, NULL),
+(31, '1', 'mark herry', 'markherry321@gmail.com', 'user', NULL, '$2y$12$oyMOPQ06y9G11X8DxY8QFuunNI6bl7SecKdvSKoTKco4SiHEUowhW', NULL, 0, '2025-06-06 12:24:06', '2025-06-06 12:24:06', 0, 1, NULL, NULL, NULL, NULL),
+(32, '1', 'Astra Lambert', 'astra@gmail.com', 'user', NULL, '$2y$12$mUK8pb0xQfXO7p8hoOo3t.pt0j35PUFsXvVOpaXJFmU5j5sxYxjK.', NULL, 0, '2025-06-06 12:27:56', '2025-06-06 12:27:56', 0, 1, NULL, NULL, NULL, NULL),
+(33, '2', 'Sonya Kelley', 'sonya@gmail.com', 'user', NULL, '$2y$12$Rt7slJqWJBoIognybIjfBefaQxb5GFTgenFnq7rQt/kuh9.v14cu6', NULL, 0, '2025-06-06 12:36:07', '2025-06-06 12:36:07', 0, 1, NULL, NULL, NULL, NULL),
+(37, '2', 'newuser', 'newuser1@gmail.com', 'user', NULL, '$2y$12$MS9fQno5uCrivkvqgSR7zuSb3lT61GK4mt6hZUGqclvQtg9708htu', NULL, 0, '2025-07-24 18:08:11', '2025-07-24 18:08:11', 0, 1, NULL, NULL, NULL, NULL),
+(41, '2', 'newuser2', 'newuser2@gmail.com', 'user', NULL, '$2y$12$ICAHjyYzRbM2zBYNWZ2i3OsRZPCn8mSivuvj4JtIo2zAgk/x.WQF2', NULL, 0, '2025-07-30 11:30:32', '2025-07-30 11:30:32', 0, 1, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -7383,7 +7454,162 @@ INSERT INTO `visits` (`id`, `user_id`, `ip_address`, `user_agent`, `url`, `visit
 (6778, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-13 18:51:50', '2025-08-13 18:51:50', '2025-08-13 18:51:50'),
 (6779, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-13 18:51:53', '2025-08-13 18:51:53', '2025-08-13 18:51:53'),
 (6780, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-13 18:52:10', '2025-08-13 18:52:10', '2025-08-13 18:52:10'),
-(6781, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-13 18:52:11', '2025-08-13 18:52:11', '2025-08-13 18:52:11');
+(6781, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-13 18:52:11', '2025-08-13 18:52:11', '2025-08-13 18:52:11'),
+(6782, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 11:27:01', '2025-08-14 11:27:01', '2025-08-14 11:27:01'),
+(6783, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 11:27:07', '2025-08-14 11:27:07', '2025-08-14 11:27:07'),
+(6784, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 11:28:26', '2025-08-14 11:28:26', '2025-08-14 11:28:26'),
+(6785, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 11:28:26', '2025-08-14 11:28:26', '2025-08-14 11:28:26'),
+(6786, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 12:20:12', '2025-08-14 12:20:12', '2025-08-14 12:20:12'),
+(6787, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 12:20:26', '2025-08-14 12:20:26', '2025-08-14 12:20:26'),
+(6788, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:20:27', '2025-08-14 12:20:27', '2025-08-14 12:20:27'),
+(6789, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:20:42', '2025-08-14 12:20:42', '2025-08-14 12:20:42'),
+(6790, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:20:44', '2025-08-14 12:20:44', '2025-08-14 12:20:44'),
+(6791, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:34', '2025-08-14 12:21:34', '2025-08-14 12:21:34'),
+(6792, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:37', '2025-08-14 12:21:37', '2025-08-14 12:21:37'),
+(6793, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:37', '2025-08-14 12:21:37', '2025-08-14 12:21:37'),
+(6794, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:37', '2025-08-14 12:21:37', '2025-08-14 12:21:37'),
+(6795, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:38', '2025-08-14 12:21:38', '2025-08-14 12:21:38'),
+(6796, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:38', '2025-08-14 12:21:38', '2025-08-14 12:21:38'),
+(6797, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:39', '2025-08-14 12:21:39', '2025-08-14 12:21:39'),
+(6798, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:39', '2025-08-14 12:21:39', '2025-08-14 12:21:39'),
+(6799, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:40', '2025-08-14 12:21:40', '2025-08-14 12:21:40'),
+(6800, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:40', '2025-08-14 12:21:40', '2025-08-14 12:21:40'),
+(6801, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:40', '2025-08-14 12:21:40', '2025-08-14 12:21:40'),
+(6802, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:41', '2025-08-14 12:21:41', '2025-08-14 12:21:41'),
+(6803, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:41', '2025-08-14 12:21:41', '2025-08-14 12:21:41'),
+(6804, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:42', '2025-08-14 12:21:42', '2025-08-14 12:21:42'),
+(6805, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:44', '2025-08-14 12:21:44', '2025-08-14 12:21:44'),
+(6806, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:44', '2025-08-14 12:21:44', '2025-08-14 12:21:44'),
+(6807, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:44', '2025-08-14 12:21:44', '2025-08-14 12:21:44'),
+(6808, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:45', '2025-08-14 12:21:45', '2025-08-14 12:21:45'),
+(6809, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:45', '2025-08-14 12:21:45', '2025-08-14 12:21:45'),
+(6810, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:46', '2025-08-14 12:21:46', '2025-08-14 12:21:46'),
+(6811, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:47', '2025-08-14 12:21:47', '2025-08-14 12:21:47'),
+(6812, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:21:54', '2025-08-14 12:21:54', '2025-08-14 12:21:54'),
+(6813, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:22:10', '2025-08-14 12:22:10', '2025-08-14 12:22:10'),
+(6814, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/publish', '2025-08-14 12:22:36', '2025-08-14 12:22:36', '2025-08-14 12:22:36'),
+(6815, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:23:44', '2025-08-14 12:23:44', '2025-08-14 12:23:44'),
+(6816, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:25:18', '2025-08-14 12:25:18', '2025-08-14 12:25:18'),
+(6817, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:27:32', '2025-08-14 12:27:32', '2025-08-14 12:27:32'),
+(6818, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:27:33', '2025-08-14 12:27:33', '2025-08-14 12:27:33'),
+(6819, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:27:36', '2025-08-14 12:27:36', '2025-08-14 12:27:36'),
+(6820, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:28:30', '2025-08-14 12:28:30', '2025-08-14 12:28:30'),
+(6821, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:28:51', '2025-08-14 12:28:51', '2025-08-14 12:28:51'),
+(6822, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:50:16', '2025-08-14 12:50:16', '2025-08-14 12:50:16'),
+(6823, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:50:20', '2025-08-14 12:50:20', '2025-08-14 12:50:20'),
+(6824, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 12:50:24', '2025-08-14 12:50:24', '2025-08-14 12:50:24'),
+(6825, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 12:50:37', '2025-08-14 12:50:37', '2025-08-14 12:50:37'),
+(6826, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 12:50:38', '2025-08-14 12:50:38', '2025-08-14 12:50:38'),
+(6827, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 14:15:34', '2025-08-14 14:15:34', '2025-08-14 14:15:34'),
+(6828, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/about', '2025-08-14 14:15:54', '2025-08-14 14:15:54', '2025-08-14 14:15:54'),
+(6829, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/publish', '2025-08-14 14:15:56', '2025-08-14 14:15:56', '2025-08-14 14:15:56'),
+(6830, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/community', '2025-08-14 14:15:58', '2025-08-14 14:15:58', '2025-08-14 14:15:58'),
+(6831, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/59/likes', '2025-08-14 14:15:58', '2025-08-14 14:15:58', '2025-08-14 14:15:58'),
+(6832, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/58/likes', '2025-08-14 14:15:59', '2025-08-14 14:15:59', '2025-08-14 14:15:59'),
+(6833, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/57/likes', '2025-08-14 14:15:59', '2025-08-14 14:15:59', '2025-08-14 14:15:59'),
+(6834, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/54/likes', '2025-08-14 14:15:59', '2025-08-14 14:15:59', '2025-08-14 14:15:59'),
+(6835, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/53/likes', '2025-08-14 14:15:59', '2025-08-14 14:15:59', '2025-08-14 14:15:59'),
+(6836, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/52/likes', '2025-08-14 14:16:00', '2025-08-14 14:16:00', '2025-08-14 14:16:00'),
+(6837, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 14:16:00', '2025-08-14 14:16:00', '2025-08-14 14:16:00'),
+(6838, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 15:04:00', '2025-08-14 15:04:00', '2025-08-14 15:04:00'),
+(6839, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 15:09:10', '2025-08-14 15:09:10', '2025-08-14 15:09:10'),
+(6840, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 15:09:15', '2025-08-14 15:09:15', '2025-08-14 15:09:15'),
+(6841, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 15:09:19', '2025-08-14 15:09:19', '2025-08-14 15:09:19'),
+(6842, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 15:20:17', '2025-08-14 15:20:17', '2025-08-14 15:20:17'),
+(6843, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 15:20:41', '2025-08-14 15:20:41', '2025-08-14 15:20:41'),
+(6844, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 15:20:46', '2025-08-14 15:20:46', '2025-08-14 15:20:46'),
+(6845, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 15:20:51', '2025-08-14 15:20:51', '2025-08-14 15:20:51'),
+(6846, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 15:21:09', '2025-08-14 15:21:09', '2025-08-14 15:21:09'),
+(6847, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 15:21:17', '2025-08-14 15:21:17', '2025-08-14 15:21:17'),
+(6848, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 15:21:26', '2025-08-14 15:21:26', '2025-08-14 15:21:26'),
+(6849, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 15:21:26', '2025-08-14 15:21:26', '2025-08-14 15:21:26'),
+(6850, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories', '2025-08-14 15:55:39', '2025-08-14 15:55:39', '2025-08-14 15:55:39'),
+(6851, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/47/likes', '2025-08-14 15:55:39', '2025-08-14 15:55:39', '2025-08-14 15:55:39'),
+(6852, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 16:15:35', '2025-08-14 16:15:35', '2025-08-14 16:15:35'),
+(6853, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/publish', '2025-08-14 16:15:38', '2025-08-14 16:15:38', '2025-08-14 16:15:38'),
+(6854, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/publish', '2025-08-14 16:45:12', '2025-08-14 16:45:12', '2025-08-14 16:45:12'),
+(6855, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/about', '2025-08-14 16:45:20', '2025-08-14 16:45:20', '2025-08-14 16:45:20'),
+(6856, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 16:45:23', '2025-08-14 16:45:23', '2025-08-14 16:45:23'),
+(6857, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories', '2025-08-14 16:45:36', '2025-08-14 16:45:36', '2025-08-14 16:45:36'),
+(6858, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/47/likes', '2025-08-14 16:45:37', '2025-08-14 16:45:37', '2025-08-14 16:45:37'),
+(6859, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 16:45:38', '2025-08-14 16:45:38', '2025-08-14 16:45:38'),
+(6860, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 16:45:44', '2025-08-14 16:45:44', '2025-08-14 16:45:44'),
+(6861, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories', '2025-08-14 16:45:46', '2025-08-14 16:45:46', '2025-08-14 16:45:46'),
+(6862, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/47/likes', '2025-08-14 16:45:47', '2025-08-14 16:45:47', '2025-08-14 16:45:47'),
+(6863, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories', '2025-08-14 16:45:51', '2025-08-14 16:45:51', '2025-08-14 16:45:51'),
+(6864, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/47/likes', '2025-08-14 16:45:52', '2025-08-14 16:45:52', '2025-08-14 16:45:52'),
+(6865, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 16:45:59', '2025-08-14 16:45:59', '2025-08-14 16:45:59'),
+(6866, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 16:46:13', '2025-08-14 16:46:13', '2025-08-14 16:46:13'),
+(6867, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 16:46:32', '2025-08-14 16:46:32', '2025-08-14 16:46:32'),
+(6868, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories', '2025-08-14 16:46:44', '2025-08-14 16:46:44', '2025-08-14 16:46:44'),
+(6869, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/47/likes', '2025-08-14 16:46:44', '2025-08-14 16:46:44', '2025-08-14 16:46:44'),
+(6870, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories?page=1', '2025-08-14 16:46:49', '2025-08-14 16:46:49', '2025-08-14 16:46:49'),
+(6871, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/47/likes', '2025-08-14 16:46:50', '2025-08-14 16:46:50', '2025-08-14 16:46:50'),
+(6872, 27, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories?page=1', '2025-08-14 16:47:26', '2025-08-14 16:47:26', '2025-08-14 16:47:26'),
+(6873, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 17:00:10', '2025-08-14 17:00:10', '2025-08-14 17:00:10'),
+(6874, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 17:45:41', '2025-08-14 17:45:41', '2025-08-14 17:45:41'),
+(6875, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 17:45:41', '2025-08-14 17:45:41', '2025-08-14 17:45:41'),
+(6876, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 17:45:41', '2025-08-14 17:45:41', '2025-08-14 17:45:41'),
+(6877, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 18:52:05', '2025-08-14 18:52:05', '2025-08-14 18:52:05'),
+(6878, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories', '2025-08-14 18:54:16', '2025-08-14 18:54:16', '2025-08-14 18:54:16'),
+(6879, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stories/47/likes', '2025-08-14 18:54:17', '2025-08-14 18:54:17', '2025-08-14 18:54:17'),
+(6880, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 18:54:18', '2025-08-14 18:54:18', '2025-08-14 18:54:18'),
+(6881, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 18:54:21', '2025-08-14 18:54:21', '2025-08-14 18:54:21'),
+(6882, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 18:55:11', '2025-08-14 18:55:11', '2025-08-14 18:55:11'),
+(6883, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 18:55:21', '2025-08-14 18:55:21', '2025-08-14 18:55:21'),
+(6884, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 18:55:22', '2025-08-14 18:55:22', '2025-08-14 18:55:22'),
+(6885, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 18:55:22', '2025-08-14 18:55:22', '2025-08-14 18:55:22'),
+(6886, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:02:44', '2025-08-14 19:02:44', '2025-08-14 19:02:44');
+INSERT INTO `visits` (`id`, `user_id`, `ip_address`, `user_agent`, `url`, `visited_at`, `created_at`, `updated_at`) VALUES
+(6887, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:03:14', '2025-08-14 19:03:14', '2025-08-14 19:03:14'),
+(6888, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:04:04', '2025-08-14 19:04:04', '2025-08-14 19:04:04'),
+(6889, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:04:29', '2025-08-14 19:04:29', '2025-08-14 19:04:29'),
+(6890, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:04:55', '2025-08-14 19:04:55', '2025-08-14 19:04:55'),
+(6891, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:05:31', '2025-08-14 19:05:31', '2025-08-14 19:05:31'),
+(6892, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stripe/payment-intent', '2025-08-14 19:06:00', '2025-08-14 19:06:00', '2025-08-14 19:06:00'),
+(6893, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:06:06', '2025-08-14 19:06:06', '2025-08-14 19:06:06'),
+(6894, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stripe/payment-intent', '2025-08-14 19:06:09', '2025-08-14 19:06:09', '2025-08-14 19:06:09'),
+(6895, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:08:15', '2025-08-14 19:08:15', '2025-08-14 19:08:15'),
+(6896, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/stripe/payment-intent', '2025-08-14 19:08:18', '2025-08-14 19:08:18', '2025-08-14 19:08:18'),
+(6897, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:23:47', '2025-08-14 19:23:47', '2025-08-14 19:23:47'),
+(6898, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:23:47', '2025-08-14 19:23:47', '2025-08-14 19:23:47'),
+(6899, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:23:48', '2025-08-14 19:23:48', '2025-08-14 19:23:48'),
+(6900, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:23:57', '2025-08-14 19:23:57', '2025-08-14 19:23:57'),
+(6901, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:23:58', '2025-08-14 19:23:58', '2025-08-14 19:23:58'),
+(6902, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:23:59', '2025-08-14 19:23:59', '2025-08-14 19:23:59'),
+(6903, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:23:59', '2025-08-14 19:23:59', '2025-08-14 19:23:59'),
+(6904, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:24:15', '2025-08-14 19:24:15', '2025-08-14 19:24:15'),
+(6905, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:24:15', '2025-08-14 19:24:15', '2025-08-14 19:24:15'),
+(6906, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:24:16', '2025-08-14 19:24:16', '2025-08-14 19:24:16'),
+(6907, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:26:06', '2025-08-14 19:26:06', '2025-08-14 19:26:06'),
+(6908, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:27:59', '2025-08-14 19:27:59', '2025-08-14 19:27:59'),
+(6909, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:28:28', '2025-08-14 19:28:28', '2025-08-14 19:28:28'),
+(6910, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:28:34', '2025-08-14 19:28:34', '2025-08-14 19:28:34'),
+(6911, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:28:41', '2025-08-14 19:28:41', '2025-08-14 19:28:41'),
+(6912, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/subscribe/2', '2025-08-14 19:28:55', '2025-08-14 19:28:55', '2025-08-14 19:28:55'),
+(6913, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/subscribe/2', '2025-08-14 19:29:04', '2025-08-14 19:29:04', '2025-08-14 19:29:04'),
+(6914, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:34:43', '2025-08-14 19:34:43', '2025-08-14 19:34:43'),
+(6915, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/subscribe/2', '2025-08-14 19:35:03', '2025-08-14 19:35:03', '2025-08-14 19:35:03'),
+(6916, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:35:34', '2025-08-14 19:35:34', '2025-08-14 19:35:34'),
+(6917, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:40:41', '2025-08-14 19:40:41', '2025-08-14 19:40:41'),
+(6918, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:40:42', '2025-08-14 19:40:42', '2025-08-14 19:40:42'),
+(6919, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:40:42', '2025-08-14 19:40:42', '2025-08-14 19:40:42'),
+(6920, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:41:09', '2025-08-14 19:41:09', '2025-08-14 19:41:09'),
+(6921, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:41:10', '2025-08-14 19:41:10', '2025-08-14 19:41:10'),
+(6922, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:41:11', '2025-08-14 19:41:11', '2025-08-14 19:41:11'),
+(6923, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/billing', '2025-08-14 19:41:14', '2025-08-14 19:41:14', '2025-08-14 19:41:14'),
+(6924, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/subscribe/2', '2025-08-14 19:41:25', '2025-08-14 19:41:25', '2025-08-14 19:41:25'),
+(6925, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/billing', '2025-08-14 19:43:32', '2025-08-14 19:43:32', '2025-08-14 19:43:32'),
+(6926, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/billing', '2025-08-14 19:43:44', '2025-08-14 19:43:44', '2025-08-14 19:43:44'),
+(6927, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:43:58', '2025-08-14 19:43:58', '2025-08-14 19:43:58'),
+(6928, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/billing', '2025-08-14 19:44:03', '2025-08-14 19:44:03', '2025-08-14 19:44:03'),
+(6929, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/subscribe/2', '2025-08-14 19:44:10', '2025-08-14 19:44:10', '2025-08-14 19:44:10'),
+(6930, 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/logout', '2025-08-14 19:45:53', '2025-08-14 19:45:53', '2025-08-14 19:45:53'),
+(6931, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000', '2025-08-14 19:45:53', '2025-08-14 19:45:53', '2025-08-14 19:45:53'),
+(6932, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/register', '2025-08-14 19:45:56', '2025-08-14 19:45:56', '2025-08-14 19:45:56'),
+(6933, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/packages', '2025-08-14 19:54:12', '2025-08-14 19:54:12', '2025-08-14 19:54:12'),
+(6934, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/billing', '2025-08-14 19:54:16', '2025-08-14 19:54:16', '2025-08-14 19:54:16'),
+(6935, NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'http://localhost:8000/login', '2025-08-14 19:54:28', '2025-08-14 19:54:28', '2025-08-14 19:54:28');
 
 -- --------------------------------------------------------
 
@@ -7468,6 +7694,12 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `packages`
+--
+ALTER TABLE `packages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `password_reset_tokens`
 --
 ALTER TABLE `password_reset_tokens`
@@ -7540,11 +7772,28 @@ ALTER TABLE `story_reads`
   ADD KEY `story_reads_user_id_foreign` (`user_id`);
 
 --
+-- Indexes for table `subscriptions`
+--
+ALTER TABLE `subscriptions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `subscriptions_stripe_id_unique` (`stripe_id`),
+  ADD KEY `subscriptions_user_id_stripe_status_index` (`user_id`,`stripe_status`);
+
+--
+-- Indexes for table `subscription_items`
+--
+ALTER TABLE `subscription_items`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `subscription_items_stripe_id_unique` (`stripe_id`),
+  ADD KEY `subscription_items_subscription_id_stripe_price_index` (`subscription_id`,`stripe_price`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD KEY `users_stripe_id_index` (`stripe_id`);
 
 --
 -- Indexes for table `visits`
@@ -7599,7 +7848,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+
+--
+-- AUTO_INCREMENT for table `packages`
+--
+ALTER TABLE `packages`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -7644,6 +7899,18 @@ ALTER TABLE `story_reads`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=559;
 
 --
+-- AUTO_INCREMENT for table `subscriptions`
+--
+ALTER TABLE `subscriptions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `subscription_items`
+--
+ALTER TABLE `subscription_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -7653,7 +7920,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `visits`
 --
 ALTER TABLE `visits`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6782;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6936;
 
 --
 -- AUTO_INCREMENT for table `writing_character`
