@@ -12,12 +12,9 @@ import { RiDashboardLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
 import { MdOutlineWorkspacePremium } from "react-icons/md";
-
-
-
-
-
-
+import { FaCreditCard } from "react-icons/fa";
+import { FaPaypal } from "react-icons/fa";
+import { FaUniversity } from "react-icons/fa";
 
 export const Icons = {
   View :GrFormView,
@@ -35,4 +32,7 @@ export const Icons = {
   Profile: CgProfile,
   Logout: IoIosLogOut,
   Premium: MdOutlineWorkspacePremium,
+  CreditCard: FaCreditCard,
+  PayPal: FaPaypal,
+  Bank: FaUniversity,
 }

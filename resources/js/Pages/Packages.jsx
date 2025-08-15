@@ -5,15 +5,214 @@ import { Icons } from '@/utils/icons';
 import { packagesData } from '@/utils/statics';
 import { useStripe, useElements, CardElement, Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import CheckoutForm from '@/Components/CheckoutForm';  // Import CheckoutForm here
+import CheckoutForm from '@/Components/CheckoutForm';
+
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
 const Packages = () => {
   const [selectedPackageId, setSelectedPackageId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
+
+  const handleGetStarted = (packageId) => {
+    setSelectedPackageId(packageId);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedPackageId(null);
+    setSelectedPaymentMethod('card');
+  };
+
+  const PaymentModal = () => {
+    if (!showModal || !selectedPackageId) return null;
+
+    const selectedPackage = packagesData.find(pkg => pkg.id === selectedPackageId);
+
+    const handleOverlayClick = (e) => {
+      if (e.target === e.currentTarget) {
+        closeModal();
+      }
+    };
+
+    return (
+      <div 
+        className="modal-overlay" 
+        style={modalOverlayStyle}
+        onClick={handleOverlayClick}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
+        <div className="modal-content" style={modalContentStyle}>
+          <div className="modal-header" style={modalHeaderStyle}>
+            <h3 id="modal-title">Complete Your Subscription</h3>
+            <button 
+              onClick={closeModal}
+              style={closeButtonStyle}
+              className="close-button"
+              aria-label="Close modal"
+            >
+              ×
+            </button>
+          </div>
+          
+          <div className="modal-body" style={modalBodyStyle}>
+            {/* Package Summary */}
+            <div className="package-summary" style={packageSummaryStyle}>
+              <h4>{selectedPackage?.title}</h4>
+              <p className="price">{selectedPackage?.price} {selectedPackage?.monthlyAnualy && `/ ${selectedPackage.monthlyAnualy}`}</p>
+            </div>
+
+            {/* Payment Method Selection */}
+            <div className="payment-methods" style={paymentMethodsStyle}>
+              <h5 style={{ marginBottom: '16px', color: '#495057' }}>Choose Payment Method</h5>
+              
+              <div 
+                className="payment-option" 
+                style={{
+                  ...paymentOptionStyle,
+                  borderColor: selectedPaymentMethod === 'card' ? '#007bff' : '#e9ecef',
+                  backgroundColor: selectedPaymentMethod === 'card' ? '#f8f9ff' : 'white',
+                }}
+                onClick={() => setSelectedPaymentMethod('card')}
+              >
+                <input
+                  type="radio"
+                  id="card"
+                  name="paymentMethod"
+                  value="card"
+                  checked={selectedPaymentMethod === 'card'}
+                  onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                  style={{ margin: 0 }}
+                />
+                <label htmlFor="card" style={paymentLabelStyle}>
+                  <Icons.CreditCard style={paymentIconStyle} />
+                  Stripe Payment
+                </label>
+              </div>
+
+              <div 
+                className="payment-option" 
+                style={{
+                  ...paymentOptionStyle,
+                  borderColor: selectedPaymentMethod === 'paypal' ? '#007bff' : '#e9ecef',
+                  backgroundColor: selectedPaymentMethod === 'paypal' ? '#f8f9ff' : 'white',
+                }}
+                onClick={() => setSelectedPaymentMethod('paypal')}
+              >
+                <input
+                  type="radio"
+                  id="paypal"
+                  name="paymentMethod"
+                  value="paypal"
+                  checked={selectedPaymentMethod === 'paypal'}
+                  onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                  style={{ margin: 0 }}
+                />
+                <label htmlFor="paypal" style={paymentLabelStyle}>
+                  <Icons.PayPal style={paymentIconStyle} />
+                  PayPal
+                </label>
+              </div>
+
+              <div 
+                className="payment-option" 
+                style={{
+                  ...paymentOptionStyle,
+                  borderColor: selectedPaymentMethod === 'bank' ? '#007bff' : '#e9ecef',
+                  backgroundColor: selectedPaymentMethod === 'bank' ? '#f8f9ff' : 'white',
+                }}
+                onClick={() => setSelectedPaymentMethod('bank')}
+              >
+                <input
+                  type="radio"
+                  id="bank"
+                  name="paymentMethod"
+                  value="bank"
+                  checked={selectedPaymentMethod === 'bank'}
+                  onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                  style={{ margin: 0 }}
+                />
+                <label htmlFor="bank" style={paymentLabelStyle}>
+                  <Icons.Bank style={paymentIconStyle} />
+                  Bank Transfer
+                </label>
+              </div>
+            </div>
+
+            {/* Payment Form */}
+            {/* {selectedPaymentMethod === 'card' && (
+              <div className="payment-form">
+                <Elements stripe={stripePromise}>
+                  <CheckoutForm packageId={selectedPackageId} onSuccess={closeModal} />
+                </Elements>
+              </div>
+            )} */}
+            {selectedPaymentMethod === 'card' && (
+              <button className="btn btn-primary">redirecting to stripe</button>
+            )}
+
+            {selectedPaymentMethod === 'paypal' && (
+              <div className="payment-form" style={paymentFormStyle}>
+                <p>PayPal integration will be available soon.</p>
+                <button className="btn btn-secondary" disabled>Coming Soon</button>
+              </div>
+            )}
+
+            {selectedPaymentMethod === 'bank' && (
+              <div className="payment-form" style={paymentFormStyle}>
+                <p>Bank transfer details will be sent to your email.</p>
+                <button className="btn btn-secondary" disabled>Coming Soon</button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <Layout headerClass="inner-header">
       <Head title="Packages" />
+      
+      {/* Modal Styles */}
+      <style>
+        {`
+          @keyframes modalSlideIn {
+            from {
+              opacity: 0;
+              transform: translateY(-20px) scale(0.95);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
+          }
+          
+          .modal-overlay {
+            animation: modalSlideIn 0.3s ease-out;
+          }
+          
+          .payment-option:hover {
+            border-color: #007bff !important;
+            background-color: #f8f9ff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+          }
+          
+          .payment-option {
+            transition: all 0.2s ease;
+          }
+          
+          .close-button:hover {
+            background-color: #e9ecef !important;
+            color: #495057 !important;
+          }
+        `}
+      </style>
+      
       <section className="pt-200 pb-100 sec-bg">
         <div className="container">
           <div className="row text-center">
@@ -79,7 +278,7 @@ const Packages = () => {
                   <div className="d-grid">
                     <button
                       className="btn btn-primary btn-lg package-cta-button"
-                      onClick={() => setSelectedPackageId(packageItem.id)}
+                      onClick={() => handleGetStarted(packageItem.id)}
                     >
                       {packageItem.ctaText}
                     </button>
@@ -93,13 +292,124 @@ const Packages = () => {
         </div>
       </section>
 
-      {selectedPackageId && (
-        <Elements stripe={stripePromise}>
-          <CheckoutForm packageId={selectedPackageId} />
-        </Elements>
-      )}
+      {/* Payment Modal */}
+      <PaymentModal />
     </Layout>
   );
+};
+
+// Modal Styles
+const modalOverlayStyle = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  zIndex: 1000,
+  backdropFilter: 'blur(2px)',
+};
+
+const modalContentStyle = {
+  backgroundColor: 'white',
+  borderRadius: '12px',
+  width: '90%',
+  maxWidth: '550px',
+  maxHeight: '90vh',
+  overflow: 'auto',
+  boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)',
+  animation: 'modalSlideIn 0.3s ease-out',
+};
+
+const modalHeaderStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '24px 24px 20px 24px',
+  borderBottom: '1px solid #e1e5e9',
+  backgroundColor: '#f8f9fa',
+  borderTopLeftRadius: '12px',
+  borderTopRightRadius: '12px',
+};
+
+const closeButtonStyle = {
+  background: 'none',
+  border: 'none',
+  fontSize: '28px',
+  cursor: 'pointer',
+  color: '#6c757d',
+  width: '32px',
+  height: '32px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '50%',
+  transition: 'all 0.2s ease',
+  ':hover': {
+    backgroundColor: '#e9ecef',
+    color: '#495057',
+  },
+};
+
+const modalBodyStyle = {
+  padding: '24px',
+};
+
+const packageSummaryStyle = {
+  textAlign: 'center',
+  marginBottom: '24px',
+  padding: '20px',
+  backgroundColor: '#f8f9fa',
+  borderRadius: '8px',
+  border: '1px solid #e9ecef',
+};
+
+const paymentMethodsStyle = {
+  marginBottom: '24px',
+};
+
+const paymentOptionStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '12px',
+  padding: '16px',
+  border: '2px solid #e9ecef',
+  borderRadius: '8px',
+  cursor: 'pointer',
+  transition: 'all 0.2s ease',
+  ':hover': {
+    borderColor: '#007bff',
+    backgroundColor: '#f8f9ff',
+  },
+};
+
+const paymentLabelStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  marginLeft: '12px',
+  cursor: 'pointer',
+  flex: 1,
+  fontSize: '16px',
+  fontWeight: '500',
+  color: '#495057',
+};
+
+const paymentIconStyle = {
+  marginRight: '12px',
+  width: '24px',
+  height: '24px',
+  color: '#6c757d',
+};
+
+const paymentFormStyle = {
+  textAlign: 'center',
+  padding: '24px',
+  backgroundColor: '#f8f9fa',
+  borderRadius: '8px',
+  border: '1px solid #e9ecef',
 };
 
 export default Packages;

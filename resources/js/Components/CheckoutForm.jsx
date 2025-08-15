@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { router } from '@inertiajs/react';
 
-const CheckoutForm = ({ packageId }) => {
+const CheckoutForm = ({ packageId, onSuccess }) => {
     const [clientSecret, setClientSecret] = useState('');
     const [loading, setLoading] = useState(false);
     const stripe = useStripe();
@@ -57,8 +57,12 @@ const CheckoutForm = ({ packageId }) => {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Handle success (Redirect to success page or show success message)
-                    router.visit('/subscription-success');
+                    // Call onSuccess callback if provided, otherwise redirect
+                    if (onSuccess) {
+                        onSuccess();
+                    } else {
+                        router.visit('/subscription-success');
+                    }
                 } else {
                     console.error(data.error);
                 }

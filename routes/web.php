@@ -38,10 +38,10 @@ Route::middleware('web')->group(function () {
 });
 
 
-Route::middleware('auth')->group(function () {
-    Route::post('/subscribe/{package}', [SubscriptionController::class, 'subscribe'])->name('subscribe');
-    Route::get('/subscription-success', [SubscriptionController::class, 'success'])->name('subscription.success');
-});
+// Route::middleware('auth')->group(function () {
+//     Route::post('/subscribe/{package}', [SubscriptionController::class, 'subscribe'])->name('subscribe');
+//     Route::get('/subscription-success', [SubscriptionController::class, 'success'])->name('subscription.success');
+// });
 
 // Route::get('/auth/facebook/redirect', [FacebookController::class, 'redirect'])->name('facebook.redirect');
 // Route::get('/auth/facebook/callback', [FacebookController::class, 'callback'])->name('facebook.callback');
@@ -106,15 +106,30 @@ Route::middleware('auth')->group(function () {
 // Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
 // Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
 
-Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
-Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
+// Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
+// Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
+
+// Route::middleware('auth')->group(function () {
+//     Route::get('/stripe/checkout/{package}', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
+//     Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
+//     Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
+// });
 
 
-Route::get('/billing', [StripeController::class, 'createCheckoutSession']);
+// Route::get('/billing', [StripeController::class, 'createCheckoutSession']);
 
 // Route::get('/stories/publish/form', function () {
 //     return Inertia::render('Stories/Publish/Form');
 // })->name('stories.publish.form');
+
+
+Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
+
+Route::middleware('auth')->group(function () {
+    Route::get('/stripe/checkout', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
+    Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
+    Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/stories/publish/form/{story}', [MainStoriesController::class, 'showPublishForm'])->name('stories.publish.form');
