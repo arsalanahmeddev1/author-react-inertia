@@ -126,9 +126,6 @@ const Create = () => {
     { value: '', label: 'Select an interval' },
     { value: 'monthly', label: 'Monthly' },
     { value: 'yearly', label: 'Yearly' },
-    { value: 'one-time', label: 'One Time' },
-    { value: 'weekly', label: 'Weekly' },
-    { value: 'daily', label: 'Daily' },
   ];
 
   const statusOptions = [

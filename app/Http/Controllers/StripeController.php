@@ -12,9 +12,9 @@ class StripeController extends Controller
     {
         Stripe::setApiKey(config('services.stripe.secret'));
 
-        $domain = env('APP_URL'); // jaise http://localhost:8000
+        $domain = env('APP_URL');
         $packageName = $request->input('package_name', 'Default Package');
-        $amount = $request->input('amount', 1900); // Amount in cents, e.g., 1000 = $10
+        $amount = $request->input('amount', 1900);
 
         $session = Session::create([
             'payment_method_types' => ['card'],
@@ -33,7 +33,7 @@ class StripeController extends Controller
             'cancel_url' => $domain . '/stripe/cancel',
         ]);
 
-        return redirect($session->url);
+        return response()->json(['url' => $session->url]);
     }
 
     public function success(Request $request)

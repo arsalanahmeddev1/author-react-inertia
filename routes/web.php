@@ -127,7 +127,7 @@ Route::middleware('auth')->group(function () {
 Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
 
 Route::middleware('auth')->group(function () {
-    Route::get('/stripe/checkout', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
+    Route::post('/stripe/checkout', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
     Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
     Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
 });
