@@ -33,11 +33,11 @@ class PackagesController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string',
             'price_cents' => 'nullable|integer|min:0',
-            'interval' => 'nullable|string|in:monthly,yearly,one-time,weekly,daily',
+            'interval' => 'nullable|string|in:monthly,yearly',
             'features' => 'nullable|array',
-            'stripe_price_id' => 'nullable|string|max:255',
+            'stripe_price_id' => 'required|string',
             'is_active' => 'boolean',
         ]);
         
@@ -52,7 +52,8 @@ class PackagesController extends Controller
         $data['is_active'] = $data['is_active'] ?? true;
         
         Package::create($data);
-        return back()->with('success', 'Package created successfully.');
+        return redirect()->route('admin-dashboard.packages.index')
+    ->with('success', 'Package created successfully.');
     }
 
     /**
@@ -85,11 +86,11 @@ class PackagesController extends Controller
     public function update(Request $request, Package $package)
     {
         $data = $request->validate([
-            'name' => 'nullable|string|max:255',
+            'name' => 'required|string',
             'price_cents' => 'nullable|integer|min:0',
             'interval' => 'nullable|string',
             'features' => 'nullable|array',
-            'stripe_price_id' => 'nullable|string',
+            'stripe_price_id' => 'required|string',
             'is_active' => 'nullable|boolean',
         ]);
         

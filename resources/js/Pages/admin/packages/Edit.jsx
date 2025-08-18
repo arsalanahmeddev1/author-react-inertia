@@ -283,7 +283,7 @@ const Edit = ({ package: pkg }) => {
                       invalid={!!errors.stripe_price_id}
                       placeholder="Enter Stripe price ID (optional)"
                     />
-                    <small className="text-muted">Optional: Enter the Stripe price ID if you have one</small>
+                    <small className="text-muted">Enter the Stripe price ID if you have dont have create one</small>
                                          {errors.stripe_price_id && (
                        <div className="text-danger">{errors.stripe_price_id}</div>
                      )}
