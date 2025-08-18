@@ -24,7 +24,7 @@ const Edit = ({ package: pkg }) => {
   console.log('Package data received:', pkg);
   console.log('Package features type:', typeof pkg.features);
   console.log('Package features value:', pkg.features);
-  
+
   const { data, setData, post, processing, errors } = useForm({
     name: pkg.name || '',
     price_cents: pkg.price_cents || '',
@@ -83,51 +83,51 @@ const Edit = ({ package: pkg }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!data.name || data.name.trim() === '') {
       newErrors.name = 'Package name is required';
     }
-    
+
     if (data.price_cents && (isNaN(data.price_cents) || data.price_cents < 0)) {
       newErrors.price_cents = 'Price must be a valid positive number';
     }
-    
+
     if (data.interval && !['monthly', 'yearly', 'one-time', 'weekly', 'daily'].includes(data.interval)) {
       newErrors.interval = 'Please select a valid interval';
     }
-    
+
     // Validate features - ensure it's not empty if provided
     if (data.features && Array.isArray(data.features) && data.features.filter(f => f && f.trim()).length === 0) {
       newErrors.features = 'At least one feature is required';
     }
-    
+
     setValidationErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     console.log('Form submission started');
     console.log('Original data.features:', data.features);
     console.log('Original data.features type:', typeof data.features);
-    
+
     // Validate form before submission
     if (!validateForm()) {
       return;
     }
-    
+
     // Filter out empty features
     const featuresArray = data.features.filter(f => f && f.trim());
-    
+
     // Update the form data with filtered features and other formatted data
     setData('features', featuresArray);
     setData('name', data.name.trim());
     // price_cents is already in cents from the onChange handler
     setData('is_active', data.is_active === '1');
-    
+
     console.log('Updated form data with features as array:', featuresArray);
-    
+
     // Use setTimeout to ensure state updates are processed before submission
     setTimeout(() => {
       console.log('Submitting form with updated data');
@@ -184,7 +184,7 @@ const Edit = ({ package: pkg }) => {
                   {successMessage}
                 </CAlert>
               )}
-              
+
               <CForm onSubmit={handleSubmit}>
                 <CRow className="mb-3">
                   <CCol md={6}>
@@ -203,7 +203,7 @@ const Edit = ({ package: pkg }) => {
                       <div className="text-danger">{validationErrors.name}</div>
                     )}
                   </CCol>
-                  
+
                   <CCol md={6}>
                     <CFormLabel htmlFor="price_cents">Price ($)</CFormLabel>
                     <CInputGroup>
@@ -228,15 +228,15 @@ const Edit = ({ package: pkg }) => {
                       />
                     </CInputGroup>
                     <small className="text-muted">Enter price in dollars (e.g., 10.30 for $10.30)</small>
-                                         {errors.price_cents && (
-                       <div className="text-danger">{errors.price_cents}</div>
-                     )}
-                     {validationErrors.price_cents && (
-                       <div className="text-danger">{validationErrors.price_cents}</div>
-                     )}
+                    {errors.price_cents && (
+                      <div className="text-danger">{errors.price_cents}</div>
+                    )}
+                    {validationErrors.price_cents && (
+                      <div className="text-danger">{validationErrors.price_cents}</div>
+                    )}
                   </CCol>
                 </CRow>
-                
+
                 <CRow className="mb-3">
                   <CCol md={6}>
                     <CFormLabel htmlFor="interval">Billing Interval</CFormLabel>
@@ -247,14 +247,14 @@ const Edit = ({ package: pkg }) => {
                       invalid={!!errors.interval}
                       options={intervalOptions}
                     />
-                                         {errors.interval && (
-                       <div className="text-danger">{errors.interval}</div>
-                     )}
-                     {validationErrors.interval && (
-                       <div className="text-danger">{validationErrors.interval}</div>
-                     )}
+                    {errors.interval && (
+                      <div className="text-danger">{errors.interval}</div>
+                    )}
+                    {validationErrors.interval && (
+                      <div className="text-danger">{validationErrors.interval}</div>
+                    )}
                   </CCol>
-                  
+
                   <CCol md={6}>
                     <CFormLabel htmlFor="is_active">Status</CFormLabel>
                     <CFormSelect
@@ -264,15 +264,15 @@ const Edit = ({ package: pkg }) => {
                       invalid={!!errors.is_active}
                       options={statusOptions}
                     />
-                                         {errors.is_active && (
-                       <div className="text-danger">{errors.is_active}</div>
-                     )}
-                     {validationErrors.is_active && (
-                       <div className="text-danger">{validationErrors.is_active}</div>
-                     )}
+                    {errors.is_active && (
+                      <div className="text-danger">{errors.is_active}</div>
+                    )}
+                    {validationErrors.is_active && (
+                      <div className="text-danger">{validationErrors.is_active}</div>
+                    )}
                   </CCol>
                 </CRow>
-                
+
                 <CRow className="mb-3">
                   <CCol md={12}>
                     <CFormLabel htmlFor="stripe_price_id">Stripe Price ID</CFormLabel>
@@ -284,15 +284,74 @@ const Edit = ({ package: pkg }) => {
                       placeholder="Enter Stripe price ID (optional)"
                     />
                     <small className="text-muted">Enter the Stripe price ID if you have dont have create one</small>
-                                         {errors.stripe_price_id && (
-                       <div className="text-danger">{errors.stripe_price_id}</div>
-                     )}
-                     {validationErrors.stripe_price_id && (
-                       <div className="text-danger">{validationErrors.stripe_price_id}</div>
-                     )}
+                    {errors.stripe_price_id && (
+                      <div className="text-danger">{errors.stripe_price_id}</div>
+                    )}
+                    {validationErrors.stripe_price_id && (
+                      <div className="text-danger">{validationErrors.stripe_price_id}</div>
+                    )}
                   </CCol>
                 </CRow>
-                
+                <CRow className="mb-3">
+                  <CCol md={6}>
+                    <CFormLabel htmlFor="name">
+                      Words Limit
+                    </CFormLabel>
+                    {/* add type number in words limit input */}
+                    <CFormInput
+                      id="words_limit"
+                      type="number"
+                      value={data.words_limit}
+                      onChange={(e) =>
+                        setData("words_limit", e.target.value)
+                      }
+                      invalid={
+                        !!errors.words_limit ||
+                        !!validationErrors.words_limit
+                      }
+                      placeholder="Enter words limit"
+                    />
+                    {errors.words_limit && (
+                      <div className="text-danger">
+                        {errors.words_limit}
+                      </div>
+                    )}
+                    {validationErrors.words_limit && (
+                      <div className="text-danger">
+                        {validationErrors.words_limit}
+                      </div>
+                    )}
+                  </CCol>
+
+                  <CCol md={6}>
+                    <CFormLabel htmlFor="name">
+                      Strories Limit
+                    </CFormLabel>
+                    <CFormInput
+                      id="stories_limit"
+                      type="number"
+                      value={data.stories_limit}
+                      onChange={(e) =>
+                        setData("stories_limit", e.target.value)
+                      }
+                      invalid={
+                        !!errors.stories_limit ||
+                        !!validationErrors.stories_limit
+                      }
+                      placeholder="Enter stories limit"
+                    />
+                    {errors.stories_limit && (
+                      <div className="text-danger">
+                        {errors.stories_limit}
+                      </div>
+                    )}
+                    {validationErrors.stories_limit && (
+                      <div className="text-danger">
+                        {validationErrors.stories_limit}
+                      </div>
+                    )}
+                  </CCol>
+                </CRow>
                 <CRow className="mb-3">
                   <CCol md={12}>
                     <CFormLabel htmlFor="features">Features</CFormLabel>
@@ -373,9 +432,9 @@ const Edit = ({ package: pkg }) => {
                           {data.features && data.features.length > 0 ? (
                             <div className="mt-2">
                               {data.features.filter(f => f && f.trim()).map((feature, index) => (
-                                <CBadge 
-                                  key={index} 
-                                  color="info" 
+                                <CBadge
+                                  key={index}
+                                  color="info"
                                   className="me-1 mb-1"
                                 >
                                   {feature.trim()}
@@ -390,12 +449,12 @@ const Edit = ({ package: pkg }) => {
                     </div>
                   </CCol>
                 </CRow>
-                
+
                 <CRow>
                   <CCol md={12} className="d-flex gap-2">
-                    <CButton 
-                      type="submit" 
-                      color="primary" 
+                    <CButton
+                      type="submit"
+                      color="primary"
                       disabled={processing}
                       style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
                     >

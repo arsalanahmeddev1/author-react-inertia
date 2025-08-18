@@ -9,6 +9,8 @@ class Package extends Model
     protected $fillable = [
         'name',
         'price_cents',
+        'words_limit',
+        'stories_limit',
         'interval',
         'features',
         'stripe_price_id',

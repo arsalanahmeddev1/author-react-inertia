@@ -28,6 +28,7 @@ const Create = () => {
         features: [""],
         stripe_price_id: "",
         is_active: "1",
+        words_limit: "",
     });
 
     const [successMessage, setSuccessMessage] = useState("");
@@ -80,6 +81,10 @@ const Create = () => {
 
     if (!data.stripe_price_id || data.stripe_price_id.trim() === "") {
         newErrors.stripe_price_id = "Stripe Price ID is required";
+    }
+
+    if (!data.words_limit || isNaN(data.words_limit) || data.words_limit <= 0) {
+        newErrors.words_limit = "Valid words limit is required";
     }
 
     setValidationErrors(newErrors);
@@ -379,6 +384,67 @@ const Create = () => {
                                         )}
                                     </CCol>
                                 </CRow>
+                                <CRow className="mb-3">
+                                    <CCol md={6}>
+                                        <CFormLabel htmlFor="name">
+                                            Words Limit
+                                        </CFormLabel>
+                                        {/* add type number in words limit input */}
+                                        <CFormInput
+                                            id="words_limit"
+                                            type="number"
+                                            value={data.words_limit}
+                                            onChange={(e) =>
+                                                setData("words_limit", e.target.value)
+                                            }
+                                            invalid={
+                                                !!errors.words_limit ||
+                                                !!validationErrors.words_limit
+                                            }
+                                            placeholder="Enter words limit"
+                                        />
+                                        {errors.words_limit && (
+                                            <div className="text-danger">
+                                                {errors.words_limit}
+                                            </div>
+                                        )}
+                                        {validationErrors.words_limit && (
+                                            <div className="text-danger">
+                                                {validationErrors.words_limit}
+                                            </div>
+                                        )}
+                                    </CCol>
+
+                                    <CCol md={6}>
+                                        <CFormLabel htmlFor="name">
+                                            Strories Limit
+                                        </CFormLabel>
+                                        <CFormInput
+                                            id="stories_limit"
+                                            type="number"
+                                            value={data.stories_limit}
+                                            onChange={(e) =>
+                                                setData("stories_limit", e.target.value)
+                                            }
+                                            invalid={
+                                                !!errors.stories_limit ||
+                                                !!validationErrors.stories_limit
+                                            }
+                                            placeholder="Enter stories limit"
+                                        />
+                                        {errors.stories_limit && (
+                                            <div className="text-danger">
+                                                {errors.stories_limit}
+                                            </div>
+                                        )}
+                                        {validationErrors.stories_limit && (
+                                            <div className="text-danger">
+                                                {validationErrors.stories_limit}
+                                            </div>
+                                        )}
+                                    </CCol>
+                                </CRow>
+                                
 
                                 <CRow className="mb-3">
                                     <CCol md={12}>
@@ -448,7 +514,7 @@ const Create = () => {
                                 {/* Preview Section */}
                                 <CRow className="mb-4">
                                     <CCol md={12}>
-                                        <h5>Package Preview</h5>
+                                        <h5>Stories Limit</h5>
                                         <div className="border rounded p-3 bg-light">
                                             <div className="row">
                                                 <div className="col-md-6">

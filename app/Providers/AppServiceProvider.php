@@ -24,6 +24,17 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Vite::prefetch(concurrency: 3);
-        Inertia::share('today', Carbon::now()->format('F j, Y'));
+        Inertia::share([
+            'today' => Carbon::now()->format('F j, Y'),
+            'auth' => function () {
+                $user = auth()->user();
+    
+                return [
+                    'user' => $user,
+                    'subscription_active' => $user?->subscription?->ends_at?->isFuture() ?? false,
+                ];
+            },
+        ]);
     }
 }
+

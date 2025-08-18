@@ -68,6 +68,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/community/store', [StoriesController::class, 'storeCommunity'])->name('community.store');
 });
 
+// Packages route - accessible without login
+Route::get('/packages', function () {
+    $packages = \App\Models\Package::where('is_active', true)->get();
+    return Inertia::render('Packages', ['packages' => $packages]);
+})->name('packages');
+
 // Comments routes
 Route::get('/stories/{story}/comments', [CommentsController::class, 'getComments'])->name('comments.get');
 Route::middleware('auth')->group(function () {
@@ -108,7 +114,7 @@ Route::middleware('auth')->group(function () {
 // Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
 
 // Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
-// Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/stripe/checkout/{package}', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
@@ -126,6 +132,7 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
 
+// Stripe routes - require authentication
 Route::middleware('auth')->group(function () {
     Route::post('/stripe/checkout', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
     Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
@@ -171,10 +178,6 @@ Route::get('/about', function () {
     return Inertia::render('About');
 })->name('about');
 
-Route::get('/packages', function () {
-    $packages = \App\Models\Package::where('is_active', true)->get();
-    return Inertia::render('Packages', ['packages' => $packages]);
-})->name('packages');
 Route::post('/chatgpt/send', [ChatbotController::class, 'send']);
 
 // new dashboard implementation

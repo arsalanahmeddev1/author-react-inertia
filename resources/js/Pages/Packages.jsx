@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/Layouts/Layout";
-import { Head } from "@inertiajs/react";
+import { Head, usePage, router } from "@inertiajs/react";
 import { Icons } from "@/utils/icons";
 import {
     useStripe,
@@ -14,30 +14,155 @@ import CheckoutForm from "@/Components/CheckoutForm";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
 const Packages = ({ packages = [] }) => {
+    const { auth } = usePage().props;
     const [selectedPackageId, setSelectedPackageId] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card");
+    const [isAuthLoading, setIsAuthLoading] = useState(false);
 
-    const handleCheckout = async (packageName, amount) => {
-        const response = await fetch("/stripe/checkout", {
+    // Check if user just registered and should be redirected back to packages
+    useEffect(() => {
+        if (auth.user && auth.user.id) {
+            const intendedPackageId = sessionStorage.getItem('intendedPackageId');
+            if (intendedPackageId) {
+                // Clear the stored package ID
+                sessionStorage.removeItem('intendedPackageId');
+                // Set loading state to prevent premature interactions
+                setIsAuthLoading(true);
+                // Add a small delay to ensure authentication state is fully loaded
+                setTimeout(() => {
+                    // Double-check that user is still authenticated before opening modal
+                    if (auth.user && auth.user.id) {
+                        // Automatically open the modal for the intended package
+                        setSelectedPackageId(parseInt(intendedPackageId));
+                        setShowModal(true);
+                    }
+                    setIsAuthLoading(false);
+                }, 100);
+            }
+        }
+    }, [auth.user]);
+
+    // Check if there's a retry package after CSRF token refresh
+    useEffect(() => {
+        if (auth.user && auth.user.id) {
+            const retryPackage = sessionStorage.getItem('retryPackage');
+            if (retryPackage) {
+                try {
+                    const packageData = JSON.parse(retryPackage);
+                    sessionStorage.removeItem('retryPackage');
+                    // Automatically open the modal for the retry package
+                    setSelectedPackageId(packageData.id);
+                    setShowModal(true);
+                } catch (error) {
+                    console.error('Error parsing retry package:', error);
+                    sessionStorage.removeItem('retryPackage');
+                }
+            }
+        }
+    }, [auth.user]);
+
+    const handleCheckoutRedirect = async (pkg) => {
+        // Debug: Log authentication state
+        console.log('Checkout attempt - Auth state:', auth.user);
+        
+        try {
+          // Get CSRF token from meta tag
+          let csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
+          if (!csrfToken) {
+            // Try to get from window object (fallback)
+            csrfToken = window.csrfToken;
+            if (!csrfToken) {
+              alert("CSRF token not found. Please refresh the page and try again.");
+              return;
+            }
+          }
+
+          const response = await fetch("/stripe/checkout", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector(
-                    'meta[name="csrf-token"]',
-                ).content,
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": csrfToken,
+              "Accept": "application/json",
             },
             body: JSON.stringify({
-                package_name: packageName,
-                amount: amount, // cents me
+              package_name: pkg.name,
+              amount: pkg.price_cents,
+              stripe_price_id: pkg.stripe_price_id,
             }),
-        });
+          });
+      
+          // Debug: Log response details
+          console.log('Response status:', response.status);
+          console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+          
+          // Check for different response statuses
+          if (response.status === 401) {
+            // User is not authenticated, redirect to login
+            alert("Please log in to continue with your subscription.");
+            router.visit(route('login'));
+            return;
+          }
+          
+          if (response.status === 419) {
+            // CSRF token mismatch or session expired
+            alert("Your session has expired. The page will refresh automatically to fix this issue.");
+            // Store the package info to retry after refresh
+            sessionStorage.setItem('retryPackage', JSON.stringify(pkg));
+            setTimeout(() => window.location.reload(), 1000);
+            return;
+          }
+          
+          if (response.status === 422) {
+            // Validation error
+            const errorData = await response.json();
+            alert("Validation error: " + (errorData.message || "Please check your input."));
+            return;
+          }
+          
+          if (response.status === 403) {
+            // Forbidden - user might not have permission
+            alert("Access denied. Please check your account permissions.");
+            return;
+          }
+          
+          if (!response.ok) {
+            // Other HTTP errors
+            console.error('HTTP Error:', response.status, response.statusText);
+            alert(`Server error: ${response.status} ${response.statusText}`);
+            return;
+          }
+      
+              const data = await response.json();
+          if (data.id) {
+            const stripe = await stripePromise;
+            stripe.redirectToCheckout({ sessionId: data.id });
+          } else {
+            alert("Something went wrong: " + (data.error || "Unknown error"));
+          }
+        } catch (error) {
+          console.error("Checkout error:", error);
+          if (error.name === 'SyntaxError') {
+            alert("Server returned invalid response. Please refresh the page and try again.");
+            window.location.reload();
+          } else {
+            alert("Checkout failed: " + error.message);
+          }
+        }
+      };     
 
-        const data = await response.json();
-        window.location.href = data.url; // Stripe hosted checkout pe redirect
-    };
 
     const handleGetStarted = (packageId) => {
+        // Check if user is authenticated
+        if (!auth.user) {
+            // Store the intended package ID in session storage to redirect back after registration
+            sessionStorage.setItem('intendedPackageId', packageId);
+            // Redirect to register page
+            router.visit(route('register'));
+            return;
+        }
+        
+        // User is authenticated, proceed with normal flow
         setSelectedPackageId(packageId);
         setShowModal(true);
     };
@@ -49,7 +174,7 @@ const Packages = ({ packages = [] }) => {
     };
 
     const PaymentModal = () => {
-        if (!showModal || !selectedPackageId) return null;
+        if (!showModal || !selectedPackageId || !auth.user) return null;
 
         const selectedPackage = packages.find(
             (pkg) => pkg.id === selectedPackageId,
@@ -184,37 +309,7 @@ const Packages = ({ packages = [] }) => {
                                 </label>
                             </div>
 
-                            <div
-                                className="payment-option"
-                                style={{
-                                    ...paymentOptionStyle,
-                                    borderColor:
-                                        selectedPaymentMethod === "bank"
-                                            ? "#007bff"
-                                            : "#e9ecef",
-                                    backgroundColor:
-                                        selectedPaymentMethod === "bank"
-                                            ? "#f8f9ff"
-                                            : "white",
-                                }}
-                                onClick={() => setSelectedPaymentMethod("bank")}
-                            >
-                                <input
-                                    type="radio"
-                                    id="bank"
-                                    name="paymentMethod"
-                                    value="bank"
-                                    checked={selectedPaymentMethod === "bank"}
-                                    onChange={(e) =>
-                                        setSelectedPaymentMethod(e.target.value)
-                                    }
-                                    style={{ margin: 0 }}
-                                />
-                                <label htmlFor="bank" style={paymentLabelStyle}>
-                                    <Icons.Bank style={paymentIconStyle} />
-                                    Bank Transfer
-                                </label>
-                            </div>
+
                         </div>
 
                         {/* Payment Form */}
@@ -227,15 +322,20 @@ const Packages = ({ packages = [] }) => {
             )} */}
                         {selectedPaymentMethod === "card" && (
                             <button
-                                className="btn btn-primary"
-                                onClick={() =>
-                                    handleCheckout(
-                                        selectedPackage.name,
-                                        selectedPackage.price_cents,
-                                    )
-                                }
+                                className="btn btn-primary w-100"
+                                onClick={() => handleCheckoutRedirect(selectedPackage)}
+                                disabled={isAuthLoading || !auth.user || !auth.user.id}
                             >
-                                Proceed to stripe
+                                {isAuthLoading ? (
+                                    <>
+                                        <i className="fas fa-spinner fa-spin me-2"></i>
+                                        Loading...
+                                    </>
+                                ) : !auth.user || !auth.user.id ? (
+                                    "Authentication Required"
+                                ) : (
+                                    "Proceed to Stripe"
+                                )}
                             </button>
                         )}
 
@@ -244,8 +344,8 @@ const Packages = ({ packages = [] }) => {
                                 className="payment-form"
                                 style={paymentFormStyle}
                             >
-                                <p>
-                                    PayPal integration will be available soon.
+                                <p className="mb-10">
+                                    PayPal will be available soon.
                                 </p>
                                 <button className="btn btn-secondary" disabled>
                                     Coming Soon
@@ -287,9 +387,9 @@ const Packages = ({ packages = [] }) => {
         const features =
             pkg.features && Array.isArray(pkg.features)
                 ? pkg.features.map((feature) => ({
-                      text: feature,
-                      isNegative: false,
-                  }))
+                    text: feature,
+                    isNegative: false,
+                }))
                 : [];
 
         // Add default features if none exist
@@ -327,6 +427,8 @@ const Packages = ({ packages = [] }) => {
                 ? `$${(pkg.price_cents / 100).toFixed(2)}`
                 : "$0",
             monthlyAnualy: pkg.interval || null,
+            words_limit: pkg.words_limit || 0,
+            stories_limit: pkg.stories_limit || 0,
             icon: "Premium",
             features: features,
             ctaText: "Get Started Now",
@@ -441,6 +543,66 @@ const Packages = ({ packages = [] }) => {
 
                                         {/* Features List */}
                                         <div className="mb-40 package-features">
+                                            <div className="package-feature-item">
+                                                {
+                                                    packageItem.words_limit > 0 ? (
+                                                        <div className={`feature-check-icon`}>
+                                                            <svg
+                                                                width="12"
+                                                                height="12"
+                                                                viewBox="0 0 24 24"
+                                                                fill="white"
+                                                            >
+                                                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                                            </svg>
+                                                        </div>
+
+                                                    ) : (
+                                                        ""
+                                                    )
+                                                }
+                                                <span className="para-mid feature-text">
+                                                {
+                                                    packageItem.words_limit > 0 ? (
+                                                        <>
+                                                        can write {packageItem.words_limit} words per day
+                                                        </>
+                                                    ) : (
+                                                        ""
+                                                    )
+                                                }
+                                                </span>
+                                            </div>
+                                            <div className="package-feature-item">
+                                                {
+                                                    packageItem.stories_limit > 0 ? (
+                                                        <div className={`feature-check-icon`}>
+                                                            <svg
+                                                                width="12"
+                                                                height="12"
+                                                                viewBox="0 0 24 24"
+                                                                fill="white"
+                                                            >
+                                                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                                            </svg>
+                                                        </div>
+
+                                                    ) : (
+                                                        ""
+                                                    )
+                                                }
+                                                <span className="para-mid feature-text">
+                                                {   
+                                                    packageItem.stories_limit > 0 ? (
+                                                        <>
+                                                        Can Post {packageItem.stories_limit} stories per month
+                                                        </>
+                                                    ) : (
+                                                        ""
+                                                    )
+                                                }
+                                                </span>
+                                            </div>
                                             {packageItem.features.map(
                                                 (feature, index) => (
                                                     <div

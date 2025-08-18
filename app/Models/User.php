@@ -122,4 +122,8 @@ class User extends Authenticatable
             ];
         });
     }
+
+    public function subscription() {
+        return $this->hasOne(Subscription::class);
+    }
 }

@@ -29,19 +29,57 @@ class StripeWebhookController extends Controller
             return response('', 400);
         }
 
-        // Event type handle karo
+        // Handle different event types
         switch ($event->type) {
             case 'invoice.payment_succeeded':
                 $invoice = $event->data->object;
                 Log::info('Payment succeeded: ' . $invoice->id);
+                
+                // Update subscription status to active when payment succeeds
+                if ($invoice->subscription) {
+                    $localSubscription = \App\Models\Subscription::where('stripe_id', $invoice->subscription)->first();
+                    if ($localSubscription) {
+                        $localSubscription->update(['stripe_status' => 'active']);
+                        Log::info('Subscription status updated to active: ' . $invoice->subscription);
+                    }
+                }
                 break;
 
             case 'customer.subscription.created':
                 $subscription = $event->data->object;
                 Log::info('Subscription created: ' . $subscription->id);
+                
+                // Update subscription status when created
+                $localSubscription = \App\Models\Subscription::where('stripe_id', $subscription->id)->first();
+                if ($localSubscription) {
+                    $localSubscription->update(['stripe_status' => $subscription->status]);
+                    Log::info('Subscription status updated: ' . $subscription->id . ' to ' . $subscription->status);
+                }
                 break;
 
-            // aur jo events chahiye wo handle kar sakte ho
+            case 'customer.subscription.updated':
+                $subscription = $event->data->object;
+                Log::info('Subscription updated: ' . $subscription->id);
+                
+                // Update subscription status when updated
+                $localSubscription = \App\Models\Subscription::where('stripe_id', $subscription->id)->first();
+                if ($localSubscription) {
+                    $localSubscription->update(['stripe_status' => $subscription->status]);
+                    Log::info('Subscription status updated: ' . $subscription->id . ' to ' . $subscription->status);
+                }
+                break;
+
+            case 'customer.subscription.deleted':
+                $subscription = $event->data->object;
+                Log::info('Subscription deleted: ' . $subscription->id);
+                
+                // Update subscription status when deleted
+                $localSubscription = \App\Models\Subscription::where('stripe_id', $subscription->id)->first();
+                if ($localSubscription) {
+                    $localSubscription->update(['stripe_status' => 'canceled']);
+                    Log::info('Subscription status updated to canceled: ' . $subscription->id);
+                }
+                break;
         }
 
         return response('Webhook Handled', 200);

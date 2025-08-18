@@ -35,6 +35,8 @@ class PackagesController extends Controller
         $data = $request->validate([
             'name' => 'required|string',
             'price_cents' => 'nullable|integer|min:0',
+            'words_limit' => 'nullable|integer|min:0',
+            'stories_limit' => 'nullable|integer|min:0',
             'interval' => 'nullable|string|in:monthly,yearly',
             'features' => 'nullable|array',
             'stripe_price_id' => 'required|string',
@@ -89,6 +91,8 @@ class PackagesController extends Controller
             'name' => 'required|string',
             'price_cents' => 'nullable|integer|min:0',
             'interval' => 'nullable|string',
+            'words_limit' => 'nullable|integer',
+            'stories_limit' => 'nullable|integer',
             'features' => 'nullable|array',
             'stripe_price_id' => 'required|string',
             'is_active' => 'nullable|boolean',
