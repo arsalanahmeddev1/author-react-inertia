@@ -94,6 +94,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/drafts', [StoryDraftsController::class, 'store'])->name('drafts.store');
     Route::put('/drafts/{draft}', [StoryDraftsController::class, 'update'])->name('drafts.update');
     Route::delete('/drafts/{draft}', [StoryDraftsController::class, 'destroy'])->name('drafts.destroy');
+    Route::get('/usage/data', [StoryDraftsController::class, 'getUsageData'])->name('usage.data');
 });
 
 

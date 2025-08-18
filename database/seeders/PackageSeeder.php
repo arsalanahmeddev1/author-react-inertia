@@ -19,6 +19,8 @@ class PackageSeeder extends Seeder
         Package::create([
             'name' => 'Free',
             'price_cents' => 0,
+            'words_limit' => 0,
+            'stories_limit' => 0,
             'interval' => null,
             'features' => [
                 'Can read all published stories',
@@ -33,6 +35,8 @@ class PackageSeeder extends Seeder
         Package::create([
             'name' => 'Standard',
             'price_cents' => 1900, // $19.00
+            'words_limit' => 300,
+            'stories_limit' => 5,
             'interval' => 'monthly',
             'features' => [
                 'Can write 300 words per day',
@@ -47,6 +51,8 @@ class PackageSeeder extends Seeder
         Package::create([
             'name' => 'Premium',
             'price_cents' => 3800, // $38.00
+            'words_limit' => 600,
+            'stories_limit' => 10,
             'interval' => 'monthly',
             'features' => [
                 'Can write 600 words per day',
@@ -61,6 +67,8 @@ class PackageSeeder extends Seeder
         Package::create([
             'name' => 'Pro',
             'price_cents' => 19000, // $190.00
+            'words_limit' => 300,
+            'stories_limit' => 5,
             'interval' => 'yearly',
             'features' => [
                 'Can write 300 words per day',
@@ -76,6 +84,8 @@ class PackageSeeder extends Seeder
         Package::create([
             'name' => 'Pro Premium',
             'price_cents' => 38000, // $380.00
+            'words_limit' => 600,
+            'stories_limit' => 10,
             'interval' => 'yearly',
             'features' => [
                 'Can write 600 words per day',

@@ -49,6 +49,13 @@ class HandleInertiaRequests extends Middleware
                         'quantity' => $request->user()->subscription->quantity,
                         'trial_ends_at' => $request->user()->subscription->trial_ends_at,
                         'ends_at' => $request->user()->subscription->ends_at,
+                        'package' => $request->user()->subscription->package ? [
+                            'id' => $request->user()->subscription->package->id,
+                            'name' => $request->user()->subscription->package->name,
+                            'words_limit' => $request->user()->subscription->package->words_limit,
+                            'stories_limit' => $request->user()->subscription->package->stories_limit,
+                            'interval' => $request->user()->subscription->package->interval,
+                        ] : null,
                     ] : null,
                 ] : null,
             ],

@@ -14,6 +14,9 @@ const StoryModal = ({ show, onHide, story }) => {
   const [savedDrafts, setSavedDrafts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingDrafts, setIsLoadingDrafts] = useState(false);
+  const [showLimitExceededModal, setShowLimitExceededModal] = useState(false);
+  const [dailyWordUsage, setDailyWordUsage] = useState(0);
+  const [monthlyStoryUsage, setMonthlyStoryUsage] = useState(0);
 
   // Reset state when modal is opened
   useEffect(() => {
@@ -22,6 +25,7 @@ const StoryModal = ({ show, onHide, story }) => {
       setWordCount(0);
       setSelectedCharacter('');
       setCharacterDetails(null);
+      setShowLimitExceededModal(false);
       if (editorRef.current) {
         editorRef.current.innerHTML = '';
       }
@@ -29,6 +33,7 @@ const StoryModal = ({ show, onHide, story }) => {
       // Load drafts when the modal is opened
       if (auth.user) {
         loadDrafts();
+        loadUsageData();
       }
     }
   }, [show]);
@@ -62,6 +67,67 @@ const StoryModal = ({ show, onHide, story }) => {
     } finally {
       setIsLoadingDrafts(false);
     }
+  };
+
+  // Load usage data from the API
+  const loadUsageData = async () => {
+    if (!auth.user || !auth.user.subscription) return;
+
+    // Debug: Log subscription and package data
+    console.log('Auth user subscription:', auth.user.subscription);
+    console.log('Package data:', auth.user.subscription.package);
+    console.log('Words limit:', auth.user.subscription.package?.words_limit);
+    console.log('Stories limit:', auth.user.subscription.package?.stories_limit);
+
+    try {
+      const response = await axios.get(route('usage.data'));
+      if (response.data) {
+        setDailyWordUsage(response.data.daily_words || 0);
+        setMonthlyStoryUsage(response.data.monthly_stories || 0);
+      }
+    } catch (error) {
+      console.error('Error loading usage data:', error);
+    }
+  };
+
+  // Check if user has exceeded daily word limit
+  const hasExceededDailyWordLimit = () => {
+    if (!auth.user?.subscription?.package) return false;
+    
+    const packageWordsLimit = auth.user.subscription.package.words_limit;
+    if (!packageWordsLimit) return false;
+    
+    return dailyWordUsage >= packageWordsLimit;
+  };
+
+  // Check if user has exceeded monthly story limit
+  const hasExceededMonthlyStoryLimit = () => {
+    if (!auth.user?.subscription?.package) return false;
+    
+    const packageStoriesLimit = auth.user.subscription.package.stories_limit;
+    if (!packageStoriesLimit) return false;
+    
+    return monthlyStoryUsage >= packageStoriesLimit;
+  };
+
+  // Check if user can add more words today
+  const canAddWords = () => {
+    if (!auth.user?.subscription?.package) return false;
+    
+    const packageWordsLimit = auth.user.subscription.package.words_limit;
+    if (!packageWordsLimit) return false;
+    
+    return dailyWordUsage < packageWordsLimit;
+  };
+
+  // Check if user can add more stories this month
+  const canAddStories = () => {
+    if (!auth.user?.subscription?.package) return false;
+    
+    const packageStoriesLimit = auth.user.subscription.package.stories_limit;
+    if (!packageStoriesLimit) return false;
+    
+    return monthlyStoryUsage < packageStoriesLimit;
   };
 
   // Initialize editor
@@ -159,6 +225,24 @@ const StoryModal = ({ show, onHide, story }) => {
       return;
     }
 
+    // Check daily word limit
+    if (hasExceededDailyWordLimit()) {
+      setShowLimitExceededModal(true);
+      return;
+    }
+
+    // Check monthly story limit
+    if (hasExceededMonthlyStoryLimit()) {
+      alert('You have reached your monthly story limit. Please wait until next month or upgrade your subscription.');
+      return;
+    }
+
+    // Check if user can add more words today
+    if (!canAddWords()) {
+      setShowLimitExceededModal(true);
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -177,6 +261,9 @@ const StoryModal = ({ show, onHide, story }) => {
       const response = await axios.post(route('community.store'), data);
 
       if (response.data.success) {
+        // Update usage data after successful submission
+        await loadUsageData();
+        
         // Redirect to the community story page
         window.location.href = route('community.show', response.data.story.id);
       } else {
@@ -199,6 +286,24 @@ const StoryModal = ({ show, onHide, story }) => {
       return;
     }
 
+    // Check daily word limit
+    if (hasExceededDailyWordLimit()) {
+      setShowLimitExceededModal(true);
+      return;
+    }
+
+    // Check monthly story limit
+    if (hasExceededMonthlyStoryLimit()) {
+      alert('You have reached your monthly story limit. Please wait until next month or upgrade your subscription.');
+      return;
+    }
+
+    // Check if user can add more words today
+    if (!canAddWords()) {
+      setShowLimitExceededModal(true);
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -214,6 +319,9 @@ const StoryModal = ({ show, onHide, story }) => {
       const response = await axios.post(route('community.store'), data);
 
       if (response.data.success) {
+        // Update usage data after successful submission
+        await loadUsageData();
+        
         // Redirect to the community story page
         window.location.href = route('community.show', response.data.story.id);
       } else {
@@ -456,6 +564,57 @@ const StoryModal = ({ show, onHide, story }) => {
                       <p className="fs-16 mb-0">{characterDetails.description}</p>
                     </div>
                   )}
+
+                  {/* Usage Display */}
+                  {auth.user?.subscription?.package && (
+                    <div className="usage-display p-3 mb-3 rounded-3" style={{backgroundColor: '#f8f9fa', border: '1px solid #e9ecef'}}>
+                      {/* Debug info */}
+                      <div className="debug-info mb-2" style={{fontSize: '12px', color: '#666'}}>
+                        Debug: Package ID: {auth.user.subscription.package.id}, 
+                        Words Limit: {auth.user.subscription.package.words_limit}, 
+                        Stories Limit: {auth.user.subscription.package.stories_limit}
+                      </div>
+                      
+                      <h6 className="secondry-font fs-16 mb-2">
+                        <i className="fas fa-chart-line me-2"></i>
+                        Daily Usage
+                      </h6>
+                      <div className="row">
+                        <div className="col-6">
+                          <div className="usage-item">
+                            <span className="usage-label">Words Used:</span>
+                            <span className={`usage-value ${dailyWordUsage >= (auth.user.subscription.package.words_limit || 0) ? 'text-danger' : 'text-success'}`}>
+                              {dailyWordUsage}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div className="usage-item">
+                            <span className="usage-label">Daily Limit:</span>
+                            <span className="usage-value">{auth.user.subscription.package.words_limit || 'Unlimited'}</span>
+                          </div>
+                        </div>
+                      </div>
+                      {auth.user.subscription.package.stories_limit && (
+                        <div className="row mt-2">
+                          <div className="col-6">
+                            <div className="usage-item">
+                              <span className="usage-label">Stories This Month:</span>
+                              <span className={`usage-value ${monthlyStoryUsage >= (auth.user.subscription.package.stories_limit || 0) ? 'text-danger' : 'text-success'}`}>
+                                {monthlyStoryUsage}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="col-6">
+                            <div className="usage-item">
+                              <span className="usage-label">Monthly Limit:</span>
+                              <span className="usage-value">{auth.user.subscription.package.stories_limit}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="mb-20">
@@ -637,6 +796,60 @@ const StoryModal = ({ show, onHide, story }) => {
           </div>
         </Tab.Container>
       </div>
+
+      {/* Limit Exceeded Modal */}
+      {showLimitExceededModal && (
+        <div className="limit-modal-overlay" onClick={() => setShowLimitExceededModal(false)}>
+          <div className="limit-modal-content" onClick={e => e.stopPropagation()}>
+            <div className="limit-modal-header">
+              <h4 className="mb-0 text-danger">
+                <i className="fas fa-exclamation-triangle me-2"></i>
+                Daily Word Limit Exceeded
+              </h4>
+              <button className="close-btn" onClick={() => setShowLimitExceededModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="limit-modal-body">
+              <div className="alert alert-warning mb-3">
+                <i className="fas fa-info-circle me-2"></i>
+                <strong>Daily Word Limit Reached:</strong> You have exceeded your daily word limit of{' '}
+                <strong>{auth.user?.subscription?.package?.words_limit || 0} words</strong>.
+              </div>
+              
+              <div className="usage-info mb-3">
+                <div className="row">
+                  <div className="col-6">
+                    <div className="usage-item">
+                      <span className="usage-label">Daily Words Used:</span>
+                      <span className="usage-value text-danger">{dailyWordUsage}</span>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="usage-item">
+                      <span className="usage-label">Daily Limit:</span>
+                      <span className="usage-value">{auth.user?.subscription?.package?.words_limit || 0}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="limit-modal-actions">
+                <button 
+                  className="btn btn-secondary me-2" 
+                  onClick={() => setShowLimitExceededModal(false)}
+                >
+                  Close
+                </button>
+                <a href={route('packages')} className="btn btn-primary">
+                  <i className="fas fa-arrow-up me-2"></i>
+                  Upgrade Subscription
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -24,4 +24,9 @@ class Subscription extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class, 'stripe_price', 'stripe_price_id');
+    }
 }

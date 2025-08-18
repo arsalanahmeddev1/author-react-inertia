@@ -107,4 +107,38 @@ class StoryDraftsController extends Controller
             'message' => 'Draft deleted successfully'
         ]);
     }
+
+    /**
+     * Get usage data for the authenticated user.
+     */
+    public function getUsageData()
+    {
+        $user = Auth::user();
+        
+        // Get today's date
+        $today = now()->startOfDay();
+        
+        // Get daily word usage (from community stories added today)
+        $dailyStories = Story::where('user_id', $user->id)
+            ->where('is_community', true)
+            ->whereDate('created_at', $today)
+            ->get();
+            
+        // Calculate word count from content
+        $dailyWords = $dailyStories->sum(function($story) {
+            return str_word_count(strip_tags($story->content));
+        });
+            
+        // Get monthly story usage (from community stories added this month)
+        $monthlyStories = Story::where('user_id', $user->id)
+            ->where('is_community', true)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+            
+        return response()->json([
+            'daily_words' => $dailyWords,
+            'monthly_stories' => $monthlyStories
+        ]);
+    }
 }

@@ -173,6 +173,7 @@ class StoriesController extends Controller
         $story->read_count = 0;
         $story->comment_count = 0;
         $story->is_community = true;
+        $story->user_id = $user->id;
         $story->save();
 
         return response()->json([
