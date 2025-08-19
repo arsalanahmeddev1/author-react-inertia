@@ -80,6 +80,7 @@ const Packages = ({ packages = [] }) => {
 
           const response = await fetch("/stripe/checkout", {
             method: "POST",
+            credentials: "same-origin",
             headers: {
               "Content-Type": "application/json",
               "X-CSRF-TOKEN": csrfToken,

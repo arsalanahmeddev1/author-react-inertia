@@ -40,6 +40,8 @@ const Edit = ({ package: pkg }) => {
       }
     })(),
     stripe_price_id: pkg.stripe_price_id || '',
+    words_limit: pkg.words_limit || '',
+    stories_limit: pkg.stories_limit || '',
     is_active: pkg.is_active ? '1' : '0',
     _method: 'PUT', // For method spoofing (PUT request)
   });

@@ -411,8 +411,8 @@
   color: #dc3545;
   font-weight: 600;
   margin: 0;
+  font-family: 'poppins';
 }
-
 .limit-modal-header .close-btn {
   background: none;
   border: none;

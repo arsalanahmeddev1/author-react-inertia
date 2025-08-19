@@ -566,55 +566,7 @@ const StoryModal = ({ show, onHide, story }) => {
                   )}
 
                   {/* Usage Display */}
-                  {auth.user?.subscription?.package && (
-                    <div className="usage-display p-3 mb-3 rounded-3" style={{backgroundColor: '#f8f9fa', border: '1px solid #e9ecef'}}>
-                      {/* Debug info */}
-                      <div className="debug-info mb-2" style={{fontSize: '12px', color: '#666'}}>
-                        Debug: Package ID: {auth.user.subscription.package.id}, 
-                        Words Limit: {auth.user.subscription.package.words_limit}, 
-                        Stories Limit: {auth.user.subscription.package.stories_limit}
-                      </div>
-                      
-                      <h6 className="secondry-font fs-16 mb-2">
-                        <i className="fas fa-chart-line me-2"></i>
-                        Daily Usage
-                      </h6>
-                      <div className="row">
-                        <div className="col-6">
-                          <div className="usage-item">
-                            <span className="usage-label">Words Used:</span>
-                            <span className={`usage-value ${dailyWordUsage >= (auth.user.subscription.package.words_limit || 0) ? 'text-danger' : 'text-success'}`}>
-                              {dailyWordUsage}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="col-6">
-                          <div className="usage-item">
-                            <span className="usage-label">Daily Limit:</span>
-                            <span className="usage-value">{auth.user.subscription.package.words_limit || 'Unlimited'}</span>
-                          </div>
-                        </div>
-                      </div>
-                      {auth.user.subscription.package.stories_limit && (
-                        <div className="row mt-2">
-                          <div className="col-6">
-                            <div className="usage-item">
-                              <span className="usage-label">Stories This Month:</span>
-                              <span className={`usage-value ${monthlyStoryUsage >= (auth.user.subscription.package.stories_limit || 0) ? 'text-danger' : 'text-success'}`}>
-                                {monthlyStoryUsage}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="col-6">
-                            <div className="usage-item">
-                              <span className="usage-label">Monthly Limit:</span>
-                              <span className="usage-value">{auth.user.subscription.package.stories_limit}</span>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                  
                 </div>
 
                 <div className="mb-20">
