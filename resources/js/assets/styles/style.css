@@ -1265,6 +1265,56 @@ header .btn.btn-link:active {
     display: flex;
 }
 
+
+
+/* .realistic-book {
+  margin: auto;
+  perspective: 200000px;
+} */
+
+.demo-book {
+  margin: auto;
+  perspective: 2500px;
+}
+
+/* Each page styling */
+.demoPage {
+  background: #fff;
+  padding: 30px;
+  font-size: 16px;
+  line-height: 1.6;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+  position: relative;
+}
+
+/* Soft shadows for all pages */
+.realistic-book .page {
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* Spine effect: darker shadow on left-side pages */
+.realistic-book .page:nth-child(even) {
+  box-shadow: inset 8px 0 15px rgba(0,0,0,0.15);
+}
+
+/* Depth edge: darker on right-side pages */
+.realistic-book .page:nth-child(odd) {
+  box-shadow: inset -8px 0 15px rgba(0,0,0,0.15);
+}
+
+/* Page edge shading for realistic effect */
+.demoPage::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 100%;
+  background: linear-gradient(to left, rgba(0,0,0,0.08), transparent);
+  pointer-events: none;
+}
+
 /* responsive */
 @media (min-width: 1560px) {
     .container {

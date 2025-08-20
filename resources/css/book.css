@@ -1,0 +1,23 @@
+.book-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.flipbook {
+  width: 800px;
+  height: 600px;
+}
+
+.flipbook .page {
+  width: 400px;
+  height: 600px;
+  background: white;
+  border: 1px solid #ccc;
+  font-size: 20px;
+  text-align: center;
+  line-height: 600px;
+  cursor: grab;   /* show draggable cursor */
+  user-select: none;
+}
