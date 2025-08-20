@@ -55,6 +55,7 @@ const Book = () => {
     return (
         <div className="book-container">
             <div ref={bookRef} className="flipbook">
+                <div class="sj-book"></div>
                 <div className="page">Page 1: Welcome to StoryVault</div>
                 <div className="page">Page 2: Your story begins here</div>
                 <div className="page">Page 3: Another chapter</div>

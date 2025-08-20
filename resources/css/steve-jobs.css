@@ -26,7 +26,7 @@
 .page-wrapper > div {
     border-radius: 4px 0px 0px 4px;
 }
-.p2::after, .last::after {
+.page::after, .last::after {
     content: "";
     position: absolute;
     width: 1px;
@@ -301,7 +301,7 @@ h2.cover-title {
   }
   
   .sj-book .depth{
-	  background-image:url(../pics/pages-depth.png);
+	  background-image:url('./assets/book/pics/pages-depth.png');
 	  position:absolute;
 	  top:7px;
 	  width:16px;
@@ -381,7 +381,7 @@ h2.cover-title {
   }
   
   .sj-book .loader{
-	  background-image:url(../pics/loader.gif);
+	  background-image:url('./assets/book/pics/loader.gif');
 	  width:22px;
 	  height:22px;
 	  position:absolute;
