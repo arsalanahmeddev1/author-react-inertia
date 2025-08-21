@@ -1,23 +1,12 @@
-.book-container {
-  display: flex;
+.turn-book-wrapper {
+  width: 100%;
+  max-width: 920px;
+  /* min-height: 100vh; */
+  /* margin: 0 auto; */
+  /* display: flex; */
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
 }
-
-.flipbook {
-  width: 800px;
-  height: 600px;
-}
-
-.flipbook .page {
-  width: 400px;
-  height: 600px;
-  background: white;
-  border: 1px solid #ccc;
-  font-size: 20px;
-  text-align: center;
-  line-height: 600px;
-  cursor: grab;   /* show draggable cursor */
-  user-select: none;
+.flip-book .page:nth-child(1)::before {
+  display: none !important;
 }

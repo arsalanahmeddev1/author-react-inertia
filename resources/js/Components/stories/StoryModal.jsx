@@ -219,11 +219,11 @@ const StoryModal = ({ show, onHide, story }) => {
     console.log('Subscription data:', auth.user?.subscription);
     
     // Check if user has subscription
-    // if (!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') {
-    //   // Show subscription message instead of redirecting
-    //   alert('Please subscribe first to use this feature. You need an active subscription to add stories to the community.');
-    //   return;
-    // }
+    if (!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') {
+      // Show subscription message instead of redirecting
+      alert('Please subscribe first to use this feature. You need an active subscription to add stories to the community.');
+      return;
+    }
 
     // Check daily word limit
     if (hasExceededDailyWordLimit()) {
@@ -280,11 +280,11 @@ const StoryModal = ({ show, onHide, story }) => {
   // Handle adding to community from draft
   const handleAddToCommunityFromDraft = async (draft) => {
     // Check if user has subscription
-    // if (!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') {
-    //   // Show subscription message instead of redirecting
-    //   alert('Please subscribe first to use this feature. You need an active subscription to add stories to the community.');
-    //   return;
-    // }
+    if (!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') {
+      // Show subscription message instead of redirecting
+      alert('Please subscribe first to use this feature. You need an active subscription to add stories to the community.');
+      return;
+    }
 
     // Check daily word limit
     if (hasExceededDailyWordLimit()) {

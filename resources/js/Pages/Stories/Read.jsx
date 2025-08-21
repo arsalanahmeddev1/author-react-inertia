@@ -8,9 +8,48 @@ import "@/assets/styles/story-read.css";
 import "@/assets/styles/comments.css";
 import { motion } from "framer-motion";
 import HTMLFlipBook from "react-pageflip";
-import Book from '../../Components/Book';
+import Book from "../../Components/Book";
 
 export default function Read({ story, auth }) {
+    const bookRef = useRef(null);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const storyPages = [
+        "Once upon a time...",
+        "The hero started his journey...",
+        "They faced many challenges...",
+        "Finally, the end.",
+    ];
+
+    useEffect(() => {
+        setTotalPages(storyPages.length);
+    }, [storyPages.length]);
+    
+
+    const flipNext = () => bookRef.current?.pageFlip()?.flipNext();
+    const flipPrev = () => bookRef.current?.pageFlip()?.flipPrev();
+
+    const handleBookInit = (flipBookInstance) => {
+        if (!flipBookInstance) return;
+
+        setTotalPages(flipBookInstance.getPageCount() || storyPages.length);
+        setCurrentPage(0);
+
+        // Listen to flip events
+        flipBookInstance.on("flip", (e) => {
+            setCurrentPage(e.data);
+        });
+    };
+
+    const handleBookFlip = (e) => {
+        setCurrentPage(e.data);
+    };
+
+    useEffect(() => {
+    // console.log("Page:", currentPage, "of", totalPages);
+  }, [currentPage, totalPages]);
+
+  
     const [showCover, setShowCover] = useState(true);
     const [commentCount, setCommentCount] = useState(story.comment_count || 0);
 
@@ -68,7 +107,7 @@ export default function Read({ story, auth }) {
         return pages;
     };
 
-    const storyPages = paginateStory(storyContent);
+    // const storyPages = paginateStory(storyContent);
 
     // Start reading (hide cover)
     const startReading = () => {
@@ -179,25 +218,32 @@ export default function Read({ story, auth }) {
                             </div>
 
                             {/* Reading Content with Flipbook */}
-                            <Book />
+                            <Book
+                                ref={bookRef}
+                                pages={storyPages}
+                                onInit={handleBookInit}
+                                onFlip={handleBookFlip}
+                            />
 
                             {/* Chapter Navigation */}
                             <div className="chapter-navigation">
                                 <button
-                                    className="btn btn-outline-secondary story-btn chapter-btn"
-                                    disabled
+                                    className="btn btn-primary story-btn chapter-btn"
+                                    onClick={flipPrev}
+                                    disabled={currentPage <= 0 || (totalPages || storyPages.length) === 0}
                                 >
                                     <i className="fas fa-chevron-left me-2"></i>{" "}
-                                    Previous Chapter
+                                    Previous Page
                                 </button>
                                 <div className="chapter-indicator secondry-font">
-                                    Chapter 1 of 1
+                                    Page {(totalPages || storyPages.length) > 0 ? currentPage + 1 : 0} of {totalPages || storyPages.length}
                                 </div>
                                 <button
-                                    className="btn btn-outline-secondary story-btn chapter-btn"
-                                    disabled
+                                    className="btn btn-primary story-btn chapter-btn"
+                                    onClick={flipNext}
+                                    disabled={(totalPages || storyPages.length) === 0 || currentPage >= (totalPages || storyPages.length) - 1}
                                 >
-                                    Next Chapter{" "}
+                                    Next Page{" "}
                                     <i className="fas fa-chevron-right ms-2"></i>
                                 </button>
                             </div>
