@@ -5,7 +5,7 @@ import Button from '@/Components/common/Button'
 import { Icons } from '@/utils/icons'
 import { Link } from '@inertiajs/react'
 
-const Packages = ({ story }) => {
+const Packages = ({ story, publishPackages = [] }) => {
   return (
     <Layout headerClass="inner-header">
       <Head title="Packages" />
@@ -20,115 +20,191 @@ const Packages = ({ story }) => {
         </div>
         <div className="container-xxl">
           <div className="row justify-content-center">
-            <div className="col-lg-8 col-xl-6">
-              {/* Package Card */}
-              <div className="publish-card package-card">
-                {/* Premium Badge */}
-                <div className="package-badge">
-                  Premium
-                </div>
-
-                {/* Package Icon */}
-                <div className="package-icon">
-                  <Icons.Premium className='fs-30 text-white' />
-                </div>
-
-                {/* Package Title */}
-                <h2 className="hd-md mb-20 package-title">
-                  Story Vault Premium
-                </h2>
-
-                {/* Price */}
-                <div className="mb-30">
-                  <span className="package-price">$19</span>
-                </div>
-
-                {/* Features List */}
-                <div className="mb-40 package-features">
-                  <div className="package-feature-item">
-                    <div className="feature-check-icon">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                      </svg>
+            {publishPackages.length > 0 ? (
+              publishPackages.map((pkg, index) => (
+                <div key={pkg.id} className="col-lg-8 col-xl-6">
+                  {/* Package Card */}
+                  <div className="publish-card package-card">
+                    {/* Premium Badge */}
+                    <div className="package-badge">
+                      {pkg.name}
                     </div>
-                    <span className="para-mid feature-text">
-                      Unlimited story creation and publishing
-                    </span>
-                  </div>
 
-                  <div className="package-feature-item">
-                    <div className="feature-check-icon">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                      </svg>
+                    {/* Package Icon */}
+                    <div className="package-icon">
+                      <Icons.Premium className='fs-30 text-white' />
                     </div>
-                    <span className="para-mid feature-text">
-                      Advanced character development tools
-                    </span>
-                  </div>
 
-                  <div className="package-feature-item">
-                    <div className="feature-check-icon">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                      </svg>
-                    </div>
-                    <span className="para-mid feature-text">
-                      Priority community story approval
-                    </span>
-                  </div>
+                    {/* Package Title */}
+                    <h2 className="hd-md mb-20 package-title">
+                      {pkg.name}
+                    </h2>
 
-                  <div className="package-feature-item">
-                    <div className="feature-check-icon">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                      </svg>
+                    {/* Price */}
+                    <div className="mb-30">
+                      <span className="package-price">
+                        {pkg.price ? `$${parseFloat(pkg.price).toFixed(2)}` : 'Free'}
+                      </span>
                     </div>
-                    <span className="para-mid feature-text">
-                      Exclusive writing workshops and tips
-                    </span>
-                  </div>
 
-                  <div className="package-feature-item">
-                    <div className="feature-check-icon">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                      </svg>
+                    {/* Features List */}
+                    <div className="mb-40 package-features">
+                      {pkg.features && pkg.features.length > 0 ? (
+                        pkg.features.map((feature, featureIndex) => (
+                          <div key={featureIndex} className="package-feature-item">
+                            <div className="feature-check-icon">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                              </svg>
+                            </div>
+                            <span className="para-mid feature-text">
+                              {feature}
+                            </span>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="package-feature-item">
+                          <div className="feature-check-icon">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+                              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                            </svg>
+                          </div>
+                          <span className="para-mid feature-text">
+                            No features listed
+                          </span>
+                        </div>
+                      )}
                     </div>
-                    <span className="para-mid feature-text">
-                      Advanced analytics and reader insights
-                    </span>
-                  </div>
 
-                  <div className="package-feature-item">
-                    <div className="feature-check-icon">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                      </svg>
+                    {/* CTA Button */}
+                    <div className="d-grid">
+                      {story?.id ? (
+                        <Link href={route('stories.publish.form', { story: story.id })}
+                          className="btn btn-primary btn-lg package-cta-button"
+                        >
+                          Get Started Now
+                        </Link> 
+                      ): (
+                          <button className="btn btn-secondary btn-lg" disabled>
+                            Loading...
+                          </button>)}
                     </div>
-                    <span className="para-mid feature-text">
-                      24/7 priority customer support
-                    </span>
+
+                    {/* Money Back Guarantee */}
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-lg-8 col-xl-6">
+                {/* Default Package Card when no packages exist */}
+                <div className="publish-card package-card">
+                  {/* Premium Badge */}
+                  <div className="package-badge">
+                    Premium
+                  </div>
 
-                {/* CTA Button */}
-                <div className="d-grid">
-                  {story?.id ? (
-                    <Link href={route('stories.publish.form', { story: story.id })}
-                      className="btn btn-primary btn-lg package-cta-button"
-                    >
-                      Get Started Now
-                    </Link> 
-                  ): (
-                      <button className="btn btn-secondary btn-lg" disabled>
-                        Loading...
-                      </button>)}
+                  {/* Package Icon */}
+                  <div className="package-icon">
+                    <Icons.Premium className='fs-30 text-white' />
+                  </div>
+
+                  {/* Package Title */}
+                  <h2 className="hd-md mb-20 package-title">
+                    Story Vault Premium
+                  </h2>
+
+                  {/* Price */}
+                  <div className="mb-30">
+                    <span className="package-price">$19</span>
+                  </div>
+
+                  {/* Features List */}
+                  <div className="mb-40 package-features">
+                    <div className="package-feature-item">
+                      <div className="feature-check-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                        </svg>
+                      </div>
+                      <span className="para-mid feature-text">
+                        Unlimited story creation and publishing
+                      </span>
+                    </div>
+
+                    <div className="package-feature-item">
+                      <div className="feature-check-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                        </svg>
+                      </div>
+                      <span className="para-mid feature-text">
+                        Advanced character development tools
+                      </span>
+                    </div>
+
+                    <div className="package-feature-item">
+                      <div className="feature-check-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                        </svg>
+                      </div>
+                      <span className="para-mid feature-text">
+                        Priority community story approval
+                      </span>
+                    </div>
+
+                    <div className="package-feature-item">
+                      <div className="feature-check-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                        </svg>
+                      </div>
+                      <span className="para-mid feature-text">
+                        Exclusive writing workshops and tips
+                      </span>
+                    </div>
+
+                    <div className="package-feature-item">
+                      <div className="feature-check-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                        </svg>
+                      </div>
+                      <span className="para-mid feature-text">
+                        Advanced analytics and reader insights
+                      </span>
+                    </div>
+
+                    <div className="package-feature-item">
+                      <div className="feature-check-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                        </svg>
+                      </div>
+                      <span className="para-mid feature-text">
+                        24/7 priority customer support
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* CTA Button */}
+                  <div className="d-grid">
+                    {story?.id ? (
+                      <Link href={route('stories.publish.form', { story: story.id })}
+                        className="btn btn-primary btn-lg package-cta-button"
+                      >
+                        Get Started Now
+                      </Link> 
+                    ): (
+                        <button className="btn btn-secondary btn-lg" disabled>
+                          Loading...
+                        </button>)}
+                  </div>
+
+                  {/* Money Back Guarantee */}
                 </div>
-
-                {/* Money Back Guarantee */}
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>

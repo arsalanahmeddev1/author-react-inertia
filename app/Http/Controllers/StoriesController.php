@@ -266,8 +266,12 @@ class StoriesController extends Controller
             return redirect()->route('stories.index')->with('error', 'Story not found.');
         }
 
+        // Fetch active publish packages
+        $publishPackages = \App\Models\PublishPackage::where('is_active', true)->get();
+
         return Inertia::render('Stories/Publish/Packages', [
             'story' => $story,
+            'publishPackages' => $publishPackages,
         ]);
     }
 

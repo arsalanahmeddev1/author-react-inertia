@@ -28,6 +28,7 @@ use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\Admin\PackagesController as AdminPackagesController;
+use App\Http\Controllers\Admin\PublishPackageController as AdminPublishPackageController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
@@ -110,30 +111,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/story/publish-request', [MainStoriesController::class, 'storePublishRequest'])->name('story.publish.request');
 });
 
-// Route::post('/stripe/checkout', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
-// Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
-// Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
-
-// Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/stripe/checkout/{package}', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
-//     Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
-//     Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
-// });
-
-
-// Route::get('/billing', [StripeController::class, 'createCheckoutSession']);
-
-// Route::get('/stories/publish/form', function () {
-//     return Inertia::render('Stories/Publish/Form');
-// })->name('stories.publish.form');
-
 
 Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent']);
 
-// Stripe routes - require authentication
 Route::middleware('auth')->group(function () {
     Route::post('/stripe/checkout', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
     Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
@@ -145,15 +126,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/story/store-draft-session', [MainStoriesController::class, 'storeDraftSession'])->name('story.draft.session');
 });
 
-
-
 // Admin Routes
 Route::prefix('admin-dashboard')->name('admin-dashboard.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->middleware(['auth']);
-
     Route::resource('users', UserController::class);
     Route::resource('stories', \App\Http\Controllers\Admin\StoriesController::class);
-    Route::resource('packages', \App\Http\Controllers\Admin\PackagesController::class);
+    Route::resource('packages', AdminPackagesController::class);
+    Route::resource('publish-packages', AdminPublishPackageController::class);
     Route::get('community/stories', [AdminStoriesController::class, 'communityStories'])->name('stories.community');
 
 

@@ -512,7 +512,7 @@ const Create = () => {
                                 </CRow>
 
                                 {/* Preview Section */}
-                                <CRow className="mb-4">
+                                {/* <CRow className="mb-4">
                                     <CCol md={12}>
                                         <h5>Stories Limit</h5>
                                         <div className="border rounded p-3 bg-light">
@@ -591,7 +591,7 @@ const Create = () => {
                                             </div>
                                         </div>
                                     </CCol>
-                                </CRow>
+                                </CRow> */}
 
                                 <CRow>
                                     <CCol md={12} className="d-flex gap-2">
