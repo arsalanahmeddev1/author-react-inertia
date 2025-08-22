@@ -616,15 +616,15 @@ const StoryModal = ({ show, onHide, story }) => {
                 </div>
 
                 {/* Subscription notice */}
-                 {/* {(!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') && ( */}
-                  {/* <div className="alert alert-info mb-3" role="alert">
+                 {(!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') && (
+                  <div className="alert alert-info mb-3" role="alert">
                     <i className="fas fa-info-circle me-2"></i>
                     <strong>Subscription Required:</strong> To add stories to the community, you need an active subscription. 
                     <a href={route('packages')} className="alert-link ms-2">
                       View available packages
                     </a>
-                  </div> */}
-                {/* )} */}
+                  </div>
+                )}
 
                 <div className="d-flex justify-content-end gap-3 pb-20">
                   <button
@@ -635,7 +635,7 @@ const StoryModal = ({ show, onHide, story }) => {
                     {isLoading ? <i className="fas fa-spinner fa-spin me-2"></i> : <i className="fas fa-save me-2"></i>}
                     Save Draft
                   </button>
-                  {/* <button
+                   <button
                     className="btn btn-success story-btn secondry-font"
                     onClick={() => handleAddToCommunity()}
                     disabled={isLoading || !isReadyForCommunity()}
@@ -646,7 +646,7 @@ const StoryModal = ({ show, onHide, story }) => {
                     {(!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') && (
                       <i className="fas fa-lock ms-2" title="Requires subscription"></i>
                     )}
-                  </button> */}
+                  </button>
                   <button
                     className="btn btn-primary story-btn secondry-font"
                     onClick={handlePublish}
@@ -660,7 +660,7 @@ const StoryModal = ({ show, onHide, story }) => {
 
               <Tab.Pane eventKey="drafts">
                 {/* Subscription notice for drafts */}
-                {/* {(!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') && (
+                {(!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') && (
                   <div className="alert alert-info mb-3" role="alert">
                     <i className="fas fa-info-circle me-2"></i>
                     <strong>Subscription Required:</strong> To add drafts to the community, you need an active subscription. 
@@ -668,7 +668,7 @@ const StoryModal = ({ show, onHide, story }) => {
                       View available packages
                     </a>
                   </div>
-                )} */}
+                )}
 
                 {savedDrafts.length > 0 ? (
                   <div className="drafts-list">
@@ -712,9 +712,9 @@ const StoryModal = ({ show, onHide, story }) => {
                           >
                             {isLoading ? <i className="fas fa-spinner fa-spin me-1"></i> : <i className="fas fa-users me-1"></i>}
                             Add to Community
-                            {/* {(!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') && (
+                            {(!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') && (
                               <i className="fas fa-lock ms-1" title="Requires subscription"></i>
-                            )} */}
+                            )}
                           </button>
                           <button
                             className="btn btn-sm btn-danger secondry-font"

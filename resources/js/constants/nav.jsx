@@ -92,6 +92,24 @@ const adminNav = [
     ],
   },
   {
+    component: CNavGroup,
+    name: 'Publish Packages',
+    to: '/admin-dashboard/packages',
+    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'List',
+        to: '/admin-dashboard/packages',
+      },
+      {
+        component: CNavItem,
+        name: 'Create',
+        to: '/admin-dashboard/packages/create',
+      },
+    ],
+  },
+  {
     component: CNavItem,
     name: 'Publish Requests',
     to: '/admin-dashboard/publish-requests',

@@ -8,9 +8,82 @@ import "@/assets/styles/story-read.css";
 import "@/assets/styles/comments.css";
 import { motion } from "framer-motion";
 import HTMLFlipBook from "react-pageflip";
-import Book from '../../Components/Book';
+import Book from "../../Components/Book";
+import usePaginateByHeight from "@/hooks/usePaginateByHeight";
 
 export default function Read({ story, auth }) {
+    const getStoryContent = () => {
+        if (story.content) {
+            return story.content;
+        }
+
+        return `
+      <h2>${story.title}</h2>
+      <p class="author">By ${story.author}</p>
+
+      <p>${story.description}</p>
+
+      <p><em>This story is still being written. Check back soon for the full content!</em></p>
+    `;
+    };
+    const bookRef = useRef(null);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const storyContent = getStoryContent();
+
+    const { pages: storyPages, isPaginating } = usePaginateByHeight(
+        storyContent,
+        460, // width (same as flipbook)
+        500, // height (same as flipbook)
+    );
+
+    useEffect(() => {
+        setTotalPages(storyPages.length);
+    }, [storyPages.length]);
+
+    const flipNext = () => bookRef.current?.pageFlip()?.flipNext();
+    const flipPrev = () => bookRef.current?.pageFlip()?.flipPrev();
+
+    const handleBookInit = (flipBookInstance) => {
+        if (!flipBookInstance) return;
+
+        // Debug: log available methods
+        console.log("FlipBook Instance:", flipBookInstance);
+        console.log(
+            "Available methods:",
+            Object.getOwnPropertyNames(flipBookInstance),
+        );
+        console.log("PageFlip property:", flipBookInstance.pageFlip);
+
+        // Try different possible method names for getting page count
+        const pageCount =
+            flipBookInstance.getPageCount?.() ||
+            flipBookInstance.pageFlip?.getPageCount?.() ||
+            storyPages.length;
+
+        setTotalPages(pageCount);
+        setCurrentPage(0);
+
+        // Listen to flip events - try different event binding approaches
+        if (flipBookInstance.on) {
+            flipBookInstance.on("flip", (e) => {
+                setCurrentPage(e.data);
+            });
+        } else if (flipBookInstance.pageFlip?.on) {
+            flipBookInstance.pageFlip.on("flip", (e) => {
+                setCurrentPage(e.data);
+            });
+        }
+    };
+
+    const handleBookFlip = (e) => {
+        setCurrentPage(e.data);
+    };
+
+    useEffect(() => {
+        // console.log("Page:", currentPage, "of", totalPages);
+    }, [currentPage, totalPages]);
+
     const [showCover, setShowCover] = useState(true);
     const [commentCount, setCommentCount] = useState(story.comment_count || 0);
 
@@ -41,34 +114,6 @@ export default function Read({ story, auth }) {
     }, [story.id]);
 
     // Get story content from the database, or create a default if not available
-    const getStoryContent = () => {
-        if (story.content) {
-            return story.content;
-        }
-
-        return `
-      <h2>${story.title}</h2>
-      <p class="author">By ${story.author}</p>
-
-      <p>${story.description}</p>
-
-      <p><em>This story is still being written. Check back soon for the full content!</em></p>
-    `;
-    };
-
-    const storyContent = getStoryContent();
-
-    // Utility function: split story content into smaller chunks (pages)
-    const paginateStory = (htmlContent, wordsPerPage = 200) => {
-        const words = htmlContent.split(" ");
-        const pages = [];
-        for (let i = 0; i < words.length; i += wordsPerPage) {
-            pages.push(words.slice(i, i + wordsPerPage).join(" "));
-        }
-        return pages;
-    };
-
-    const storyPages = paginateStory(storyContent);
 
     // Start reading (hide cover)
     const startReading = () => {
@@ -179,25 +224,74 @@ export default function Read({ story, auth }) {
                             </div>
 
                             {/* Reading Content with Flipbook */}
-                            <Book />
+                            {isPaginating ? (
+                                <div className="text-center py-5">
+                                    <div
+                                        className="spinner-border text-primary"
+                                        role="status"
+                                    >
+                                        <span className="visually-hidden">
+                                            Loading...
+                                        </span>
+                                    </div>
+                                    <p className="mt-3">
+                                        Preparing your book...
+                                    </p>
+                                </div>
+                            ) : (
+                                <Book
+                                    ref={bookRef}
+                                    pages={storyPages.map((page, index) => (
+                                        <div
+                                            key={index}
+                                            className="page-content"
+                                            dangerouslySetInnerHTML={{
+                                                __html: page,
+                                            }}
+                                        />
+                                    ))}
+                                    coverImage={
+                                        story.cover_image
+                                            ? `/storage/${story.cover_image}`
+                                            : "/assets/images/default-cover.jpg"
+                                    }
+                                    onInit={handleBookInit}
+                                    onFlip={handleBookFlip}
+                                />
+                            )}
 
                             {/* Chapter Navigation */}
                             <div className="chapter-navigation">
                                 <button
-                                    className="btn btn-outline-secondary story-btn chapter-btn"
-                                    disabled
+                                    className="btn btn-primary story-btn chapter-btn"
+                                    onClick={flipPrev}
+                                    disabled={
+                                        currentPage <= 0 ||
+                                        (totalPages || storyPages.length) === 0
+                                    }
                                 >
                                     <i className="fas fa-chevron-left me-2"></i>{" "}
-                                    Previous Chapter
+                                    Previous Page
                                 </button>
                                 <div className="chapter-indicator secondry-font">
-                                    Chapter 1 of 1
+                                    Page{" "}
+                                    {(totalPages || storyPages.length) > 0
+                                        ? currentPage + 1
+                                        : 0}{" "}
+                                    of {totalPages || storyPages.length}
                                 </div>
                                 <button
-                                    className="btn btn-outline-secondary story-btn chapter-btn"
-                                    disabled
+                                    className="btn btn-primary story-btn chapter-btn"
+                                    onClick={flipNext}
+                                    disabled={
+                                        (totalPages || storyPages.length) ===
+                                            0 ||
+                                        currentPage >=
+                                            (totalPages || storyPages.length) -
+                                                1
+                                    }
                                 >
-                                    Next Chapter{" "}
+                                    Next Page{" "}
                                     <i className="fas fa-chevron-right ms-2"></i>
                                 </button>
                             </div>
