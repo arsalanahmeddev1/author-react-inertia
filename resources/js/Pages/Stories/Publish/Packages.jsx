@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/react'
 import Button from '@/Components/common/Button'
 import { Icons } from '@/utils/icons'
 import { Link } from '@inertiajs/react'
-// packages
+
 const Packages = ({ story, publishPackages = [] }) => {
   return (
     <Layout headerClass="inner-header">
