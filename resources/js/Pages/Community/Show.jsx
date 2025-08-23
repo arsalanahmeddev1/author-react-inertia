@@ -48,7 +48,7 @@ export default function CommunityShow({ story }) {
                 <div className="row">
                   <div className="col-md-4 mb-4 mb-md-0">
                     <img
-                      src={`/${story.cover_image}`}
+                      src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/book-03.png'}
                       alt={story.title}
                       className="img-fluid rounded-3 mb-3"
                       onError={(e) => {

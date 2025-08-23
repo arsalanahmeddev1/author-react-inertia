@@ -15,6 +15,14 @@ import { MdOutlineWorkspacePremium } from "react-icons/md";
 import { FaCreditCard } from "react-icons/fa";
 import { FaPaypal } from "react-icons/fa";
 import { FaUniversity } from "react-icons/fa";
+import { FaBook } from "react-icons/fa";
+import { MdAutoStories } from "react-icons/md";
+import { CgReadme } from "react-icons/cg";
+import { MdOutlinePayment } from "react-icons/md";
+
+
+
+
 
 export const Icons = {
   View :GrFormView,
@@ -36,4 +44,8 @@ export const Icons = {
   CreditCard: FaCreditCard,
   PayPal: FaPaypal,
   Bank: FaUniversity,
+  Book: FaBook,
+  AutoStories: MdAutoStories,
+  Readme: CgReadme,
+  Payment: MdOutlinePayment,
 }

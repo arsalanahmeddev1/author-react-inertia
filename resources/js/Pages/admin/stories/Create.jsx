@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import DashboardLayout from '../../../Layouts/DashboardLayout';
+import Swal from 'sweetalert2';
 import {
   CButton,
   CCard,
@@ -21,7 +22,13 @@ import {
 } from '@coreui/react';
 import ReactQuill from 'react-quill-new';
 
-const Create = () => {
+// Define theme colors
+const themeColors = {
+  primary: '#C67C19',
+  secondary: '#74989E',
+};
+
+const Create = ({ flash }) => {
   const { data, setData, post, processing, errors, reset } = useForm({
     title: '',
     description: '',
@@ -35,18 +42,94 @@ const Create = () => {
 
   const [newCharacter, setNewCharacter] = useState({ name: '', description: '' });
   const [preview, setPreview] = useState(null);
-  const [successMessage, setSuccessMessage] = useState('');
+
+  // Handle flash messages with SweetAlert
+  useEffect(() => {
+    if (flash?.success) {
+      Swal.fire({
+        icon: 'success',
+        title: flash.success,
+        showConfirmButton: false,
+        timer: 1500,
+        confirmButtonColor: themeColors.primary,
+        background: '#fff',
+        customClass: {
+          popup: 'swal2-custom-popup',
+          title: 'swal2-custom-title',
+          content: 'swal2-custom-content'
+        }
+      });
+    }
+  }, [flash?.success]);
+
+  // Warn user about unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (data.title || data.description || data.author || data.content) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [data]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Show loading state
+    Swal.fire({
+      title: 'Creating story...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
     
     post(route('admin-dashboard.stories.store'), {
       preserveScroll: true,
       onSuccess: () => {
         reset();
         setPreview(null);
-        setSuccessMessage('Story created successfully!');
-        setTimeout(() => setSuccessMessage(''), 3000);
+        Swal.fire({
+          icon: 'success',
+          title: 'Story created successfully!',
+          text: 'Redirecting to stories list...',
+          showConfirmButton: false,
+          timer: 1500,
+          confirmButtonColor: themeColors.primary,
+          background: '#fff',
+          customClass: {
+            popup: 'swal2-custom-popup',
+            title: 'swal2-custom-title',
+            content: 'swal2-custom-content'
+          }
+        });
+      },
+      onError: (errors) => {
+        // Show specific error messages
+        let errorMessage = 'Please check your input.';
+        if (errors.title) errorMessage = errors.title;
+        else if (errors.description) errorMessage = errors.description;
+        else if (errors.author) errorMessage = errors.author;
+        else if (errors.genre) errorMessage = errors.genre;
+        else if (errors.content) errorMessage = errors.content;
+        else if (errors.cover_image) errorMessage = errors.cover_image;
+        
+        Swal.fire({
+          icon: 'error',
+          title: 'Error creating story!',
+          text: errorMessage,
+          showConfirmButton: true,
+          confirmButtonColor: themeColors.primary,
+          background: '#fff',
+          customClass: {
+            popup: 'swal2-custom-popup',
+            title: 'swal2-custom-title',
+            content: 'swal2-custom-content'
+          }
+        });
       },
     });
   };
@@ -96,11 +179,6 @@ const Create = () => {
               <strong>Create New Story</strong>
             </CCardHeader>
             <CCardBody>
-              {successMessage && (
-                <CAlert color="success" dismissible>
-                  {successMessage}
-                </CAlert>
-              )}
               
               <CForm onSubmit={handleSubmit} encType="multipart/form-data">
                 <CRow className="mb-3">

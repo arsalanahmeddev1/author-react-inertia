@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import DashboardLayout from '../../../Layouts/DashboardLayout';
+import Swal from 'sweetalert2';
 import {
   CCard,
   CCardBody,
@@ -21,7 +22,7 @@ const themeColors = {
   secondary: '#74989E',
 };
 
-const Edit = ({ user }) => {
+const Edit = ({ user, flash }) => {
   const [error, setError] = useState('');
   const { data, setData, put, processing, errors } = useForm({
     name: user.name,
@@ -29,13 +30,84 @@ const Edit = ({ user }) => {
     password: '',
   });
 
+  // Handle flash messages with SweetAlert
+  useEffect(() => {
+    if (flash?.success) {
+      Swal.fire({
+        icon: 'success',
+        title: flash.success,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  }, [flash?.success]);
+
+  // Warn user about unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (data.name !== user.name || data.email !== user.email || data.password) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [data, user]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    put(route('admin.users.update', user.id), {
+    
+    // Show loading state
+    Swal.fire({
+      title: 'Updating user...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    put(route('admin-dashboard.users.update', user.id), {
+      onSuccess: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'User updated successfully!',
+          text: 'Redirecting to users list...',
+          showConfirmButton: false,
+          timer: 1500,
+          confirmButtonColor: themeColors.primary,
+          background: '#fff',
+          customClass: {
+            popup: 'swal2-custom-popup',
+            title: 'swal2-custom-title',
+            content: 'swal2-custom-content'
+          }
+        });
+      },
       onError: (errors) => {
         if (Object.keys(errors).length === 0) {
           setError('An unexpected error occurred. Please try again.');
         }
+        
+        // Show specific error messages
+        let errorMessage = 'Please check your input.';
+        if (errors.name) errorMessage = errors.name;
+        else if (errors.email) errorMessage = errors.email;
+        else if (errors.password) errorMessage = errors.password;
+        
+        Swal.fire({
+          icon: 'error',
+          title: 'Error updating user!',
+          text: errorMessage,
+          showConfirmButton: true,
+          confirmButtonColor: themeColors.primary,
+          background: '#fff',
+          customClass: {
+            popup: 'swal2-custom-popup',
+            title: 'swal2-custom-title',
+            content: 'swal2-custom-content'
+          }
+        });
       },
     });
   };
@@ -52,16 +124,12 @@ const Edit = ({ user }) => {
               </div>
               <Link href={route('admin-dashboard.users.index')}>
                 <CButton 
-                  style={{ 
-                    color: themeColors.primary, 
-                    borderColor: themeColors.primary 
-                  }} 
-                  variant="outline" 
-                  size="sm"
-                  className="d-flex align-items-center"
+                  color="primary" size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
                 >
                   <FaArrowLeft className="me-1" /> Back to Users
                 </CButton>
+
+                
               </Link>
             </CCardHeader>
             <CCardBody>
@@ -108,10 +176,7 @@ const Edit = ({ user }) => {
 
                 <div className="d-flex justify-content-end">
                   <CButton 
-                    style={{ 
-                      backgroundColor: themeColors.primary, 
-                      borderColor: themeColors.primary 
-                    }} 
+                    color="primary" size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
                     type="submit" 
                     disabled={processing}
                     className="d-flex align-items-center"

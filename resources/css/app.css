@@ -102,6 +102,93 @@
   animation: fadeInDown 0.3s ease forwards;
 }
 
+/* Custom SweetAlert2 Styles */
+.swal2-custom-popup {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid #e1e5e9 !important;
+}
+
+.swal2-custom-title {
+  color: #2c3e50 !important;
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
+}
+
+.swal2-custom-content {
+  color: #5a6c7d !important;
+  font-size: 1rem !important;
+}
+
+.swal2-confirm {
+  background-color: #C67C19 !important;
+  border-color: #C67C19 !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.swal2-confirm:hover {
+  background-color: #a66a15 !important;
+  border-color: #a66a15 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(198, 124, 25, 0.3) !important;
+}
+
+.swal2-cancel {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.swal2-cancel:hover {
+  background-color: #5a6268 !important;
+  border-color: #5a6268 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3) !important;
+}
+
+/* SweetAlert2 loading animation */
+.swal2-popup.swal2-loading {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+}
+
+.swal2-loading .swal2-title {
+  color: #C67C19 !important;
+}
+
+/* Success icon color */
+.swal2-icon.swal2-success {
+  border-color: #28a745 !important;
+}
+
+.swal2-icon.swal2-success [class^='swal2-success-line'] {
+  background-color: #28a745 !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+  border-color: #28a745 !important;
+}
+
+/* Error icon color */
+.swal2-icon.swal2-error {
+  border-color: #dc3545 !important;
+}
+
+.swal2-icon.swal2-error [class^='swal2-x-mark-line'] {
+  background-color: #dc3545 !important;
+}
+
+/* Warning icon color */
+.swal2-icon.swal2-warning {
+  border-color: #ffc107 !important;
+  color: #856404 !important;
+}
+
   .create-element-wrapper {
     @apply rounded-md bg-white  border border-gray-300 shadow-sm focus-within:border-indigo-500 focus-within:ring focus-within:ring-indigo-500 p-[15px] mb-4;
   }

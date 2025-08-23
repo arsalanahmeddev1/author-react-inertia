@@ -34,7 +34,7 @@ export default function Read({ story, auth }) {
     const { pages: storyPages, isPaginating } = usePaginateByHeight(
         storyContent,
         460, // width (same as flipbook)
-        500, // height (same as flipbook)
+        600, // height (same as flipbook)
     );
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Head, router, Link } from '@inertiajs/react';
 import DashboardLayout from '../../../Layouts/DashboardLayout';
 import { Icons } from '../../../utils/icons';
@@ -22,6 +22,25 @@ import {
 } from '@coreui/react';
 
 function Index({ packages, flash }) {
+    // Handle flash messages with SweetAlert
+    useEffect(() => {
+        if (flash?.success) {
+            Swal.fire({
+                icon: 'success',
+                title: flash.success,
+                showConfirmButton: false,
+                timer: 1500,
+                confirmButtonColor: '#C67C19',
+                background: '#fff',
+                customClass: {
+                    popup: 'swal2-custom-popup',
+                    title: 'swal2-custom-title',
+                    content: 'swal2-custom-content'
+                }
+            });
+        }
+    }, [flash?.success]);
+
     const handleStatusChange = (id, value) => {
         router.put(`/admin/packages/${id}`, { is_active: value === "1" });
     };
@@ -32,17 +51,60 @@ function Index({ packages, flash }) {
             html: `Are you sure you want to delete the package: <strong>${pkg.name}</strong>?<br><br>This action cannot be undone.`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#fea257',
+            confirmButtonColor: '#d33',
             cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Delete',
+            confirmButtonText: 'Delete Package',
             cancelButtonText: 'Cancel',
+            background: '#fff',
             customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content',
                 confirmButton: 'swal2-confirm',
                 cancelButton: 'swal2-cancel'
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                router.delete(route('admin-dashboard.packages.destroy', pkg.id))
+                // Show loading state
+                Swal.fire({
+                    title: 'Deleting package...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                router.delete(route('admin-dashboard.packages.destroy', pkg.id), {
+                    onSuccess: () => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Package deleted successfully!',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            confirmButtonColor: '#C67C19',
+                            background: '#fff',
+                            customClass: {
+                                popup: 'swal2-custom-popup',
+                                title: 'swal2-custom-title',
+                                content: 'swal2-custom-content'
+                            }
+                        });
+                    },
+                    onError: () => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error deleting package!',
+                            text: 'An unexpected error occurred.',
+                            confirmButtonColor: '#C67C19',
+                            background: '#fff',
+                            customClass: {
+                                popup: 'swal2-custom-popup',
+                                title: 'swal2-custom-title',
+                                content: 'swal2-custom-content'
+                            }
+                        });
+                    }
+                });
             }
         })
     };
@@ -61,22 +123,6 @@ function Index({ packages, flash }) {
                                 </CButton>
                             </Link>
                         </CCardHeader>
-
-                        {flash?.success && (
-                            <div className="alert alert-success alert-dismissible fade show m-3" role="alert">
-                                <i className="fas fa-check-circle me-2"></i>
-                                {flash.success}
-                                <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        )}
-
-                        {flash?.error && (
-                            <div className="alert alert-danger alert-dismissible fade show m-3" role="alert">
-                                <i className="fas fa-exclamation-circle me-2"></i>
-                                {flash.error}
-                                <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        )}
 
                         <CCardBody>
                             <CTable hover responsive>

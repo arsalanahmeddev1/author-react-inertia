@@ -121,7 +121,7 @@ const userNav = [
   {
     component: CNavItem,
     name: 'User Dashboard',
-    to: '/dashboard',
+    to: '/user-dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },
 

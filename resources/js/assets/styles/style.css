@@ -1314,7 +1314,9 @@ header .btn.btn-link:active {
   background: linear-gradient(to left, rgba(0,0,0,0.08), transparent);
   pointer-events: none;
 }
-
+.dynamic-cover-wrapper {
+    
+}
 /* responsive */
 @media (min-width: 1560px) {
     .container {

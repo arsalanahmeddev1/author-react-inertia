@@ -1,6 +1,7 @@
 import React from 'react'
 import { Head, Link, router } from '@inertiajs/react'
 import DashboardLayout from '../../../Layouts/DashboardLayout'
+import Swal from 'sweetalert2';
 import {
   CButton,
   CCard,
@@ -14,7 +15,13 @@ import {
 import { Icons } from '../../../utils/icons'
 import { format } from 'date-fns'
 
-const Show = ({ package: pkg }) => {
+// Define theme colors
+const themeColors = {
+  primary: '#C67C19',
+  secondary: '#74989E',
+};
+
+const Show = ({ package: pkg, flash }) => {
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A'
     try {
@@ -46,11 +53,70 @@ const Show = ({ package: pkg }) => {
   };
 
   const handleDelete = () => {
-    if (confirm(`Are you sure you want to delete "${pkg.name}"? This action cannot be undone.`)) {
-      router.delete(route('admin-dashboard.packages.destroy', pkg.id), {
-        onSuccess: () => router.visit(route('admin-dashboard.packages.index')),
-      })
-    }
+    Swal.fire({
+      title: 'Confirm Delete',
+      html: `Are you sure you want to delete: <strong>${pkg.name}</strong>?<br><br>This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Delete Package',
+      cancelButtonText: 'Cancel',
+      background: '#fff',
+      customClass: {
+        popup: 'swal2-custom-popup',
+        title: 'swal2-custom-title',
+        content: 'swal2-custom-content',
+        confirmButton: 'swal2-confirm',
+        cancelButton: 'swal2-cancel'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Show loading state
+        Swal.fire({
+          title: 'Deleting package...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        
+        router.delete(route('admin-dashboard.packages.destroy', pkg.id), {
+          onSuccess: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Package deleted successfully!',
+              text: 'Redirecting to packages list...',
+              showConfirmButton: false,
+              timer: 1500,
+              confirmButtonColor: themeColors.primary,
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            }).then(() => {
+              router.visit(route('admin-dashboard.packages.index'));
+            });
+          },
+          onError: () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error deleting package!',
+              text: 'An unexpected error occurred.',
+              confirmButtonColor: themeColors.primary,
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            });
+          }
+        });
+      }
+    });
   }
 
   return (

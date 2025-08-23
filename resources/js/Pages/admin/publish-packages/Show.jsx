@@ -1,6 +1,7 @@
 import React from 'react'
 import { Head, Link, router } from '@inertiajs/react'
 import DashboardLayout from '../../../Layouts/DashboardLayout'
+import Swal from 'sweetalert2';
 import {
   CButton,
   CCard,
@@ -14,7 +15,13 @@ import {
 import { Icons } from '../../../utils/icons'
 import { format } from 'date-fns'
 
-const Show = ({ publishPackage: pkg }) => {
+// Define theme colors
+const themeColors = {
+  primary: '#C67C19',
+  secondary: '#74989E',
+};
+
+const Show = ({ publishPackage: pkg, flash }) => {
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A'
     try {
@@ -46,11 +53,70 @@ const Show = ({ publishPackage: pkg }) => {
   };
 
   const handleDelete = () => {
-    if (confirm(`Are you sure you want to delete "${pkg.name}"? This action cannot be undone.`)) {
-      router.delete(route('admin-dashboard.publish-packages.destroy', pkg.id), {
-        onSuccess: () => router.visit(route('admin-dashboard.publish-packages.index')),
-      })
-    }
+    Swal.fire({
+      title: 'Confirm Delete',
+      html: `Are you sure you want to delete: <strong>${pkg.name}</strong>?<br><br>This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Delete Package',
+      cancelButtonText: 'Cancel',
+      background: '#fff',
+      customClass: {
+        popup: 'swal2-custom-popup',
+        title: 'swal2-custom-title',
+        content: 'swal2-custom-content',
+        confirmButton: 'swal2-confirm',
+        cancelButton: 'swal2-cancel'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Show loading state
+        Swal.fire({
+          title: 'Deleting package...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        
+        router.delete(route('admin-dashboard.publish-packages.destroy', pkg.id), {
+          onSuccess: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Package deleted successfully!',
+              text: 'Redirecting to packages list...',
+              showConfirmButton: false,
+              timer: 1500,
+              confirmButtonColor: themeColors.primary,
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            }).then(() => {
+              router.visit(route('admin-dashboard.publish-packages.index'));
+            });
+          },
+          onError: () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error deleting package!',
+              text: 'An unexpected error occurred.',
+              confirmButtonColor: themeColors.primary,
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            });
+          }
+        });
+      }
+    });
   }
 
   return (
@@ -62,7 +128,7 @@ const Show = ({ publishPackage: pkg }) => {
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center">
                 <Link href={route('admin-dashboard.publish-packages.index')}>
-                  <CButton color="primary" size="sm" variant="outline" className="me-2">
+                  <CButton className="me-2 arrow-redirect-btn">
                     <Icons.ArrowLeft />
                   </CButton>
                 </Link>
@@ -70,12 +136,12 @@ const Show = ({ publishPackage: pkg }) => {
               </div>
               <div className="d-flex gap-2">
                 <Link href={route('admin-dashboard.publish-packages.edit', pkg.id)}>
-                  <CButton color="primary" size="sm" variant="outline">
+                  <CButton color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}>
                     <Icons.Edit className="me-1" /> Edit Package
                   </CButton>
                 </Link>
                 <CTooltip content="Delete Publish Package">
-                  <CButton color="danger" size="sm" onClick={handleDelete}>
+                  <CButton color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }} onClick={handleDelete}>
                     <Icons.Delete className="me-1" /> Delete Package
                   </CButton>
                 </CTooltip>

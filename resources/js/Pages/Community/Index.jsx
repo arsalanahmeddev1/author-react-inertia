@@ -97,8 +97,9 @@ export default function CommunityIndex({ stories, genres, filters }) {
               stories.data.map((story) => (
                 <div className="col-lg-4 col-md-6" key={story.id}>
                   <div className="cards" data-aos-duration="3000" data-aos="flip-left">
+                    <div className="dynamic-cover-wrapper">
                     <img
-                      src={`/${story.cover_image}`}
+                      src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/book-03.png'}
                       className="mb-20 w-100 story-book-img"
                       alt={story.title}
                       onError={(e) => {
@@ -109,7 +110,8 @@ export default function CommunityIndex({ stories, genres, filters }) {
                         ];
                         e.target.src = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
                       }}
-                    />
+                      />
+                      </div>
                     <div className="d-flex align-items-center justify-content-between mb-10">
                       <h4 className="light-black story-title">{story.title}</h4>
                       <div className='d-flex align-items-center gap-10'>

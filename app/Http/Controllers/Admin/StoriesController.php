@@ -7,6 +7,8 @@ use App\Models\Story;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Intervention\Image\Facades\Image;
+
 
 class StoriesController extends Controller
 {
@@ -133,8 +135,14 @@ class StoriesController extends Controller
             }
         }
 
+       
+
+
+
         return redirect()->route('admin-dashboard.stories.index')
             ->with('success', 'Story created successfully.');
+
+
     }
 
     /**
@@ -253,6 +261,13 @@ class StoriesController extends Controller
         $story->characters()->delete(); // Delete characters
 
         $story->delete();
+
+        // Check if the request came from community stories page
+        $referrer = request()->header('referer');
+        if ($referrer && str_contains($referrer, 'community/stories')) {
+            return redirect()->route('admin-dashboard.stories.community')
+                ->with('success', 'Community story deleted successfully.');
+        }
 
         return redirect()->route('admin-dashboard.stories.index')
             ->with('success', 'Story deleted successfully.');

@@ -148,6 +148,7 @@ Route::prefix('admin-dashboard')->name('admin-dashboard.')->middleware(['auth', 
 Route::prefix('user-dashboard')->name('user-dashboard.')->middleware(['auth', 'user'])->group(function() {
     Route::get('/', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::resource('stories', UserStoriesController::class);
+    Route::put('stories/{story}/toggle-status', [UserStoriesController::class, 'toggleStatus'])->name('stories.toggle-status');
 });
 
 

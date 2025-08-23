@@ -1,6 +1,7 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import DashboardLayout from '../../../Layouts/DashboardLayout';
+import Swal from 'sweetalert2';
 import {
   CCard,
   CCardBody,
@@ -11,7 +12,7 @@ import {
   CListGroupItem,
   CButton,
 } from '@coreui/react';
-import { FaArrowLeft, FaEdit, FaUserCircle } from 'react-icons/fa';
+import { FaArrowLeft, FaEdit, FaUserCircle, FaTrash } from 'react-icons/fa';
 
 // Define theme colors
 const themeColors = {
@@ -19,7 +20,62 @@ const themeColors = {
   secondary: '#74989E',
 };
 
-const Show = ({ user }) => {
+const Show = ({ user, flash }) => {
+  const handleDelete = () => {
+    Swal.fire({
+      title: 'Confirm Delete',
+      html: `Are you sure you want to delete the user: <strong>${user.name}</strong>?<br><br>This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Delete User',
+      cancelButtonText: 'Cancel',
+      background: '#fff',
+      customClass: {
+        popup: 'swal2-custom-popup',
+        title: 'swal2-custom-title',
+        content: 'swal2-custom-content',
+        confirmButton: 'swal2-confirm',
+        cancelButton: 'swal2-cancel'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.delete(route('admin-dashboard.users.destroy', user.id), {
+          onSuccess: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'User deleted successfully!',
+              showConfirmButton: false,
+              timer: 1500,
+              confirmButtonColor: themeColors.primary,
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            });
+          },
+          onError: () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error deleting user!',
+              text: 'An unexpected error occurred.',
+              confirmButtonColor: themeColors.primary,
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            });
+          }
+        });
+      }
+    });
+  };
+
   return (
     <DashboardLayout>
       <Head title={`User: ${user.name}`} />
@@ -33,30 +89,24 @@ const Show = ({ user }) => {
               <div className="d-flex gap-2">
                 <Link href={route('admin-dashboard.users.index')}>
                   <CButton 
-                    style={{ 
-                      color: themeColors.primary, 
-                      borderColor: themeColors.primary 
-                    }} 
-                    variant="outline" 
-                    size="sm"
-                    className="d-flex align-items-center"
+                   color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
                   >
                     <FaArrowLeft className="me-1" /> Back to Users
                   </CButton>
                 </Link>
                 <Link href={route('admin-dashboard.users.edit', user.id)}>
                   <CButton 
-                    style={{ 
-                      color: themeColors.secondary, 
-                      borderColor: themeColors.secondary 
-                    }} 
-                    variant="outline" 
-                    size="sm"
-                    className="d-flex align-items-center"
+                    color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
                   >
                     <FaEdit className="me-1" /> Edit User
                   </CButton>
                 </Link>
+                <CButton 
+                  onClick={handleDelete}
+                  color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
+                >
+                  <FaTrash className="me-1" /> Delete User
+                </CButton>
               </div>
             </CCardHeader>
             <CCardBody>

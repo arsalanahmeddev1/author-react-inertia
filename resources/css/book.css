@@ -28,8 +28,9 @@
   justify-content: center;
   align-items: center;
   background: #111;
-  object-position: top !important;
-  height: 500px !important;
+}
+.turn-book-wrapper .book-cover img {
+  object-position: top;
 }
 
 .cover-image {

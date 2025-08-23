@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Head, useForm, Link } from "@inertiajs/react";
 import DashboardLayout from "../../../Layouts/DashboardLayout";
 import { Icons } from "../../../utils/icons";
+import Swal from 'sweetalert2';
 import {
     CButton,
     CCard,
@@ -20,8 +21,14 @@ import {
     CBadge,
 } from "@coreui/react";
 
-const Create = () => {
-    const { data, setData, post, processing, errors } = useForm({
+// Define theme colors
+const themeColors = {
+    primary: '#C67C19',
+    secondary: '#74989E',
+};
+
+const Create = ({ flash }) => {
+    const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
         price_cents: "",
         interval: "",
@@ -29,10 +36,40 @@ const Create = () => {
         stripe_price_id: "",
         is_active: "1",
         words_limit: "",
+        stories_limit: "",
     });
 
-    const [successMessage, setSuccessMessage] = useState("");
-    const [validationErrors, setValidationErrors] = useState({});
+    // Handle flash messages with SweetAlert
+    useEffect(() => {
+        if (flash?.success) {
+            Swal.fire({
+                icon: 'success',
+                title: flash.success,
+                showConfirmButton: false,
+                timer: 1500,
+                confirmButtonColor: themeColors.primary,
+                background: '#fff',
+                customClass: {
+                    popup: 'swal2-custom-popup',
+                    title: 'swal2-custom-title',
+                    content: 'swal2-custom-content'
+                }
+            });
+        }
+    }, [flash?.success]);
+
+    // Warn user about unsaved changes
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            if (data.name || data.price_cents || data.interval || data.stripe_price_id) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, [data]);
 
     const addFeature = () => {
         setData("features", [...data.features, ""]);
@@ -49,55 +86,68 @@ const Create = () => {
         setData("features", newFeatures);
     };
 
-    // Clear validation errors when data changes
-    React.useEffect(() => {
-        if (Object.keys(errors).length > 0) {
-            setValidationErrors(errors);
-        }
-    }, [errors]);
-
     const validateForm = () => {
-    const newErrors = {};
+        const newErrors = {};
 
-    if (!data.name || data.name.trim() === "") {
-        newErrors.name = "Package name is required";
-    }
+        if (!data.name || data.name.trim() === "") {
+            newErrors.name = "Package name is required";
+        }
 
-    if (!data.price_cents || isNaN(data.price_cents) || data.price_cents <= 0) {
-        newErrors.price_cents = "Valid price is required";
-    }
+        if (!data.price_cents || isNaN(data.price_cents) || data.price_cents <= 0) {
+            newErrors.price_cents = "Valid price is required";
+        }
 
-    if (!data.interval) {
-        newErrors.interval = "Billing interval is required";
-    }
+        if (!data.interval) {
+            newErrors.interval = "Billing interval is required";
+        }
 
-    if (
-        data.features &&
-        Array.isArray(data.features) &&
-        data.features.filter((f) => f && f.trim()).length === 0
-    ) {
-        newErrors.features = "At least one feature is required";
-    }
+        if (
+            data.features &&
+            Array.isArray(data.features) &&
+            data.features.filter((f) => f && f.trim()).length === 0
+        ) {
+            newErrors.features = "At least one feature is required";
+        }
 
-    if (!data.stripe_price_id || data.stripe_price_id.trim() === "") {
-        newErrors.stripe_price_id = "Stripe Price ID is required";
-    }
+        if (!data.stripe_price_id || data.stripe_price_id.trim() === "") {
+            newErrors.stripe_price_id = "Stripe Price ID is required";
+        }
 
-    if (!data.words_limit || isNaN(data.words_limit) || data.words_limit <= 0) {
-        newErrors.words_limit = "Valid words limit is required";
-    }
+        if (!data.words_limit || isNaN(data.words_limit) || data.words_limit <= 0) {
+            newErrors.words_limit = "Valid words limit is required";
+        }
 
-    setValidationErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-};
-
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
         // Validate form before submission
         if (!validateForm()) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error!',
+                text: 'Please check your input and try again.',
+                confirmButtonColor: themeColors.primary,
+                background: '#fff',
+                customClass: {
+                    popup: 'swal2-custom-popup',
+                    title: 'swal2-custom-title',
+                    content: 'swal2-custom-content'
+                }
+            });
             return;
         }
+
+        // Show loading state
+        Swal.fire({
+            title: 'Creating package...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
         // Filter out empty features
         const featuresArray = data.features.filter((f) => f && f.trim());
@@ -105,33 +155,53 @@ const Create = () => {
         // Update the form data with filtered features and other formatted data
         setData("features", featuresArray);
         setData("name", data.name.trim());
-        // price_cents is already in cents from the onChange handler
         setData("is_active", data.is_active === "1");
 
-        // Use setTimeout to ensure state updates are processed before submission
-        setTimeout(() => {
-            post(route("admin-dashboard.packages.store"), {
-                preserveScroll: true,
-                onSuccess: () => {
-                    setSuccessMessage("Package created successfully!");
-                    setValidationErrors({});
-                    // Reset form after successful creation
-                    setData({
-                        name: "",
-                        price_cents: "",
-                        interval: "",
-                        features: [""],
-                        stripe_price_id: "",
-                        is_active: "1",
-                    });
-                    setTimeout(() => setSuccessMessage(""), 3000);
-                },
-                onError: (errors) => {
-                    console.error("Creation failed:", errors);
-                    setValidationErrors(errors);
-                },
-            });
-        }, 100); // Small delay to ensure state updates are processed
+        post(route("admin-dashboard.packages.store"), {
+            preserveScroll: true,
+            onSuccess: () => {
+                reset();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Package created successfully!',
+                    text: 'Redirecting to packages list...',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    confirmButtonColor: themeColors.primary,
+                    background: '#fff',
+                    customClass: {
+                        popup: 'swal2-custom-popup',
+                        title: 'swal2-custom-title',
+                        content: 'swal2-custom-content'
+                    }
+                });
+            },
+            onError: (errors) => {
+                // Show specific error messages
+                let errorMessage = 'Please check your input.';
+                if (errors.name) errorMessage = errors.name;
+                else if (errors.price_cents) errorMessage = errors.price_cents;
+                else if (errors.interval) errorMessage = errors.interval;
+                else if (errors.stripe_price_id) errorMessage = errors.stripe_price_id;
+                else if (errors.words_limit) errorMessage = errors.words_limit;
+                else if (errors.stories_limit) errorMessage = errors.stories_limit;
+                else if (errors.features) errorMessage = errors.features;
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error creating package!',
+                    text: errorMessage,
+                    showConfirmButton: true,
+                    confirmButtonColor: themeColors.primary,
+                    background: '#fff',
+                    customClass: {
+                        popup: 'swal2-custom-popup',
+                        title: 'swal2-custom-title',
+                        content: 'swal2-custom-content'
+                    }
+                });
+            },
+        });
     };
 
     const intervalOptions = [
@@ -171,11 +241,7 @@ const Create = () => {
                             </div>
                         </CCardHeader>
                         <CCardBody>
-                            {successMessage && (
-                                <CAlert color="success" dismissible>
-                                    {successMessage}
-                                </CAlert>
-                            )}
+                            {/* Removed successMessage and validationErrors state */}
 
                             <CForm onSubmit={handleSubmit}>
                                 <CRow className="mb-3">
@@ -190,19 +256,13 @@ const Create = () => {
                                                 setData("name", e.target.value)
                                             }
                                             invalid={
-                                                !!errors.name ||
-                                                !!validationErrors.name
+                                                !!errors.name
                                             }
                                             placeholder="Enter package name"
                                         />
                                         {errors.name && (
                                             <div className="text-danger">
                                                 {errors.name}
-                                            </div>
-                                        )}
-                                        {validationErrors.name && (
-                                            <div className="text-danger">
-                                                {validationErrors.name}
                                             </div>
                                         )}
                                     </CCol>
@@ -249,8 +309,7 @@ const Create = () => {
                                                     }
                                                 }}
                                                 invalid={
-                                                    !!errors.price_cents ||
-                                                    !!validationErrors.price_cents
+                                                    !!errors.price_cents
                                                 }
                                                 placeholder="10.30 for $10.30"
                                                 min="0"
@@ -265,11 +324,6 @@ const Create = () => {
                                         {errors.price_cents && (
                                             <div className="text-danger">
                                                 {errors.price_cents}
-                                            </div>
-                                        )}
-                                        {validationErrors.price_cents && (
-                                            <div className="text-danger">
-                                                {validationErrors.price_cents}
                                             </div>
                                         )}
                                     </CCol>
@@ -290,8 +344,7 @@ const Create = () => {
                                                 )
                                             }
                                             invalid={
-                                                !!errors.interval ||
-                                                !!validationErrors.interval
+                                                !!errors.interval
                                             }
                                             options={intervalOptions}
                                         />
@@ -302,11 +355,6 @@ const Create = () => {
                                         {errors.interval && (
                                             <div className="text-danger">
                                                 {errors.interval}
-                                            </div>
-                                        )}
-                                        {validationErrors.interval && (
-                                            <div className="text-danger">
-                                                {validationErrors.interval}
                                             </div>
                                         )}
                                     </CCol>
@@ -325,8 +373,7 @@ const Create = () => {
                                                 )
                                             }
                                             invalid={
-                                                !!errors.is_active ||
-                                                !!validationErrors.is_active
+                                                !!errors.is_active
                                             }
                                             options={statusOptions}
                                         />
@@ -336,11 +383,6 @@ const Create = () => {
                                         {errors.is_active && (
                                             <div className="text-danger">
                                                 {errors.is_active}
-                                            </div>
-                                        )}
-                                        {validationErrors.is_active && (
-                                            <div className="text-danger">
-                                                {validationErrors.is_active}
                                             </div>
                                         )}
                                     </CCol>
@@ -361,8 +403,7 @@ const Create = () => {
                                                 )
                                             }
                                             invalid={
-                                                !!errors.stripe_price_id ||
-                                                !!validationErrors.stripe_price_id
+                                                !!errors.stripe_price_id
                                             }
                                             placeholder="Enter Stripe price ID (optional)"
                                         />
@@ -373,13 +414,6 @@ const Create = () => {
                                         {errors.stripe_price_id && (
                                             <div className="text-danger">
                                                 {errors.stripe_price_id}
-                                            </div>
-                                        )}
-                                        {validationErrors.stripe_price_id && (
-                                            <div className="text-danger">
-                                                {
-                                                    validationErrors.stripe_price_id
-                                                }
                                             </div>
                                         )}
                                     </CCol>
@@ -398,19 +432,13 @@ const Create = () => {
                                                 setData("words_limit", e.target.value)
                                             }
                                             invalid={
-                                                !!errors.words_limit ||
-                                                !!validationErrors.words_limit
+                                                !!errors.words_limit
                                             }
                                             placeholder="Enter words limit"
                                         />
                                         {errors.words_limit && (
                                             <div className="text-danger">
                                                 {errors.words_limit}
-                                            </div>
-                                        )}
-                                        {validationErrors.words_limit && (
-                                            <div className="text-danger">
-                                                {validationErrors.words_limit}
                                             </div>
                                         )}
                                     </CCol>
@@ -427,19 +455,13 @@ const Create = () => {
                                                 setData("stories_limit", e.target.value)
                                             }
                                             invalid={
-                                                !!errors.stories_limit ||
-                                                !!validationErrors.stories_limit
+                                                !!errors.stories_limit
                                             }
                                             placeholder="Enter stories limit"
                                         />
                                         {errors.stories_limit && (
                                             <div className="text-danger">
                                                 {errors.stories_limit}
-                                            </div>
-                                        )}
-                                        {validationErrors.stories_limit && (
-                                            <div className="text-danger">
-                                                {validationErrors.stories_limit}
                                             </div>
                                         )}
                                     </CCol>
@@ -501,11 +523,6 @@ const Create = () => {
                                         {errors.features && (
                                             <div className="text-danger">
                                                 {errors.features}
-                                            </div>
-                                        )}
-                                        {validationErrors.features && (
-                                            <div className="text-danger">
-                                                {validationErrors.features}
                                             </div>
                                         )}
                                     </CCol>

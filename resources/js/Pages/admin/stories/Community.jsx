@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Head, router } from '@inertiajs/react'
 import DashboardLayout from '../../../Layouts/DashboardLayout';
 import { Icons } from '../../../utils/icons';
+import Swal from 'sweetalert2';
 import {
   CButton,
   CCard,
@@ -18,36 +19,223 @@ import {
   CTableHeaderCell,
   CTableRow,
   CTooltip,
-  CModal,
-  CModalHeader,
-  CModalTitle,
-  CModalBody,
-  CModalFooter,
   CBadge,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 // import { cilTrash, cilEye } from '@coreui/icons'
 // import { format } from 'date-fns'
 
-const Community = ({ stories }) => {
-  const [deleteModal, setDeleteModal] = useState(false)
-  const [storyToDelete, setStoryToDelete] = useState(null)
+const Community = ({ stories, flash }) => {
+  // Handle flash messages with SweetAlert
+  useEffect(() => {
+    if (flash?.success) {
+      Swal.fire({
+        icon: 'success',
+        title: flash.success,
+        showConfirmButton: false,
+        timer: 1500,
+        confirmButtonColor: '#C67C19',
+        background: '#fff',
+        customClass: {
+          popup: 'swal2-custom-popup',
+          title: 'swal2-custom-title',
+          content: 'swal2-custom-content'
+        }
+      });
+    }
+  }, [flash?.success]);
 
   const confirmDelete = (story) => {
-    setStoryToDelete(story)
-    setDeleteModal(true)
+    Swal.fire({
+      title: 'Confirm Delete',
+      html: `Are you sure you want to delete the story: <strong>${story.title}</strong>?<br><br>This action cannot be undone and will remove all associated comments and likes.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Delete Story',
+      cancelButtonText: 'Cancel',
+      background: '#fff',
+      customClass: {
+        popup: 'swal2-custom-popup',
+        title: 'swal2-custom-title',
+        content: 'swal2-custom-content',
+        confirmButton: 'swal2-confirm',
+        cancelButton: 'swal2-cancel'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Show loading state
+        Swal.fire({
+          title: 'Deleting story...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        
+        router.delete(route('admin-dashboard.stories.destroy', story.id), {
+          onSuccess: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Story deleted successfully!',
+              showConfirmButton: false,
+              timer: 1500,
+              confirmButtonColor: '#C67C19',
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            });
+          },
+          onError: () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error deleting story!',
+              text: 'An unexpected error occurred.',
+              confirmButtonColor: '#C67C19',
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            });
+          }
+        });
+      }
+    })
   }
 
-  const handleDelete = () => {
-    if (storyToDelete) {
-      router.delete(route('admin-dashboard.stories.destroy', storyToDelete.id), {
-        onSuccess: () => {
-          setDeleteModal(false)
-          setStoryToDelete(null)
-        }
-      })
-    }
-  }
+  const handleApprove = (story) => {
+    Swal.fire({
+      title: 'Approve Story',
+      html: `Are you sure you want to approve: <strong>${story.title}</strong>?<br><br>This will make the story visible to all users.`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Approve Story',
+      cancelButtonText: 'Cancel',
+      background: '#fff',
+      customClass: {
+        popup: 'swal2-custom-popup',
+        title: 'swal2-custom-title',
+        content: 'swal2-custom-content',
+        confirmButton: 'swal2-confirm',
+        cancelButton: 'swal2-cancel'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Show loading state
+        Swal.fire({
+          title: 'Approving story...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        
+        router.post(route('admin-dashboard.stories.approve', story.id), {}, {
+          onSuccess: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Story approved successfully!',
+              showConfirmButton: false,
+              timer: 1500,
+              confirmButtonColor: '#28a745',
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            });
+          },
+          onError: () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error approving story!',
+              text: 'An unexpected error occurred.',
+              confirmButtonColor: '#28a745',
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            });
+          }
+        });
+      }
+    });
+  };
+
+  const handleReject = (story) => {
+    Swal.fire({
+      title: 'Reject Story',
+      html: `Are you sure you want to reject: <strong>${story.title}</strong>?<br><br>This will remove the story from the community.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Reject Story',
+      cancelButtonText: 'Cancel',
+      background: '#fff',
+      customClass: {
+        popup: 'swal2-custom-popup',
+        title: 'swal2-custom-title',
+        content: 'swal2-custom-content',
+        confirmButton: 'swal2-confirm',
+        cancelButton: 'swal2-cancel'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Show loading state
+        Swal.fire({
+          title: 'Rejecting story...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        
+        router.post(route('admin-dashboard.stories.reject', story.id), {}, {
+          onSuccess: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Story rejected successfully!',
+              showConfirmButton: false,
+              timer: 1500,
+              confirmButtonColor: '#dc3545',
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            });
+          },
+          onError: () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error rejecting story!',
+              text: 'An unexpected error occurred.',
+              confirmButtonColor: '#dc3545',
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            });
+          }
+        });
+      }
+    });
+  };
 
   // const formatDate = (dateString) => {
   //   if (!dateString) return 'N/A'
@@ -65,7 +253,7 @@ const Community = ({ stories }) => {
         <CCol xs={12}>
           <CCard className="mb-4">
             <CCardHeader className="d-flex justify-content-between align-items-center">
-              <strong>Stories</strong>
+              <strong>Community Stories</strong>
             </CCardHeader>
             <CCardBody>
               <CTable hover responsive>
@@ -113,8 +301,7 @@ const Community = ({ stories }) => {
                             {[
                               <CTooltip key="view" content="View Story">
                                 <CButton
-                                  color="info"
-                                  size="sm"
+                                className='btn-icon-size p-0'
                                   onClick={() => router.visit(route('admin-dashboard.stories.show', story.id))}
                                 >
                                   {/* <CIcon icon={cilEye} /> View */}
@@ -123,8 +310,7 @@ const Community = ({ stories }) => {
                               </CTooltip>,
                               <CTooltip key="edit" content="Edit Story">
                                 <CButton
-                                  color="warning"
-                                  size="sm"
+                                  className='btn-icon-size p-0'
                                   onClick={() => router.visit(route('admin-dashboard.stories.edit', story.id))}
                                 >
                                   <Icons.Edit />
@@ -132,8 +318,7 @@ const Community = ({ stories }) => {
                               </CTooltip>,
                               <CTooltip key="delete" content="Delete Story">
                                 <CButton
-                                  color="danger"
-                                  size="sm"
+                                className='btn-icon-size p-0'
                                   onClick={() => confirmDelete(story)}
                                 >
                                   <Icons.Delete />
@@ -145,7 +330,7 @@ const Community = ({ stories }) => {
                                     <CButton
                                       color="success"
                                       size="sm"
-                                      onClick={() => router.post(route('admin-dashboard.stories.approve', story.id))}
+                                      onClick={() => handleApprove(story)}
                                     >
                                       ✅
                                     </CButton>
@@ -154,7 +339,7 @@ const Community = ({ stories }) => {
                                     <CButton
                                       color="warning"
                                       size="sm"
-                                      onClick={() => router.post(route('admin-dashboard.stories.reject', story.id))}
+                                      onClick={() => handleReject(story)}
                                     >
                                       ❌
                                     </CButton>
@@ -196,24 +381,7 @@ const Community = ({ stories }) => {
       </CRow>
 
       {/* Delete Confirmation Modal */}
-      <CModal visible={deleteModal} onClose={() => setDeleteModal(false)}>
-        <CModalHeader onClose={() => setDeleteModal(false)}>
-          <CModalTitle>Confirm Delete</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          Are you sure you want to delete the story: <strong>{storyToDelete?.title}</strong>?
-          <br />
-          This action cannot be undone and will remove all associated comments and likes.
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setDeleteModal(false)}>
-            Cancel
-          </CButton>
-          <CButton color="danger" onClick={handleDelete}>
-            Delete
-          </CButton>
-        </CModalFooter>
-      </CModal>
+      {/* This modal is no longer needed as SweetAlert2 handles the confirmation */}
     </DashboardLayout>
   )
 }

@@ -10,7 +10,18 @@ class UserDashboardController extends Controller
 {
     public function index()
     {
-        return Inertia::render('user/Dashboard');
+        $user = auth()->user();
+        $totalStories = $user->stories()->count();
+        $publishedStories = $user->stories()->where('status', 'published')->count();
+        $totalReads = $user->stories()->sum('read_count');
+        return Inertia::render('user/Dashboard', [
+            'metrics' => [
+                'totalStories' => $totalStories,
+                'publishedStories' => $publishedStories,
+                '$totalReads' => $totalReads,
+            ]
+        ]);
+
     }
 
     

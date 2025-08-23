@@ -31,7 +31,7 @@ const themeColors = {
 const UserIndex = ({ users, flash }) => {
   const toggleUserStatus = (userId) => {
     if (confirm('Are you sure you want to toggle this user\'s status?')) {
-      router.post(route('admin.users.toggle-status', userId), {}, {
+      router.post(route('admin-dashboard.users.toggle-status', userId), {}, {
         preserveScroll: true,
       });
     }
@@ -70,9 +70,7 @@ const UserIndex = ({ users, flash }) => {
               </strong>
               <Link className='text-decoration-none' href={route('admin-dashboard.users.create')}>
                 <CButton 
-                  style={{ backgroundColor: themeColors.primary, borderColor: themeColors.primary }}
-                  className="d-flex align-items-center text-black" 
-                  size="sm"
+                  color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
                 >
                   <FaUserPlus className="me-2" /> <span>Create User</span>
                 </CButton>

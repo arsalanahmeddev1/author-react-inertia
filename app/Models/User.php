@@ -126,4 +126,8 @@ class User extends Authenticatable
     public function subscription() {
         return $this->hasOne(Subscription::class)->with('package');
     }
+
+    public function stories() {
+        return $this->hasMany(Story::class);
+    }
 }

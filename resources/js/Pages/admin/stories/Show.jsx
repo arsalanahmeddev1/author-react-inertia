@@ -1,6 +1,7 @@
 import React from 'react'
 import { Head, Link, router } from '@inertiajs/react'
 import DashboardLayout from '../../../Layouts/DashboardLayout'
+import Swal from 'sweetalert2'
 import {
   CButton,
   CCard,
@@ -15,7 +16,13 @@ import CIcon from '@coreui/icons-react'
 import { cilArrowLeft, cilTrash } from '@coreui/icons'
 import { format } from 'date-fns'
 
-const Show = ({ story }) => {
+// Define theme colors
+const themeColors = {
+  primary: '#C67C19',
+  secondary: '#74989E',
+};
+
+const Show = ({ story, flash }) => {
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A'
     try {
@@ -26,11 +33,70 @@ const Show = ({ story }) => {
   }
 
   const handleDelete = () => {
-    if (confirm(`Are you sure you want to delete "${story.title}"? This action cannot be undone.`)) {
-      router.delete(route('admin-dashboard.stories.destroy', story.id), {
-        onSuccess: () => router.visit(route('admin-dashboard.stories.index')),
-      })
-    }
+    Swal.fire({
+      title: 'Confirm Delete',
+      html: `Are you sure you want to delete: <strong>${story.title}</strong>?<br><br>This action cannot be undone and will remove all associated comments and likes.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Delete Story',
+      cancelButtonText: 'Cancel',
+      background: '#fff',
+      customClass: {
+        popup: 'swal2-custom-popup',
+        title: 'swal2-custom-title',
+        content: 'swal2-custom-content',
+        confirmButton: 'swal2-confirm',
+        cancelButton: 'swal2-cancel'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Show loading state
+        Swal.fire({
+          title: 'Deleting story...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        
+        router.delete(route('admin-dashboard.stories.destroy', story.id), {
+          onSuccess: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Story deleted successfully!',
+              text: 'Redirecting to stories list...',
+              showConfirmButton: false,
+              timer: 1500,
+              confirmButtonColor: themeColors.primary,
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            }).then(() => {
+              router.visit(route('admin-dashboard.stories.index'));
+            });
+          },
+          onError: () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error deleting story!',
+              text: 'An unexpected error occurred.',
+              confirmButtonColor: themeColors.primary,
+              background: '#fff',
+              customClass: {
+                popup: 'swal2-custom-popup',
+                title: 'swal2-custom-title',
+                content: 'swal2-custom-content'
+              }
+            });
+          }
+        });
+      }
+    });
   }
 
   return (
@@ -42,14 +108,14 @@ const Show = ({ story }) => {
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center">
                 <Link href={route('admin-dashboard.stories.index')}>
-                  <CButton color="primary" size="sm" variant="outline" className="me-2">
+                  <CButton className="me-2 arrow-redirect-btn">
                     <CIcon icon={cilArrowLeft} />
                   </CButton>
                 </Link>
                 <strong>Story Details</strong>
               </div>
               <CTooltip content="Delete Story">
-                <CButton color="danger" size="sm" onClick={handleDelete}>
+                <CButton color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }} onClick={handleDelete}>
                   <CIcon icon={cilTrash} className="me-1" /> Delete Story
                 </CButton>
               </CTooltip>
@@ -86,7 +152,7 @@ const Show = ({ story }) => {
               <div className="border rounded p-3 bg-light">
                 <div style={{ maxHeight: '400px', overflow: 'auto' }}>
                   {story.content ? (
-                    <div dangerouslySetInnerHTML={{ __html: story.content }} />
+                    <div className='page-content' dangerouslySetInnerHTML={{ __html: story.content }} />
                   ) : (
                     <p className="text-muted">No content available.</p>
                   )}

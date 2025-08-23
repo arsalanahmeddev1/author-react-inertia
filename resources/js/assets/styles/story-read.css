@@ -309,11 +309,14 @@
     font-family: "Georgia", serif;
     box-sizing: border-box;
     position: relative;
-    background: linear-gradient(
+    /* background: linear-gradient(
         302deg,
         rgb(254 162 87 / 55%) 0%,
         rgb(116 152 158 / 39%) 67%
-    );
+    ); */
+    background-image: url('../../../../assets/images/book-page-bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .page-content div {

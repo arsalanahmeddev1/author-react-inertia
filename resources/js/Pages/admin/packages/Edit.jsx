@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, useForm, Link } from '@inertiajs/react';
 import DashboardLayout from '../../../Layouts/DashboardLayout';
 import { Icons } from '../../../utils/icons';
+import Swal from 'sweetalert2';
 import {
   CButton,
   CCard,
@@ -19,12 +20,13 @@ import {
   CBadge,
 } from '@coreui/react';
 
-const Edit = ({ package: pkg }) => {
-  // Debug log to see what we're receiving
-  console.log('Package data received:', pkg);
-  console.log('Package features type:', typeof pkg.features);
-  console.log('Package features value:', pkg.features);
+// Define theme colors
+const themeColors = {
+  primary: '#C67C19',
+  secondary: '#74989E',
+};
 
+const Edit = ({ package: pkg, flash }) => {
   const { data, setData, post, processing, errors } = useForm({
     name: pkg.name || '',
     price_cents: pkg.price_cents || '',
@@ -46,8 +48,38 @@ const Edit = ({ package: pkg }) => {
     _method: 'PUT', // For method spoofing (PUT request)
   });
 
-  const [successMessage, setSuccessMessage] = useState('');
-  const [validationErrors, setValidationErrors] = useState({});
+  // Handle flash messages with SweetAlert
+  useEffect(() => {
+    if (flash?.success) {
+      Swal.fire({
+        icon: 'success',
+        title: flash.success,
+        showConfirmButton: false,
+        timer: 1500,
+        confirmButtonColor: themeColors.primary,
+        background: '#fff',
+        customClass: {
+          popup: 'swal2-custom-popup',
+          title: 'swal2-custom-title',
+          content: 'swal2-custom-content'
+        }
+      });
+    }
+  }, [flash?.success]);
+
+  // Warn user about unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (data.name !== pkg.name || data.price_cents !== pkg.price_cents ||
+        data.interval !== pkg.interval || data.stripe_price_id !== pkg.stripe_price_id) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [data, pkg]);
 
   const addFeature = () => {
     setData('features', [...data.features, '']);
@@ -64,15 +96,8 @@ const Edit = ({ package: pkg }) => {
     setData('features', newFeatures);
   };
 
-  // Clear validation errors when data changes
-  React.useEffect(() => {
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
-    }
-  }, [errors]);
-
   // Ensure features are properly initialized
-  React.useEffect(() => {
+  useEffect(() => {
     // If features is not properly set, initialize it
     if (!data.features && pkg.features) {
       if (Array.isArray(pkg.features)) {
@@ -98,54 +123,98 @@ const Edit = ({ package: pkg }) => {
       newErrors.interval = 'Please select a valid interval';
     }
 
-    // Validate features - ensure it's not empty if provided
-    if (data.features && Array.isArray(data.features) && data.features.filter(f => f && f.trim()).length === 0) {
-      newErrors.features = 'At least one feature is required';
+    if (!data.stripe_price_id || data.stripe_price_id.trim() === '') {
+      newErrors.stripe_price_id = 'Stripe Price ID is required';
     }
 
-    setValidationErrors(newErrors);
+    if (!data.words_limit || isNaN(data.words_limit) || data.words_limit <= 0) {
+      newErrors.words_limit = 'Valid words limit is required';
+    }
+
+    if (!data.stories_limit || isNaN(data.stories_limit) || data.stories_limit <= 0) {
+      newErrors.stories_limit = 'Valid stories limit is required';
+    }
+
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log('Form submission started');
-    console.log('Original data.features:', data.features);
-    console.log('Original data.features type:', typeof data.features);
-
     // Validate form before submission
     if (!validateForm()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error!',
+        text: 'Please check your input and try again.',
+        confirmButtonColor: themeColors.primary,
+        background: '#fff',
+        customClass: {
+          popup: 'swal2-custom-popup',
+          title: 'swal2-custom-title',
+          content: 'swal2-custom-content'
+        }
+      });
       return;
     }
 
+    // Show loading state
+    Swal.fire({
+      title: 'Updating package...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     // Filter out empty features
     const featuresArray = data.features.filter(f => f && f.trim());
-
-    // Update the form data with filtered features and other formatted data
     setData('features', featuresArray);
-    setData('name', data.name.trim());
-    // price_cents is already in cents from the onChange handler
-    setData('is_active', data.is_active === '1');
 
-    console.log('Updated form data with features as array:', featuresArray);
+    post(route('admin-dashboard.packages.update', pkg.id), {
+      preserveScroll: true,
+      onSuccess: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Package updated successfully!',
+          text: 'Redirecting to packages list...',
+          showConfirmButton: false,
+          timer: 1500,
+          confirmButtonColor: themeColors.primary,
+          background: '#fff',
+          customClass: {
+            popup: 'swal2-custom-popup',
+            title: 'swal2-custom-title',
+            content: 'swal2-custom-content'
+          }
+        });
+      },
+      onError: (errors) => {
+        // Show specific error messages
+        let errorMessage = 'Please check your input.';
+        if (errors.name) errorMessage = errors.name;
+        else if (errors.price_cents) errorMessage = errors.price_cents;
+        else if (errors.interval) errorMessage = errors.interval;
+        else if (errors.stripe_price_id) errorMessage = errors.stripe_price_id;
+        else if (errors.words_limit) errorMessage = errors.words_limit;
+        else if (errors.stories_limit) errorMessage = errors.stories_limit;
+        else if (errors.features) errorMessage = errors.features;
 
-    // Use setTimeout to ensure state updates are processed before submission
-    setTimeout(() => {
-      console.log('Submitting form with updated data');
-      post(route('admin-dashboard.packages.update', pkg.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-          setSuccessMessage('Package updated successfully!');
-          setValidationErrors({});
-          setTimeout(() => setSuccessMessage(''), 3000);
-        },
-        onError: (errors) => {
-          console.error('Update failed:', errors);
-          setValidationErrors(errors);
-        },
-      });
-    }, 100); // Small delay to ensure state updates are processed
+        Swal.fire({
+          icon: 'error',
+          title: 'Error updating package!',
+          text: errorMessage,
+          showConfirmButton: true,
+          confirmButtonColor: themeColors.primary,
+          background: '#fff',
+          customClass: {
+            popup: 'swal2-custom-popup',
+            title: 'swal2-custom-title',
+            content: 'swal2-custom-content'
+          }
+        });
+      },
+    });
   };
 
   const intervalOptions = [
@@ -168,24 +237,24 @@ const Edit = ({ package: pkg }) => {
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center">
                 <Link href={route('admin-dashboard.packages.index')}>
-                  <CButton color="primary" size="sm" variant="outline" className="me-2">
+                  <CButton className="me-2 arrow-redirect-btn">
                     <Icons.ArrowLeft />
                   </CButton>
                 </Link>
                 <strong>Edit Package: {pkg.name}</strong>
               </div>
               <Link href={route('admin-dashboard.packages.show', pkg.id)}>
-                <CButton color="info" size="sm" variant="outline">
+                {/* <CButton className='custom-outline-btn'>
+                  <Icons.View className="me-1" /> View Package
+                </CButton> */}
+
+                <CButton color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}>
                   <Icons.View className="me-1" /> View Package
                 </CButton>
               </Link>
             </CCardHeader>
             <CCardBody>
-              {successMessage && (
-                <CAlert color="success" dismissible>
-                  {successMessage}
-                </CAlert>
-              )}
+              {/* Removed successMessage and validationErrors state */}
 
               <CForm onSubmit={handleSubmit}>
                 <CRow className="mb-3">
@@ -201,9 +270,7 @@ const Edit = ({ package: pkg }) => {
                     {errors.name && (
                       <div className="text-danger">{errors.name}</div>
                     )}
-                    {validationErrors.name && (
-                      <div className="text-danger">{validationErrors.name}</div>
-                    )}
+                    {/* Removed validationErrors.name */}
                   </CCol>
 
                   <CCol md={6}>
@@ -233,9 +300,7 @@ const Edit = ({ package: pkg }) => {
                     {errors.price_cents && (
                       <div className="text-danger">{errors.price_cents}</div>
                     )}
-                    {validationErrors.price_cents && (
-                      <div className="text-danger">{validationErrors.price_cents}</div>
-                    )}
+                    {/* Removed validationErrors.price_cents */}
                   </CCol>
                 </CRow>
 
@@ -252,9 +317,7 @@ const Edit = ({ package: pkg }) => {
                     {errors.interval && (
                       <div className="text-danger">{errors.interval}</div>
                     )}
-                    {validationErrors.interval && (
-                      <div className="text-danger">{validationErrors.interval}</div>
-                    )}
+                    {/* Removed validationErrors.interval */}
                   </CCol>
 
                   <CCol md={6}>
@@ -269,9 +332,7 @@ const Edit = ({ package: pkg }) => {
                     {errors.is_active && (
                       <div className="text-danger">{errors.is_active}</div>
                     )}
-                    {validationErrors.is_active && (
-                      <div className="text-danger">{validationErrors.is_active}</div>
-                    )}
+                    {/* Removed validationErrors.is_active */}
                   </CCol>
                 </CRow>
 
@@ -289,9 +350,7 @@ const Edit = ({ package: pkg }) => {
                     {errors.stripe_price_id && (
                       <div className="text-danger">{errors.stripe_price_id}</div>
                     )}
-                    {validationErrors.stripe_price_id && (
-                      <div className="text-danger">{validationErrors.stripe_price_id}</div>
-                    )}
+                    {/* Removed validationErrors.stripe_price_id */}
                   </CCol>
                 </CRow>
                 <CRow className="mb-3">
@@ -307,10 +366,7 @@ const Edit = ({ package: pkg }) => {
                       onChange={(e) =>
                         setData("words_limit", e.target.value)
                       }
-                      invalid={
-                        !!errors.words_limit ||
-                        !!validationErrors.words_limit
-                      }
+                      invalid={!!errors.words_limit}
                       placeholder="Enter words limit"
                     />
                     {errors.words_limit && (
@@ -318,11 +374,7 @@ const Edit = ({ package: pkg }) => {
                         {errors.words_limit}
                       </div>
                     )}
-                    {validationErrors.words_limit && (
-                      <div className="text-danger">
-                        {validationErrors.words_limit}
-                      </div>
-                    )}
+                    {/* Removed validationErrors.words_limit */}
                   </CCol>
 
                   <CCol md={6}>
@@ -336,10 +388,7 @@ const Edit = ({ package: pkg }) => {
                       onChange={(e) =>
                         setData("stories_limit", e.target.value)
                       }
-                      invalid={
-                        !!errors.stories_limit ||
-                        !!validationErrors.stories_limit
-                      }
+                      invalid={!!errors.stories_limit}
                       placeholder="Enter stories limit"
                     />
                     {errors.stories_limit && (
@@ -347,11 +396,7 @@ const Edit = ({ package: pkg }) => {
                         {errors.stories_limit}
                       </div>
                     )}
-                    {validationErrors.stories_limit && (
-                      <div className="text-danger">
-                        {validationErrors.stories_limit}
-                      </div>
-                    )}
+                    {/* Removed validationErrors.stories_limit */}
                   </CCol>
                 </CRow>
                 <CRow className="mb-3">
@@ -379,23 +424,16 @@ const Edit = ({ package: pkg }) => {
                         )}
                       </div>
                     ))}
-                    <CButton
-                      color="success"
-                      size="sm"
-                      variant="outline"
-                      onClick={addFeature}
-                      type="button"
-                      className="mt-2"
+                    <CButton color="primary" size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
+                    onClick={addFeature}
                     >
-                      + Add More Feature
+                      <Icons.Plus className="me-1" />Add More Feature
                     </CButton>
                     <small className="text-muted d-block mt-2">Add features one by one. Each feature will be displayed as a bullet point.</small>
                     {errors.features && (
                       <div className="text-danger">{errors.features}</div>
                     )}
-                    {validationErrors.features && (
-                      <div className="text-danger">{validationErrors.features}</div>
-                    )}
+                    {/* Removed validationErrors.features */}
                   </CCol>
                 </CRow>
 

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Head, useForm, Link } from "@inertiajs/react";
 import DashboardLayout from "../../../Layouts/DashboardLayout";
 import { Icons } from "../../../utils/icons";
+import Swal from 'sweetalert2';
 import {
     CButton,
     CCard,
@@ -19,12 +20,13 @@ import {
     CBadge,
 } from "@coreui/react";
 
-const Edit = ({ publishPackage: pkg }) => {
-    // Debug log to see what we're receiving
-    console.log("Publish Package data received:", pkg);
-    console.log("Publish Package features type:", typeof pkg.features);
-    console.log("Publish Package features value:", pkg.features);
+// Define theme colors
+const themeColors = {
+    primary: '#C67C19',
+    secondary: '#74989E',
+};
 
+const Edit = ({ publishPackage: pkg, flash }) => {
     const { data, setData, post, processing, errors } = useForm({
         name: pkg.name || "",
         price: pkg.price ? parseFloat(pkg.price).toFixed(2) : "",
@@ -43,8 +45,38 @@ const Edit = ({ publishPackage: pkg }) => {
         _method: "PUT", // For method spoofing (PUT request)
     });
 
-    const [successMessage, setSuccessMessage] = useState("");
-    const [validationErrors, setValidationErrors] = useState({});
+    // Handle flash messages with SweetAlert
+    useEffect(() => {
+        if (flash?.success) {
+            Swal.fire({
+                icon: 'success',
+                title: flash.success,
+                showConfirmButton: false,
+                timer: 1500,
+                confirmButtonColor: themeColors.primary,
+                background: '#fff',
+                customClass: {
+                    popup: 'swal2-custom-popup',
+                    title: 'swal2-custom-title',
+                    content: 'swal2-custom-content'
+                }
+            });
+        }
+    }, [flash?.success]);
+
+    // Warn user about unsaved changes
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            if (data.name !== pkg.name || data.price !== pkg.price || 
+                data.stripe_price_id !== pkg.stripe_price_id) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, [data, pkg]);
 
     const addFeature = () => {
         setData("features", [...data.features, ""]);
@@ -61,15 +93,8 @@ const Edit = ({ publishPackage: pkg }) => {
         setData("features", newFeatures);
     };
 
-    // Clear validation errors when data changes
-    React.useEffect(() => {
-        if (Object.keys(errors).length > 0) {
-            setValidationErrors(errors);
-        }
-    }, [errors]);
-
     // Ensure features are properly initialized
-    React.useEffect(() => {
+    useEffect(() => {
         // If features is not properly set, initialize it
         if (!data.features && pkg.features) {
             if (Array.isArray(pkg.features)) {
@@ -97,57 +122,87 @@ const Edit = ({ publishPackage: pkg }) => {
             newErrors.price = "Price must be a valid positive number";
         }
 
-        // Validate features - ensure it's not empty if provided
-        if (
-            data.features &&
-            Array.isArray(data.features) &&
-            data.features.filter((f) => f && f.trim()).length === 0
-        ) {
-            newErrors.features = "At least one feature is required";
+        if (!data.stripe_price_id || data.stripe_price_id.trim() === "") {
+            newErrors.stripe_price_id = "Stripe Price ID is required";
         }
 
-        setValidationErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        console.log("Form submission started");
-        console.log("Original data.features:", data.features);
-        console.log("Original data.features type:", typeof data.features);
-
+        
         // Validate form before submission
         if (!validateForm()) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error!',
+                text: 'Please check your input and try again.',
+                confirmButtonColor: themeColors.primary,
+                background: '#fff',
+                customClass: {
+                    popup: 'swal2-custom-popup',
+                    title: 'swal2-custom-title',
+                    content: 'swal2-custom-content'
+                }
+            });
             return;
         }
 
+        // Show loading state
+        Swal.fire({
+            title: 'Updating publish package...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         // Filter out empty features
-        const featuresArray = data.features.filter((f) => f && f.trim());
+        const featuresArray = data.features.filter(f => f && f.trim());
+        setData('features', featuresArray);
 
-        // Update the form data with filtered features and other formatted data
-        setData("features", featuresArray);
-        setData("name", data.name.trim());
-        setData("is_active", data.is_active === "1");
-
-        console.log("Updated form data with features as array:", featuresArray);
-
-        // Use setTimeout to ensure state updates are processed before submission
-        setTimeout(() => {
-            console.log("Submitting form with updated data");
-            post(route("admin-dashboard.publish-packages.update", pkg.id), {
-                preserveScroll: true,
-                onSuccess: () => {
-                    setSuccessMessage("Publish package updated successfully!");
-                    setValidationErrors({});
-                    setTimeout(() => setSuccessMessage(""), 3000);
-                },
-                onError: (errors) => {
-                    console.error("Update failed:", errors);
-                    setValidationErrors(errors);
-                },
-            });
-        }, 100); // Small delay to ensure state updates are processed
+        post(route('admin-dashboard.publish-packages.update', pkg.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Publish Package updated successfully!',
+                    text: 'Redirecting to packages list...',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    confirmButtonColor: themeColors.primary,
+                    background: '#fff',
+                    customClass: {
+                        popup: 'swal2-custom-popup',
+                        title: 'swal2-custom-title',
+                        content: 'swal2-custom-content'
+                    }
+                });
+            },
+            onError: (errors) => {
+                // Show specific error messages
+                let errorMessage = 'Please check your input.';
+                if (errors.name) errorMessage = errors.name;
+                else if (errors.price) errorMessage = errors.price;
+                else if (errors.stripe_price_id) errorMessage = errors.stripe_price_id;
+                else if (errors.features) errorMessage = errors.features;
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error updating publish package!',
+                    text: errorMessage,
+                    showConfirmButton: true,
+                    confirmButtonColor: themeColors.primary,
+                    background: '#fff',
+                    customClass: {
+                        popup: 'swal2-custom-popup',
+                        title: 'swal2-custom-title',
+                        content: 'swal2-custom-content'
+                    }
+                });
+            },
+        });
     };
 
     const statusOptions = [
@@ -169,10 +224,7 @@ const Edit = ({ publishPackage: pkg }) => {
                                     )}
                                 >
                                     <CButton
-                                        color="primary"
-                                        size="sm"
-                                        variant="outline"
-                                        className="me-2"
+                                        className="me-2 arrow-redirect-btn"
                                     >
                                         <Icons.ArrowLeft />
                                     </CButton>
@@ -188,9 +240,7 @@ const Edit = ({ publishPackage: pkg }) => {
                                 )}
                             >
                                 <CButton
-                                    color="info"
-                                    size="sm"
-                                    variant="outline"
+                                   color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
                                 >
                                     <Icons.View className="me-1" /> View Publish
                                     Package
@@ -198,11 +248,7 @@ const Edit = ({ publishPackage: pkg }) => {
                             </Link>
                         </CCardHeader>
                         <CCardBody>
-                            {successMessage && (
-                                <CAlert color="success" dismissible>
-                                    {successMessage}
-                                </CAlert>
-                            )}
+                            {/* Removed successMessage and validationErrors state */}
 
                             <CForm onSubmit={handleSubmit}>
                                 <CRow className="mb-3">
@@ -219,11 +265,9 @@ const Edit = ({ publishPackage: pkg }) => {
                                             invalid={!!errors.name}
                                             placeholder="Enter publish package name"
                                         />
-                                        {(errors.name ||
-                                            validationErrors.name) && (
+                                        {errors.name && (
                                             <div className="text-danger">
-                                                {errors.name ||
-                                                    validationErrors.name}
+                                                {errors.name}
                                             </div>
                                         )}
                                     </CCol>
@@ -264,11 +308,9 @@ const Edit = ({ publishPackage: pkg }) => {
                                             Enter price in dollars (e.g., 10.30
                                             for $10.30)
                                         </small>
-                                        {(errors.price ||
-                                            validationErrors.price) && (
+                                        {errors.price && (
                                             <div className="text-danger">
-                                                {errors.price ||
-                                                    validationErrors.price}
+                                                {errors.price}
                                             </div>
                                         )}
                                     </CCol>
@@ -291,11 +333,9 @@ const Edit = ({ publishPackage: pkg }) => {
                                             invalid={!!errors.is_active}
                                             options={statusOptions}
                                         />
-                                        {(errors.is_active ||
-                                            validationErrors.is_active) && (
+                                        {errors.is_active && (
                                             <div className="text-danger">
-                                                {errors.is_active ||
-                                                    validationErrors.is_active}
+                                                {errors.is_active}
                                             </div>
                                         )}
                                     </CCol>
@@ -320,11 +360,9 @@ const Edit = ({ publishPackage: pkg }) => {
                                             Enter the Stripe price ID if you
                                             have one
                                         </small>
-                                        {(errors.stripe_price_id ||
-                                            validationErrors.stripe_price_id) && (
+                                        {errors.stripe_price_id && (
                                             <div className="text-danger">
-                                                {errors.stripe_price_id ||
-                                                    validationErrors.stripe_price_id}
+                                                {errors.stripe_price_id}
                                             </div>
                                         )}
                                     </CCol>
@@ -382,11 +420,9 @@ const Edit = ({ publishPackage: pkg }) => {
                                             feature will be displayed as a
                                             bullet point.
                                         </small>
-                                        {(errors.features ||
-                                            validationErrors.features) && (
+                                        {errors.features && (
                                             <div className="text-danger">
-                                                {errors.features ||
-                                                    validationErrors.features}
+                                                {errors.features}
                                             </div>
                                         )}
                                     </CCol>

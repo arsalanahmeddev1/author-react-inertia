@@ -1,3 +1,7 @@
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
 .sidebar-nav .nav-group:hover,
 .sidebar-nav .nav-item:hover {
   background-color: #202020;
@@ -9,4 +13,86 @@
   padding: 0 !important;
 } 
 
+.arrow-redirect-btn {
+  border: 1px solid rgb(254, 162, 87);
+  border-radius: 4px;
+  padding: 5px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.arrow-redirect-btn:hover {
+  border: 1px solid #74989e;
+}
+.card-header a {
+  text-decoration: none;
+}
+.custom-primary-btn {
+  display: flex;
+  align-items: center;
 
+}
+/* span,
+p,
+strong {
+  background-color: transparent !important;
+} */
+
+.page-content span,
+.page-content div,
+.page-content p,
+.page-content h1,
+.page-content h2,
+.page-content h3,
+.page-content h4,
+.page-content h5,
+.page-content h6,
+.page-content em,
+.page-content i,
+.page-content strong,
+.page-content b,
+.page-content a {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+/* user dashboard css */
+.dashboard-card-wrapper {
+  background-image: url('/assets/dashboard/images/cards-bg-image.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+
+  transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+    border-radius: 15px;
+    box-shadow: 0px 9px 20px rgba(46, 35, 94, 0.07);
+}
+.dashboard-card-wrapper:hover {
+  transform: translateY(-5px);
+  transition: 0.5s;
+}
+.dashboard-card-wrapper .card-title {
+  color: #202020;
+}
+.dcw-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: #74989e;
+  font-size: 24px;
+  border: 1px solid rgb(254, 162, 87);
+}
