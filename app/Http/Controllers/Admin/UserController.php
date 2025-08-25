@@ -19,8 +19,9 @@ class UserController extends Controller
         // Clean up old guest users (older than 24 hours)
         $this->cleanupOldGuestUsers();
         
-        // Get regular users (non-guest) for admin panel
+        // Get regular users (non-guest) for admin panel with subscription data
         $users = User::where('is_guest', false)
+                    ->with(['subscription.package'])
                     ->latest()
                     ->paginate(10);
 
@@ -78,6 +79,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $user->load(['subscription.package']);
+        
         return Inertia::render('admin/users/Show', [
             'user' => $user,
         ]);

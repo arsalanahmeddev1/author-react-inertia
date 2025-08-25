@@ -121,12 +121,85 @@ const Show = ({ user, flash }) => {
                   <strong>Email:</strong> {user.email}
                 </CListGroupItem>
                 <CListGroupItem>
+                  <strong>Role:</strong> <span className="badge bg-primary">{user.role}</span>
+                </CListGroupItem>
+                <CListGroupItem>
+                  <strong>Status:</strong> <span className={`badge ${user.is_active ? 'bg-success' : 'bg-danger'}`}>
+                    {user.is_active ? 'Active' : 'Inactive'}
+                  </span>
+                </CListGroupItem>
+                <CListGroupItem>
                   <strong>Created:</strong> {new Date(user.created_at).toLocaleString()}
                 </CListGroupItem>
                 <CListGroupItem>
                   <strong>Updated:</strong> {new Date(user.updated_at).toLocaleString()}
                 </CListGroupItem>
               </CListGroup>
+
+              {/* Subscription Information */}
+              {user.subscription && (
+                <div className="mt-4">
+                  <h6 className="mb-3">Subscription Information</h6>
+                  <CListGroup>
+                    <CListGroupItem className="d-flex justify-content-between">
+                      <span>Subscription Status:</span>
+                      <span className={`badge ${
+                        user.subscription.stripe_status === 'active' ? 'bg-success' : 
+                        user.subscription.stripe_status === 'trialing' ? 'bg-info' : 
+                        user.subscription.stripe_status === 'past_due' ? 'bg-warning' : 'bg-danger'
+                      }`}>
+                        {user.subscription.stripe_status}
+                      </span>
+                    </CListGroupItem>
+                    <CListGroupItem className="d-flex justify-content-between">
+                      <span>Package:</span>
+                      <strong>{user.subscription.package?.name || 'N/A'}</strong>
+                    </CListGroupItem>
+                    <CListGroupItem className="d-flex justify-content-between">
+                      <span>Billing Cycle:</span>
+                      <strong>{user.subscription.package?.interval || 'N/A'}</strong>
+                    </CListGroupItem>
+                    <CListGroupItem className="d-flex justify-content-between">
+                      <span>Words Limit:</span>
+                      <strong>{user.subscription.package?.words_limit || 'N/A'}</strong>
+                    </CListGroupItem>
+                    <CListGroupItem className="d-flex justify-content-between">
+                      <span>Stories Limit:</span>
+                      <strong>{user.subscription.package?.stories_limit || 'N/A'}</strong>
+                    </CListGroupItem>
+                    <CListGroupItem className="d-flex justify-content-between">
+                      <span>Subscription Created:</span>
+                      <strong>{new Date(user.subscription.created_at).toLocaleDateString()}</strong>
+                    </CListGroupItem>
+                    <CListGroupItem className="d-flex justify-content-between">
+                      <span>Expires:</span>
+                      <strong className={user.subscription.ends_at && new Date(user.subscription.ends_at) < new Date() ? 'text-danger' : 'text-success'}>
+                        {user.subscription.ends_at ? new Date(user.subscription.ends_at).toLocaleDateString() : 'N/A'}
+                      </strong>
+                    </CListGroupItem>
+                  </CListGroup>
+                  
+                  <div className="mt-3">
+                    <Link href={route('admin-dashboard.subscriptions.show', user.subscription.id)}>
+                      <CButton 
+                        color="info" 
+                        size="sm"
+                      >
+                        View Full Subscription Details
+                      </CButton>
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {/* No Subscription Message */}
+              {!user.subscription && (
+                <div className="mt-4">
+                  <div className="alert alert-warning">
+                    <strong>No Active Subscription:</strong> This user does not have an active subscription.
+                  </div>
+                </div>
+              )}
             </CCardBody>
           </CCard>
         </CCol>

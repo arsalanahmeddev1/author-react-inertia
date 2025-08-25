@@ -82,15 +82,16 @@ const UserIndex = ({ users, flash }) => {
               )}
               
               <CTable hover responsive>
-                <CTableHead>
-                  <CTableRow>
-                    <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Email</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Created</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
-                  </CTableRow>
-                </CTableHead>
+                                  <CTableHead>
+                    <CTableRow>
+                      <CTableHeaderCell scope="col">ID</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Email</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Subscription</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Created</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                    </CTableRow>
+                  </CTableHead>
                 <CTableBody>
                   {users.data.length > 0 ? (
                     users.data.map((user) => (
@@ -98,6 +99,23 @@ const UserIndex = ({ users, flash }) => {
                         <CTableHeaderCell scope="row">{user.id}</CTableHeaderCell>
                         <CTableDataCell>{user.name}</CTableDataCell>
                         <CTableDataCell>{user.email}</CTableDataCell>
+                        <CTableDataCell>
+                          {user.subscription ? (
+                            <div>
+                              <span className={`badge ${
+                                user.subscription.stripe_status === 'active' ? 'bg-success' : 
+                                user.subscription.stripe_status === 'trialing' ? 'bg-info' : 
+                                user.subscription.stripe_status === 'past_due' ? 'bg-warning' : 'bg-danger'
+                              }`}>
+                                {user.subscription.stripe_status}
+                              </span>
+                              <br />
+                              <small className="text-muted">{user.subscription.package?.name || 'N/A'}</small>
+                            </div>
+                          ) : (
+                            <span className="badge bg-secondary">No Subscription</span>
+                          )}
+                        </CTableDataCell>
                         <CTableDataCell>{new Date(user.created_at).toLocaleDateString()}</CTableDataCell>
                         <CTableDataCell>
                           <div className="d-flex align-items-center gap-2">
@@ -135,7 +153,7 @@ const UserIndex = ({ users, flash }) => {
                     ))
                   ) : (
                     <CTableRow>
-                      <CTableDataCell colSpan="5" className="text-center">
+                      <CTableDataCell colSpan="6" className="text-center">
                         No users found
                       </CTableDataCell>
                     </CTableRow>

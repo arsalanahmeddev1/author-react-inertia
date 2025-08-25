@@ -18,6 +18,9 @@ const StoryModal = ({ show, onHide, story }) => {
   const [dailyWordUsage, setDailyWordUsage] = useState(0);
   const [monthlyStoryUsage, setMonthlyStoryUsage] = useState(0);
 
+  // Check if user has active subscription
+  const hasActiveSubscription = auth.user?.subscription?.stripe_status === 'active';
+
   // Reset state when modal is opened
   useEffect(() => {
     if (show) {
@@ -214,16 +217,11 @@ const StoryModal = ({ show, onHide, story }) => {
 
   // Handle adding to community
   const handleAddToCommunity = async () => {
-    // Debug: Log subscription data
-    console.log('Auth user:', auth.user);
-    console.log('Subscription data:', auth.user?.subscription);
-    
-    // Check if user has subscription
-    // if (!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') {
-    //   // Show subscription message instead of redirecting
-    //   alert('Please subscribe first to use this feature. You need an active subscription to add stories to the community.');
-    //   return;
-    // }
+    // Check if user has active subscription
+    if (!hasActiveSubscription) {
+      alert('Please subscribe first to use this feature. You need an active subscription to add stories to the community.');
+      return;
+    }
 
     // Check daily word limit
     if (hasExceededDailyWordLimit()) {
@@ -279,12 +277,11 @@ const StoryModal = ({ show, onHide, story }) => {
 
   // Handle adding to community from draft
   const handleAddToCommunityFromDraft = async (draft) => {
-    // Check if user has subscription
-    // if (!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') {
-    //   // Show subscription message instead of redirecting
-    //   alert('Please subscribe first to use this feature. You need an active subscription to add stories to the community.');
-    //   return;
-    // }
+    // Check if user has active subscription
+    if (!hasActiveSubscription) {
+      alert('Please subscribe first to use this feature. You need an active subscription to add stories to the community.');
+      return;
+    }
 
     // Check daily word limit
     if (hasExceededDailyWordLimit()) {
@@ -616,7 +613,7 @@ const StoryModal = ({ show, onHide, story }) => {
                 </div>
 
                 {/* Subscription notice */}
-                 {(!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') && (
+                 {!hasActiveSubscription && (
                   <div className="alert alert-info mb-3" role="alert">
                     <i className="fas fa-info-circle me-2"></i>
                     <strong>Subscription Required:</strong> To add stories to the community, you need an active subscription. 
@@ -630,37 +627,45 @@ const StoryModal = ({ show, onHide, story }) => {
                   <button
                     className="btn btn-secondary story-btn secondry-font"
                     onClick={handleSaveDraft}
-                    disabled={isLoading || !isReadyForCommunity()}
+                    disabled={isLoading || !isReadyForCommunity() || !hasActiveSubscription}
+                    title={!hasActiveSubscription ? 'Requires active subscription' : 'Save your story as draft'}
                   >
                     {isLoading ? <i className="fas fa-spinner fa-spin me-2"></i> : <i className="fas fa-save me-2"></i>}
                     Save Draft
+                    {!hasActiveSubscription && (
+                      <i className="fas fa-lock ms-2" title="Requires subscription"></i>
+                    )}
                   </button>
                    <button
                     className="btn btn-success story-btn secondry-font"
                     onClick={() => handleAddToCommunity()}
-                    disabled={isLoading || !isReadyForCommunity()}
-                    title={!auth.user.subscription || auth.user.subscription.stripe_status !== 'active' ? 'Requires active subscription' : 'Add your story to the community'}
+                    disabled={isLoading || !isReadyForCommunity() || !hasActiveSubscription}
+                    title={!hasActiveSubscription ? 'Requires active subscription' : 'Add your story to the community'}
                   >
                     {isLoading ? <i className="fas fa-spinner fa-spin me-2"></i> : <i className="fas fa-users me-2"></i>}
                     Add to Community
-                    {(!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') && (
+                    {!hasActiveSubscription && (
                       <i className="fas fa-lock ms-2" title="Requires subscription"></i>
                     )}
                   </button>
                   <button
                     className="btn btn-primary story-btn secondry-font"
                     onClick={handlePublish}
-                    disabled={isLoading || !isReadyForCommunity()}
+                    disabled={isLoading || !isReadyForCommunity() || !hasActiveSubscription}
+                    title={!hasActiveSubscription ? 'Requires active subscription' : 'Publish your story'}
                   >
                     {isLoading ? <i className="fas fa-spinner fa-spin me-2"></i> : <i className="fas fa-paper-plane me-2"></i>}
                     Publish
+                    {!hasActiveSubscription && (
+                      <i className="fas fa-lock ms-2" title="Requires subscription"></i>
+                    )}
                   </button>
                 </div>
               </Tab.Pane>
 
               <Tab.Pane eventKey="drafts">
                 {/* Subscription notice for drafts */}
-                {(!auth.user.subscription || auth.user.subscription.stripe_status !== 'active') && (
+                {!hasActiveSubscription && (
                   <div className="alert alert-info mb-3" role="alert">
                     <i className="fas fa-info-circle me-2"></i>
                     <strong>Subscription Required:</strong> To add drafts to the community, you need an active subscription. 

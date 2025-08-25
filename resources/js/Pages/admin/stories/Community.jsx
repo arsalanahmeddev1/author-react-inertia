@@ -328,20 +328,18 @@ const Community = ({ stories, flash }) => {
                                 <>
                                   <CTooltip key="approve" content="Approve Story">
                                     <CButton
-                                      color="success"
-                                      size="sm"
+                                      className='btn-icon-size p-0'
                                       onClick={() => handleApprove(story)}
                                     >
-                                      ✅
+                                      <Icons.Check />
                                     </CButton>
                                   </CTooltip>
                                   <CTooltip key="reject" content="Reject Story">
                                     <CButton
-                                      color="warning"
-                                      size="sm"
+                                      className='btn-icon-size p-0'
                                       onClick={() => handleReject(story)}
                                     >
-                                      ❌
+                                      <Icons.Cross2 />
                                     </CButton>
                                   </CTooltip>
                                 </>

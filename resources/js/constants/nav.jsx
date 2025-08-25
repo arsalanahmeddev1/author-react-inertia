@@ -52,6 +52,29 @@ const adminNav = [
   },
   {
     component: CNavGroup,
+    name: 'Subscriptions',
+    to: '/admin-dashboard/subscriptions',
+    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+    items: [
+      {
+        component: InertiaNavItem,
+        name: 'All Subscriptions',
+        to: '/admin-dashboard/subscriptions',
+      },
+      {
+        component: InertiaNavItem,
+        name: 'Active Subscriptions',
+        to: '/admin-dashboard/subscriptions?status=active',
+      },
+      {
+        component: InertiaNavItem,
+        name: 'Expired Subscriptions',
+        to: '/admin-dashboard/subscriptions?status=expired',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
     name: 'Stories',
     to: '/admin-dashboard/stories',
     icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,

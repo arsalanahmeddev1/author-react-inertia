@@ -19,6 +19,19 @@ import { FaBook } from "react-icons/fa";
 import { MdAutoStories } from "react-icons/md";
 import { CgReadme } from "react-icons/cg";
 import { MdOutlinePayment } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
+import { BiPurchaseTag } from "react-icons/bi";
+import { RiPassExpiredLine } from "react-icons/ri";
+import { FaRegCommentDots } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
+import { IoSpeedometerOutline } from "react-icons/io5";
+import { IoPencil } from "react-icons/io5";
+import { RiPassExpiredFill } from "react-icons/ri";
+import { BsLightbulb, BsArrowUp, BsArrowUpCircle, BsPercent, BsInfoCircle, BsClock, BsClockHistory, BsCalendar, BsExclamationTriangle, BsArrowLeftCircle, BsStar } from "react-icons/bs";
+
+
+
 
 
 
@@ -48,4 +61,25 @@ export const Icons = {
   AutoStories: MdAutoStories,
   Readme: CgReadme,
   Payment: MdOutlinePayment,
+  Check: FaCheck,
+  Cross2: RxCross2,
+  Subscription: BiPurchaseTag,
+  Expired: RiPassExpiredLine,
+  Chat: FaRegCommentDots,
+  Heart: FaRegHeart,
+  Speedometer: IoSpeedometerOutline,
+  PencilSquare: IoPencil,
+  ExpiredFill: RiPassExpiredFill,
+  // New icons for dashboard
+  Lightbulb: BsLightbulb,
+  ArrowUp: BsArrowUp,
+  ArrowUpCircle: BsArrowUpCircle,
+  Percent: BsPercent,
+  Info: BsInfoCircle,
+  Clock: BsClock,
+  ClockHistory: BsClockHistory,
+  Calendar: BsCalendar,
+  ExclamationTriangle: BsExclamationTriangle,
+  ArrowLeftCircle: BsArrowLeftCircle,
+  Star: BsStar,
 }

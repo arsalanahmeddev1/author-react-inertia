@@ -29,6 +29,7 @@ use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\Admin\PackagesController as AdminPackagesController;
 use App\Http\Controllers\Admin\PublishPackageController as AdminPublishPackageController;
+use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
@@ -40,10 +41,11 @@ Route::middleware('web')->group(function () {
 });
 
 
-// Route::middleware('auth')->group(function () {
-//     Route::post('/subscribe/{package}', [SubscriptionController::class, 'subscribe'])->name('subscribe');
-//     Route::get('/subscription-success', [SubscriptionController::class, 'success'])->name('subscription.success');
-// });
+Route::middleware('auth')->group(function () {
+    Route::post('/subscribe/{package}', [SubscriptionController::class, 'subscribe'])->name('subscribe');
+    Route::post('/subscription/renew', [SubscriptionController::class, 'renew'])->name('subscription.renew');
+    Route::get('/subscription-success', [SubscriptionController::class, 'success'])->name('subscription.success');
+});
 
 // Route::get('/auth/facebook/redirect', [FacebookController::class, 'redirect'])->name('facebook.redirect');
 // Route::get('/auth/facebook/callback', [FacebookController::class, 'callback'])->name('facebook.callback');
@@ -66,6 +68,10 @@ Route::get('/stories/{story}/read', [StoriesController::class, 'read'])->name('s
 Route::middleware('auth')->group(function () {
     Route::get('/community', [CommunityController::class, 'index'])->name('community.index');
     Route::get('/community/{story}', [CommunityController::class, 'show'])->name('community.show');
+});
+
+// Protected community routes requiring subscription
+Route::middleware(['auth', 'subscription'])->group(function () {
     Route::post('/community/store', [StoriesController::class, 'storeCommunity'])->name('community.store');
 });
 
@@ -121,7 +127,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'subscription'])->group(function () {
     Route::get('/stories/publish/form/{story}', [MainStoriesController::class, 'showPublishForm'])->name('stories.publish.form');
     Route::post('/story/store-draft-session', [MainStoriesController::class, 'storeDraftSession'])->name('story.draft.session');
 });
@@ -133,6 +139,9 @@ Route::prefix('admin-dashboard')->name('admin-dashboard.')->middleware(['auth', 
     Route::resource('stories', \App\Http\Controllers\Admin\StoriesController::class);
     Route::resource('packages', AdminPackagesController::class);
     Route::resource('publish-packages', AdminPublishPackageController::class);
+    Route::resource('subscriptions', AdminSubscriptionController::class)->only(['index', 'show']);
+    Route::get('subscriptions/users/with', [AdminSubscriptionController::class, 'usersWithSubscriptions'])->name('subscriptions.users.with');
+    Route::get('subscriptions/users/without', [AdminSubscriptionController::class, 'usersWithoutSubscriptions'])->name('subscriptions.users.without');
     Route::get('community/stories', [AdminStoriesController::class, 'communityStories'])->name('stories.community');
 
 

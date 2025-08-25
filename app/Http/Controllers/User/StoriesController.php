@@ -39,6 +39,13 @@ class StoriesController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+        
+        // Check if user has active subscription
+        if (!$user->subscription || $user->subscription->stripe_status !== 'active') {
+            return redirect()->back()->with('error', 'Active subscription required to create stories');
+        }
+        
         // This will be implemented when the create form is ready
         return redirect()->route('user-dashboard.stories.index')
             ->with('success', 'Story created successfully.');

@@ -60,6 +60,14 @@ class StoriesController extends Controller
 
     public function store(Request $request)
     {
+
+        $user = Auth::user();
+
+        // ADD THIS CHECK HERE
+        if (!$user->subscription || $user->subscription->stripe_status !== 'active') {
+            return redirect()->back()->with('error', 'Active subscription required to create stories');
+        }
+
         if (!Auth::check()) {
             return redirect()->back()->with('error', 'You must be logged in to submit a story.');
         }
@@ -152,6 +160,12 @@ class StoriesController extends Controller
     {
         $user = Auth::user();
 
+        if (!$user->subscription || $user->subscription->stripe_status !== 'active') {
+            return response()->json([
+                'error' => 'Active subscription required to add community stories'
+            ], 403);
+        }
+
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -202,6 +216,11 @@ class StoriesController extends Controller
             return redirect()->route('login')->with('error', 'Your account is inactive. Please contact support for assistance.');
         }
 
+        // Check if user has active subscription
+        if (!$user->subscription || $user->subscription->stripe_status !== 'active') {
+            return redirect()->route('packages')->with('error', 'Active subscription required to save drafts');
+        }
+
         session()->put('story_publish_data', $request->only(['story_id', 'character_name', 'content']));
         return redirect()->route('stories.publish.packages');
     }
@@ -223,6 +242,11 @@ class StoriesController extends Controller
         // Check if user account is inactive (is_active = 0)
         if (!$user->is_active) {
             return redirect()->route('login')->with('error', 'Your account is inactive. Please contact support for assistance.');
+        }
+
+        // Check if user has active subscription
+        if (!$user->subscription || $user->subscription->stripe_status !== 'active') {
+            return redirect()->route('packages')->with('error', 'Active subscription required to access publish packages');
         }
 
         $prefill = session('story_publish_data');
@@ -251,6 +275,11 @@ class StoriesController extends Controller
         // Check if user account is inactive (is_active = 0)
         if (!$user->is_active) {
             return redirect()->route('login')->with('error', 'Your account is inactive. Please contact support for assistance.');
+        }
+
+        // Check if user has active subscription
+        if (!$user->subscription || $user->subscription->stripe_status !== 'active') {
+            return redirect()->route('packages')->with('error', 'Active subscription required to access publish packages');
         }
 
         $session = session('story_publish_data');
@@ -283,6 +312,13 @@ class StoriesController extends Controller
         }
 
         $user = Auth::user();
+
+
+
+        // Check if user has active subscription
+        if (!$user->subscription || $user->subscription->stripe_status !== 'active') {
+            return redirect()->back()->with('error', 'Active subscription required to publish stories');
+        }
 
         // Check if user is a guest (is_guest = 1)
         if ($user->is_guest) {
@@ -341,7 +377,7 @@ class StoriesController extends Controller
                 'error' => $e->getMessage(),
                 'request_data' => $request->all(),
             ]);
-            
+
             return redirect()->back()->with('error', 'Failed to create publish request. Please try again.');
         }
     }
