@@ -225,7 +225,7 @@ class StoriesController extends Controller
         return redirect()->route('stories.publish.packages');
     }
 
-    public function showPublishForm(Story $story)
+    public function showPublishForm(Request $request, Story $story)
     {
         // Check if user is not logged in
         if (!Auth::check()) {
@@ -250,11 +250,21 @@ class StoriesController extends Controller
         }
 
         $prefill = session('story_publish_data');
-        $story = $story;
+        
+        // Get package information from query parameters
+        $packageData = null;
+        if ($request->has('package') && $request->has('package_price')) {
+            $packageData = [
+                'id' => $request->get('package'),
+                'name' => $request->get('package_name'),
+                'price' => $request->get('package_price')
+            ];
+        }
 
         return Inertia::render('Stories/Publish/Form', [
             'prefill' => $prefill,
-            'story' => $story
+            'story' => $story,
+            'package' => $packageData
         ]);
     }
 
@@ -308,26 +318,36 @@ class StoriesController extends Controller
     {
         // Check if user is not logged in
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'You must be logged in to publish stories.');
+            return response()->json([
+                'success' => false,
+                'message' => 'You must be logged in to publish stories.'
+            ], 401);
         }
 
         $user = Auth::user();
 
-
-
         // Check if user has active subscription
         if (!$user->subscription || $user->subscription->stripe_status !== 'active') {
-            return redirect()->back()->with('error', 'Active subscription required to publish stories');
+            return response()->json([
+                'success' => false,
+                'message' => 'Active subscription required to publish stories'
+            ], 403);
         }
 
         // Check if user is a guest (is_guest = 1)
         if ($user->is_guest) {
-            return redirect()->route('register')->with('error', 'Guest users cannot publish stories. Please create a full account to continue.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Guest users cannot publish stories. Please create a full account to continue.'
+            ], 403);
         }
 
         // Check if user account is inactive (is_active = 0)
         if (!$user->is_active) {
-            return redirect()->route('login')->with('error', 'Your account is inactive. Please contact support for assistance.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Your account is inactive. Please contact support for assistance.'
+            ], 403);
         }
 
         try {
@@ -353,17 +373,17 @@ class StoriesController extends Controller
                 'status' => 'pending',
             ]);
 
-            // Create a payment record for the successful payment
-            Payment::create([
-                'user_id' => Auth::id(),
-                'publish_request_id' => $publishRequest->id,
-                'stripe_payment_intent_id' => 'manual_' . time(), // Since we don't have the actual payment intent ID here
-                'amount' => 19.00, // Fixed amount for publishing
-                'currency' => 'USD',
-                'status' => 'succeeded',
-                'payment_method' => 'card',
-                'description' => 'Story Publishing Package - ' . $request->title,
-            ]);
+            // Don't create payment record here - it will be created after successful Stripe payment
+            // Payment::create([
+            //     'user_id' => Auth::id(),
+            //     'publish_request_id' => $publishRequest->id,
+            //     'stripe_payment_intent_id' => 'manual_' . time(),
+            //     'amount' => 19.00,
+            //     'currency' => 'USD',
+            //     'status' => 'succeeded',
+            //     'payment_method' => 'card',
+            //     'description' => 'Story Publishing Package - ' . $request->title,
+            // ]);
 
             Log::info('Publish request created successfully', [
                 'publish_request_id' => $publishRequest->id,
@@ -371,14 +391,25 @@ class StoriesController extends Controller
                 'story_id' => $request->story_id,
             ]);
 
-            return redirect()->route('stories.index')->with('success', 'Your book is now in the publishing process!');
+            return response()->json([
+                'success' => true,
+                'message' => 'Publish request created successfully',
+                'publishRequest' => [
+                    'id' => $publishRequest->id,
+                    'title' => $publishRequest->title,
+                    'status' => $publishRequest->status
+                ]
+            ]);
         } catch (\Exception $e) {
             Log::error('Error creating publish request', [
                 'error' => $e->getMessage(),
                 'request_data' => $request->all(),
             ]);
 
-            return redirect()->back()->with('error', 'Failed to create publish request. Please try again.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create publish request. Please try again.'
+            ], 500);
         }
     }
 }

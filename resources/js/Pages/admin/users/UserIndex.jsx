@@ -110,7 +110,7 @@ const UserIndex = ({ users, flash }) => {
                                 {user.subscription.stripe_status}
                               </span>
                               <br />
-                              <small className="text-muted">{user.subscription.package?.name || 'N/A'}</small>
+                              {/* <small className="text-muted">{user.subscription.package?.name || 'N/A'}</small> */}
                             </div>
                           ) : (
                             <span className="badge bg-secondary">No Subscription</span>

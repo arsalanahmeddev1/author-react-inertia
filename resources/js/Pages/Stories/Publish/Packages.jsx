@@ -79,7 +79,13 @@ const Packages = ({ story, publishPackages = [] }) => {
                     {/* CTA Button */}
                     <div className="d-grid">
                       {story?.id ? (
-                        <Link href={route('stories.publish.form', { story: story.id })}
+                        <Link 
+                          href={route('stories.publish.form', { 
+                            story: story.id,
+                            package: pkg.id,
+                            package_name: pkg.name,
+                            package_price: pkg.price
+                          })}
                           className="btn btn-primary btn-lg package-cta-button"
                         >
                           Get Started Now

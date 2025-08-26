@@ -48,49 +48,49 @@ const Index = ({ subscriptions, stats, filters }) => {
       <Head title="Subscription Management" />
       
       {/* Statistics Cards */}
-      <CRow className="mb-4">
-        <CCol xs={12} sm={6} md={2}>
-          <CCard className="text-center">
+      <div className="d-flex flex-wrap gap-3 mb-4">
+        <div className="flex-grow-1">
+          <CCard className="text-center" style={{ minWidth: '120px' }}>
             <CCardBody>
               <h4 className="text-primary">{stats.total}</h4>
               <small className="text-muted">Total Subscriptions</small>
             </CCardBody>
           </CCard>
-        </CCol>
-        <CCol xs={12} sm={6} md={2}>
-          <CCard className="text-center">
+        </div>
+        <div className="flex-grow-1">
+          <CCard className="text-center" style={{ minWidth: '120px' }}>
             <CCardBody>
               <h4 className="text-success">{stats.active}</h4>
               <small className="text-muted">Active</small>
             </CCardBody>
           </CCard>
-        </CCol>
-        <CCol xs={12} sm={6} md={2}>
-          <CCard className="text-center">
+        </div>
+        <div className="flex-grow-1">
+          <CCard className="text-center" style={{ minWidth: '120px' }}>
             <CCardBody>
               <h4 className="text-info">{stats.trialing}</h4>
               <small className="text-muted">Trial</small>
             </CCardBody>
           </CCard>
-        </CCol>
-        <CCol xs={12} sm={6} md={2}>
-          <CCard className="text-center">
+        </div>
+        <div className="flex-grow-1">
+          <CCard className="text-center" style={{ minWidth: '120px' }}>
             <CCardBody>
               <h4 className="text-warning">{stats.past_due}</h4>
               <small className="text-muted">Past Due</small>
             </CCardBody>
           </CCard>
-        </CCol>
-        <CCol xs={12} sm={6} md={2}>
-          <CCard className="text-center">
+        </div>
+        <div className="flex-grow-1">
+          <CCard className="text-center" style={{ minWidth: '120px' }}>
             <CCardBody>
               <h4 className="text-danger">{stats.expired}</h4>
               <small className="text-muted">Expired</small>
             </CCardBody>
           </CCard>
-        </CCol>
-        <CCol xs={12} sm={6} md={2}>
-          <CCard className="text-center">
+        </div>
+        {/* <div className="flex-shrink-0">
+          <CCard className="text-center" style={{ minWidth: '120px' }}>
             <CCardBody>
               <Link to={route('admin-dashboard.subscriptions.users.with')} className="text-decoration-none">
                 <h4 className="text-primary">View Users</h4>
@@ -98,8 +98,8 @@ const Index = ({ subscriptions, stats, filters }) => {
               </Link>
             </CCardBody>
           </CCard>
-        </CCol>
-      </CRow>
+        </div> */}
+      </div>
 
       {/* Filter Buttons */}
       <CRow className="mb-3">

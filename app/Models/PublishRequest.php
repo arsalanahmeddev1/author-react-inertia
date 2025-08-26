@@ -12,12 +12,16 @@ class PublishRequest extends Model
     protected $fillable = [
         'user_id',
         'story_id',
+        'package_id',
         'cover_image',
         'title',
         'character',
         'genre',
         'content',
         'status',
+        'payment_status',
+        'stripe_session_id',
+        'paid_at',
     ];
 
     /**

@@ -651,74 +651,72 @@ const UserDashboard = () => {
 
       {/* Subscription Management Section */}
       {metrics?.subscriptionStatus && metrics.subscriptionStatus !== 'No Subscription' ? (
-        // User has subscription - show management cards
-        <div className="row mt-4">
-          <div className="col-12 mb-3">
-            <h4 className="fw-medium text-dark mb-0 text-24 d-flex align-items-center gap-2">
-              <Icons.CreditCard className='text-muted' />
-              Subscription Management
-            </h4>
-            <p className="text-muted mb-0 small">Upgrade, renew, or manage your subscription</p>
-          </div>
-          
-          <div className="col-lg-6 col-md-12">
-            <div className="card border-0 shadow-sm h-100">
-              <div className="card-body">
-                <div className="d-flex align-items-center justify-content-between mb-3">
-                  <h5 className="card-title mb-0 fw-medium text-dark">
-                    Upgrade Subscription
-                  </h5>
-                  <span className="badge bg-primary-theme rounded-pill">Recommended</span>
-                </div>
-                
-                <div className="mb-3">
-                  <p className="text-muted mb-2">
-                    Get more features and higher limits with our premium packages
-                  </p>
-                  <div className="d-flex flex-wrap gap-2 mb-3">
-                    <span className="badge bg-light text-dark border">
-                      Higher word limits
-                    </span>
-                    <span className="badge bg-light text-dark border">
-                      More story submissions
-                    </span>
-                    <span className="badge bg-light text-dark border">
-                      Priority support
-                    </span>
+        // Check if subscription is active
+        metrics.subscriptionStatus === 'Active' ? (
+          // User has ACTIVE subscription - show management cards
+          <div className="row mt-4">
+            <div className="col-12 mb-3">
+              <h4 className="fw-medium text-dark mb-0 text-24 d-flex align-items-center gap-2">
+                <Icons.CreditCard className='text-muted' />
+                Subscription Management
+              </h4>
+              <p className="text-muted mb-0 small">Upgrade, renew, or manage your subscription</p>
+            </div>
+            
+            <div className="col-lg-6 col-md-12">
+              <div className="card border-0 shadow-sm h-100">
+                <div className="card-body">
+                  <div className="d-flex align-items-center justify-content-between mb-3">
+                    <h5 className="card-title mb-0 fw-medium text-dark">
+                      Upgrade Subscription
+                    </h5>
+                    <span className="badge bg-primary-theme rounded-pill">Recommended</span>
                   </div>
-                </div>
-                
-                <div className="d-grid">
-                  <a
-                    href={route('packages')} 
-                    className="btn btn-primary btn-lg"
-                  >
-                    View Upgrade Options
-                  </a>
+                  
+                  <div className="mb-3">
+                    <p className="text-muted mb-2">
+                      Get more features and higher limits with our premium packages
+                    </p>
+                    <div className="d-flex flex-wrap gap-2 mb-3">
+                      <span className="badge bg-light text-dark border">
+                        Higher word limits
+                      </span>
+                      <span className="badge bg-light text-dark border">
+                        More story submissions
+                      </span>
+                      <span className="badge bg-light text-dark border">
+                        Priority support
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="d-grid">
+                    <a
+                      href={route('packages')} 
+                      className="btn btn-primary btn-lg"
+                    >
+                      View Upgrade Options
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          
-          <div className="col-lg-6 col-md-12">
-            <div className="card border-0 shadow-sm h-100">
-              <div className="card-body">
-                <div className="d-flex align-items-center justify-content-between mb-3">
-                  <h5 className="card-title mb-0 fw-medium text-dark">
-                    Renew Subscription
-                  </h5>
-                  {metrics?.subscriptionStatus === 'Active' && (
+            
+            <div className="col-lg-6 col-md-12">
+              <div className="card border-0 shadow-sm h-100">
+                <div className="card-body">
+                  <div className="d-flex align-items-center justify-content-between mb-3">
+                    <h5 className="card-title mb-0 fw-medium text-dark">
+                      Renew Subscription
+                    </h5>
                     <span className="badge bg-primary-theme rounded-pill">Active</span>
-                  )}
-                </div>
-                
-                <div className="mb-3">
-                  {metrics?.subscriptionStatus === 'Active' ? (
-                    <>
-                      <p className="text-muted mb-2">
-                        Your subscription is currently active. Renew early to avoid any interruptions.
-                      </p>
-                                          {daysUntilExpiration !== null && daysUntilExpiration <= 30 && (
+                  </div>
+                  
+                  <div className="mb-3">
+                    <p className="text-muted mb-2">
+                      Your subscription is currently active. Renew early to avoid any interruptions.
+                    </p>
+                    {daysUntilExpiration !== null && daysUntilExpiration <= 30 && (
                       <div className="alert alert-warning py-2 mb-3">
                         <Icons.ExpiredFill className="me-2" />
                         <small>
@@ -726,48 +724,84 @@ const UserDashboard = () => {
                         </small>
                       </div>
                     )}
-                    </>
-                  ) : (
-                    <p className="text-muted mb-2">
-                      Renew your subscription to continue enjoying our premium features
-                    </p>
-                  )}
-                  
-                  <div className="d-flex flex-wrap gap-2 mb-3">
-                    <span className="badge bg-light text-dark border">
-                      Uninterrupted access
-                    </span>
-                    <span className="badge bg-light text-dark border">
-                      Keep your data
-                    </span>
-                    <span className="badge bg-light text-dark border">
-                      Maintain benefits
-                    </span>
+                    
+                    <div className="d-flex flex-wrap gap-2 mb-3">
+                      <span className="badge bg-light text-dark border">
+                        Uninterrupted access
+                      </span>
+                      <span className="badge bg-light text-dark border">
+                        Keep your data
+                      </span>
+                      <span className="badge bg-light text-dark border">
+                        Maintain benefits
+                      </span>
+                    </div>
                   </div>
-                </div>
-                
-                <div className="d-grid">
-                  {metrics?.subscriptionStatus === 'Active' ? (
+                  
+                  <div className="d-grid">
                     <button 
                       onClick={() => handleRenewEarly()}
                       className="btn btn-primary btn-lg"
                     >
                       Renew Early
                     </button>
-                  ) : (
-                    <a 
-                      href={route('packages')} 
-                      className="btn btn-outline-primary btn-lg"
-                    >
-                      <i className="bi bi-arrow-clockwise me-2"></i>
-                      Renew Subscription
-                    </a>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          // User has INACTIVE/EXPIRED subscription - show renewal card
+          <div className="row mt-4">
+            <div className="col-12 mb-3">
+              <h4 className="fw-medium text-dark mb-0 text-24 d-flex align-items-center gap-2">
+                <Icons.ExpiredFill className='text-warning' />
+                Subscription Expired
+              </h4>
+              <p className="text-muted mb-0 small">Your subscription has expired. Renew to continue enjoying premium features.</p>
+            </div>
+            
+            <div className="col-md-12">
+              <div className="card border-0 shadow-sm h-100">
+                <div className="card-body">
+                  <div className="d-flex align-items-center justify-content-between mb-3">
+                    <h5 className="card-title mb-0 fw-medium text-dark">
+                      Renew Your Subscription
+                    </h5>
+                    <span className="badge bg-warning rounded-pill">Expired</span>
+                  </div>
+                  
+                  <div className="mb-3">
+                    <p className="text-muted mb-2">
+                      Your subscription benefits have been paused. Renew now to restore access.
+                    </p>
+                    <div className="d-flex flex-wrap gap-2 mb-3">
+                      <span className="badge bg-light text-dark border">
+                        Restore premium features
+                      </span>
+                      <span className="badge bg-light text-dark border">
+                        Continue where you left off
+                      </span>
+                      <span className="badge bg-light text-dark border">
+                        No data loss
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="d-grid">
+                    <a
+                      href={route('packages')} 
+                      className="btn btn-warning btn-lg"
+                    >
+                      <i className="bi bi-arrow-clockwise me-2"></i>
+                      Renew Now
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
       ) : (
         // User has no subscription - show purchase card
         <div className="row mt-5">

@@ -121,7 +121,7 @@ const Show = ({ user, flash }) => {
                   <strong>Email:</strong> {user.email}
                 </CListGroupItem>
                 <CListGroupItem>
-                  <strong>Role:</strong> <span className="badge bg-primary">{user.role}</span>
+                  <strong>Role:</strong> <span className="badge bg-primary-theme">{user.role}</span>
                 </CListGroupItem>
                 <CListGroupItem>
                   <strong>Status:</strong> <span className={`badge ${user.is_active ? 'bg-success' : 'bg-danger'}`}>
@@ -143,7 +143,7 @@ const Show = ({ user, flash }) => {
                   <CListGroup>
                     <CListGroupItem className="d-flex justify-content-between">
                       <span>Subscription Status:</span>
-                      <span className={`badge ${
+                      <span className={`badge d-flex align-items-center ${
                         user.subscription.stripe_status === 'active' ? 'bg-success' : 
                         user.subscription.stripe_status === 'trialing' ? 'bg-info' : 
                         user.subscription.stripe_status === 'past_due' ? 'bg-warning' : 'bg-danger'
@@ -182,8 +182,7 @@ const Show = ({ user, flash }) => {
                   <div className="mt-3">
                     <Link href={route('admin-dashboard.subscriptions.show', user.subscription.id)}>
                       <CButton 
-                        color="info" 
-                        size="sm"
+                      className='btn-primary'
                       >
                         View Full Subscription Details
                       </CButton>

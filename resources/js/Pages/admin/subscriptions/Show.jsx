@@ -68,9 +68,10 @@ const Show = ({ subscription }) => {
                 </Link>
                 <Link href={route('admin-dashboard.users.show', subscription.user_id)}>
                   <CButton 
-                    color="info" 
+                    color="primary" 
                     className='custom-primary-btn' 
-                    size="sm"
+                    size="sm" 
+                    style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
                   >
                     <Icons.Profile className="me-1" /> View User
                   </CButton>
@@ -93,7 +94,7 @@ const Show = ({ subscription }) => {
                         </CListGroupItem>
                         <CListGroupItem className="d-flex justify-content-between">
                           <span>Status:</span>
-                          {getStatusBadge(subscription.stripe_status)}
+                          <span className='d-flex align-items-center'>{getStatusBadge(subscription.stripe_status)}</span>
                         </CListGroupItem>
                         <CListGroupItem className="d-flex justify-content-between">
                           <span>Type:</span>
@@ -200,7 +201,7 @@ const Show = ({ subscription }) => {
                         </CListGroupItem>
                         <CListGroupItem className="d-flex justify-content-between">
                           <span>Role:</span>
-                          <CBadge color="primary">{subscription.user?.role || 'N/A'}</CBadge>
+                          <CBadge className='bg-primary-theme d-flex align-items-center'>{subscription.user?.role || 'N/A'}</CBadge>
                         </CListGroupItem>
                         <CListGroupItem className="d-flex justify-content-between">
                           <span>Active:</span>
@@ -215,7 +216,7 @@ const Show = ({ subscription }) => {
               </CRow>
 
               {/* Subscription Status Summary */}
-              <CRow>
+              {/* <CRow>
                 <CCol xs={12}>
                   <CCard className="mb-3">
                     <CCardHeader>
@@ -248,7 +249,7 @@ const Show = ({ subscription }) => {
                     </CCardBody>
                   </CCard>
                 </CCol>
-              </CRow>
+              </CRow> */}
             </CCardBody>
           </CCard>
         </CCol>

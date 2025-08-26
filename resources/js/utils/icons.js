@@ -28,7 +28,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoSpeedometerOutline } from "react-icons/io5";
 import { IoPencil } from "react-icons/io5";
 import { RiPassExpiredFill } from "react-icons/ri";
-import { BsLightbulb, BsArrowUp, BsArrowUpCircle, BsPercent, BsInfoCircle, BsClock, BsClockHistory, BsCalendar, BsExclamationTriangle, BsArrowLeftCircle, BsStar } from "react-icons/bs";
+import { BsLightbulb, BsArrowUp, BsArrowUpCircle, BsPercent, BsInfoCircle, BsClock, BsClockHistory, BsCalendar, BsExclamationTriangle, BsArrowLeftCircle, BsStar, BsCheckCircle, BsXCircle, BsPerson, BsBox, BsType } from "react-icons/bs";
 
 
 
@@ -82,4 +82,11 @@ export const Icons = {
   ExclamationTriangle: BsExclamationTriangle,
   ArrowLeftCircle: BsArrowLeftCircle,
   Star: BsStar,
+  // New icons for subscription success page
+  CheckCircle: BsCheckCircle,
+  Error: BsXCircle,
+  User: BsPerson,
+  Package: BsBox,
+  Words: BsType,
+  Status: BsInfoCircle,
 }

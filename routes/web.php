@@ -125,11 +125,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/stripe/checkout', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
     Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
     Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
+    Route::get('/stripe/publish-success', [StripeController::class, 'publishSuccess'])->name('stripe.publish.success');
+    Route::get('/stripe/publish-cancel', [StripeController::class, 'publishCancel'])->name('stripe.publish.cancel');
 });
 
 Route::middleware(['auth', 'subscription'])->group(function () {
-    Route::get('/stories/publish/form/{story}', [MainStoriesController::class, 'showPublishForm'])->name('stories.publish.form');
-    Route::post('/story/store-draft-session', [MainStoriesController::class, 'storeDraftSession'])->name('story.draft.session');
+    Route::get('/stories/publish/form/{story}', [StoriesController::class, 'showPublishForm'])->name('stories.publish.form');
+    Route::post('/story/store-draft-session', [StoriesController::class, 'storeDraftSession'])->name('story.draft.session');
 });
 
 // Admin Routes

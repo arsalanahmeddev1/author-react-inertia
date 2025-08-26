@@ -19,6 +19,7 @@ const Packages = ({ packages = [] }) => {
     const [showModal, setShowModal] = useState(false);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card");
     const [isAuthLoading, setIsAuthLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState('monthly'); // Add tab state
 
     // Check if user just registered and should be redirected back to packages
     useEffect(() => {
@@ -272,55 +273,8 @@ const Packages = ({ packages = [] }) => {
                                     Stripe Payment
                                 </label>
                             </div>
-
-                            <div
-                                className="payment-option"
-                                style={{
-                                    ...paymentOptionStyle,
-                                    borderColor:
-                                        selectedPaymentMethod === "paypal"
-                                            ? "#007bff"
-                                            : "#e9ecef",
-                                    backgroundColor:
-                                        selectedPaymentMethod === "paypal"
-                                            ? "#f8f9ff"
-                                            : "white",
-                                }}
-                                onClick={() =>
-                                    setSelectedPaymentMethod("paypal")
-                                }
-                            >
-                                <input
-                                    type="radio"
-                                    id="paypal"
-                                    name="paymentMethod"
-                                    value="paypal"
-                                    checked={selectedPaymentMethod === "paypal"}
-                                    onChange={(e) =>
-                                        setSelectedPaymentMethod(e.target.value)
-                                    }
-                                    style={{ margin: 0 }}
-                                />
-                                <label
-                                    htmlFor="paypal"
-                                    style={paymentLabelStyle}
-                                >
-                                    <Icons.PayPal style={paymentIconStyle} />
-                                    PayPal
-                                </label>
-                            </div>
-
-
                         </div>
 
-                        {/* Payment Form */}
-                        {/* {selectedPaymentMethod === 'card' && (
-              <div className="payment-form">
-                <Elements stripe={stripePromise}>
-                  <CheckoutForm packageId={selectedPackageId} onSuccess={closeModal} />
-                </Elements>
-              </div>
-            )} */}
                         {selectedPaymentMethod === "card" && (
                             <button
                                 className="btn btn-primary w-100"
@@ -374,8 +328,18 @@ const Packages = ({ packages = [] }) => {
         );
     };
 
+    // Filter packages by active tab
+    const filteredPackages = (packages || []).filter(pkg => {
+        if (activeTab === 'monthly') {
+            return pkg.interval === 'month' || pkg.interval === 'monthly';
+        } else if (activeTab === 'yearly') {
+            return pkg.interval === 'year' || pkg.interval === 'yearly';
+        }
+        return true; // Show all if no specific tab
+    });
+
     // Transform database packages to match the expected format
-    const transformedPackages = (packages || []).map((pkg, index) => {
+    const transformedPackages = filteredPackages.map((pkg, index) => {
         // Determine badge based on price
         let badge = "Free";
         if (pkg.price_cents > 0) {
@@ -398,6 +362,7 @@ const Packages = ({ packages = [] }) => {
             if (pkg.price_cents === 0) {
                 features.push(
                     {
+
                         text: "Can read all published stories.",
                         isNegative: false,
                     },
@@ -471,6 +436,130 @@ const Packages = ({ packages = [] }) => {
             background-color: #e9ecef !important;
             color: #495057 !important;
           }
+
+          /* Package Tabs Styles */
+          .package-tabs-wrapper {
+            margin-bottom: 30px;
+          }
+
+          .package-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 50px;
+            padding: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e9ecef;
+          }
+
+          .package-tab {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+          }
+
+          .package-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(254, 162, 87, 0.3);
+          }
+
+          .package-tab.active {
+            background: #fea257;
+            color: white;
+            box-shadow: 0 6px 25px rgba(254, 162, 87, 0.4);
+            transform: translateY(-2px);
+          }
+
+          .package-tab:not(.active) {
+            color: #6c757d;
+          }
+
+          .package-tab:not(.active):hover {
+            color: #495057;
+            background: rgba(254, 162, 87, 0.1);
+          }
+
+          .tab-text {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.2;
+          }
+
+          .tab-badge {
+            font-size: 11px;
+            font-weight: 500;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+
+          .package-tab.active .tab-badge {
+            opacity: 1;
+          }
+
+          .tab-count {
+            font-size: 10px;
+            font-weight: 400;
+            opacity: 0.7;
+            margin-top: 2px;
+          }
+
+          .package-tab.active .tab-count {
+            opacity: 1;
+          }
+
+          /* Responsive adjustments */
+          @media (max-width: 768px) {
+            .package-tabs {
+              flex-direction: column;
+              border-radius: 25px;
+              padding: 6px;
+            }
+
+            .package-tab {
+              border-radius: 20px;
+              padding: 14px 20px;
+            }
+
+            .tab-text {
+              font-size: 14px;
+            }
+
+            .tab-badge {
+              font-size: 10px;
+            }
+          }
+
+          /* No Packages Message Styles */
+          .no-packages-message {
+            padding: 60px 20px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            border: 2px dashed #dee2e6;
+          }
+
+          .no-packages-message .fs-50 {
+            font-size: 50px !important;
+            opacity: 0.6;
+          }
+
+          .no-packages-message h4 {
+            color: #6c757d !important;
+          }
+
+          .no-packages-message p {
+            color: #6c757d !important;
+            max-width: 400px;
+            margin: 0 auto;
+          }
         `}
             </style>
 
@@ -490,15 +579,45 @@ const Packages = ({ packages = [] }) => {
                                 <span className="">Packages</span>
                             </h2>
                             <h5 className="secondry-font fs-30 light-black mb-20">
-                                Stories Written by Our Community
+                                Choose Your Perfect Plan
                             </h5>
                             <p className="fs-20 mb-30">
-                                Discover unique continuations and
-                                interpretations of our stories, written by
-                                fellow community members. Find inspiration,
-                                enjoy creative twists, and see how others have
-                                expanded on our original tales.
+                                Select the subscription plan that best fits your writing goals and budget.
                             </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Package Tabs */}
+            <section className="sec-bg pb-50">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-md-8 col-lg-6">
+                            <div className="package-tabs-wrapper">
+                                <div className="package-tabs">
+                                    <button
+                                        className={`package-tab ${activeTab === 'monthly' ? 'active' : ''}`}
+                                        onClick={() => setActiveTab('monthly')}
+                                    >
+                                        <span className="tab-text">Monthly Plans</span>
+                                        <span className="tab-badge">Most Popular</span>
+                                        {/* <span className="tab-count">
+                                            {packages.filter(pkg => pkg.interval === 'month' || pkg.interval === 'monthly').length} Plans
+                                        </span> */}
+                                    </button>
+                                    <button
+                                        className={`package-tab ${activeTab === 'yearly' ? 'active' : ''}`}
+                                        onClick={() => setActiveTab('yearly')}
+                                    >
+                                        <span className="tab-text">Yearly Plans</span>
+                                        <span className="tab-badge">Save 20%</span>
+                                        {/* <span className="tab-count">
+                                            {packages.filter(pkg => pkg.interval === 'year' || pkg.interval === 'yearly').length} Plans
+                                        </span> */}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -654,9 +773,22 @@ const Packages = ({ packages = [] }) => {
                             ))
                         ) : (
                             <div className="col-12 text-center">
-                                <p className="fs-20 text-muted">
-                                    No packages available at the moment.
-                                </p>
+                                <div className="no-packages-message">
+                                    <Icons.Package className="fs-50 text-muted mb-3" />
+                                    <h4 className="text-muted mb-2">No {activeTab === 'monthly' ? 'Monthly' : 'Yearly'} Plans Available</h4>
+                                    <p className="fs-18 text-muted mb-3">
+                                        {activeTab === 'monthly' 
+                                            ? 'Check out our yearly plans for better value, or contact us for custom options.'
+                                            : 'Check out our monthly plans for flexibility, or contact us for custom options.'
+                                        }
+                                    </p>
+                                    <button 
+                                        className="btn btn-outline-primary"
+                                        onClick={() => setActiveTab(activeTab === 'monthly' ? 'yearly' : 'monthly')}
+                                    >
+                                        View {activeTab === 'monthly' ? 'Yearly' : 'Monthly'} Plans
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
