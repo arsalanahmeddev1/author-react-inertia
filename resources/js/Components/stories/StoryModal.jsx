@@ -120,7 +120,21 @@ const StoryModal = ({ show, onHide, story }) => {
     const packageWordsLimit = auth.user.subscription.package.words_limit;
     if (!packageWordsLimit) return false;
     
-    return dailyWordUsage < packageWordsLimit;
+    // Check if adding the current story content would exceed the limit
+    const currentStoryWords = wordCount;
+    return (dailyWordUsage + currentStoryWords) <= packageWordsLimit;
+  };
+
+  // Check if user can add a specific draft to community
+  const canAddDraftToCommunity = (draft) => {
+    if (!auth.user?.subscription?.package) return false;
+    
+    const packageWordsLimit = auth.user.subscription.package.words_limit;
+    if (!packageWordsLimit) return false;
+    
+    // Check if adding the draft would exceed the limit
+    const draftWords = draft.wordCount || 0;
+    return (dailyWordUsage + draftWords) <= packageWordsLimit;
   };
 
   // Check if user can add more stories this month
@@ -562,8 +576,48 @@ const StoryModal = ({ show, onHide, story }) => {
                     </div>
                   )}
 
-                  {/* Usage Display */}
-                  
+                                    {/* Usage Display */}
+                  {hasActiveSubscription && auth.user?.subscription?.package && (
+                    <div className="usage-display p-3 mb-3 rounded-3 bg-light">
+                      <h6 className="secondry-font fs-16 mb-2">
+                        <i className="fas fa-chart-line me-2"></i>
+                        Daily Word Usage
+                      </h6>
+                      <div className="row">
+                        <div className="col-6">
+                          <div className="usage-item">
+                            <span className="usage-label">Used Today:</span>
+                            <span className="usage-value">{dailyWordUsage} words</span>
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div className="usage-item">
+                            <span className="usage-label">Daily Limit:</span>
+                            <span className="usage-value">{auth.user.subscription.package.words_limit} words</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-2">
+                        <div className="progress" style={{height: '8px'}}>
+                          <div 
+                            className={`progress-bar ${dailyWordUsage >= auth.user.subscription.package.words_limit ? 'bg-danger' : 'bg-success'}`}
+                            style={{width: `${Math.min((dailyWordUsage / auth.user.subscription.package.words_limit) * 100, 100)}%`}}
+                          ></div>
+                        </div>
+                        <small className="text-muted">
+                          {Math.max(0, auth.user.subscription.package.words_limit - dailyWordUsage)} words remaining today
+                        </small>
+                      </div>
+                      {wordCount > 0 && (
+                        <div className="mt-2">
+                          <small className={`${(dailyWordUsage + wordCount) > auth.user.subscription.package.words_limit ? 'text-danger' : 'text-success'}`}>
+                            <i className={`fas fa-${(dailyWordUsage + wordCount) > auth.user.subscription.package.words_limit ? 'exclamation-triangle' : 'check-circle'} me-1`}></i>
+                            This story will add {wordCount} words to your daily total
+                          </small>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="mb-20">
@@ -639,8 +693,8 @@ const StoryModal = ({ show, onHide, story }) => {
                    <button
                     className="btn btn-success story-btn secondry-font"
                     onClick={() => handleAddToCommunity()}
-                    disabled={isLoading || !isReadyForCommunity() || !hasActiveSubscription}
-                    title={!hasActiveSubscription ? 'Requires active subscription' : 'Add your story to the community'}
+                    disabled={isLoading || !isReadyForCommunity() || !hasActiveSubscription || !canAddWords()}
+                    title={!hasActiveSubscription ? 'Requires active subscription' : !canAddWords() ? 'Daily word limit would be exceeded' : 'Add your story to the community'}
                   >
                     {isLoading ? <i className="fas fa-spinner fa-spin me-2"></i> : <i className="fas fa-users me-2"></i>}
                     Add to Community
@@ -712,8 +766,8 @@ const StoryModal = ({ show, onHide, story }) => {
                           <button
                             className="btn btn-success story-btn secondry-font"
                             onClick={() => handleAddToCommunityFromDraft(draft)}
-                            disabled={isLoading || (!draft.content && !draft.characterId)}
-                            title={!auth.user.subscription || auth.user.subscription.stripe_status !== 'active' ? 'Requires active subscription' : 'Add your draft to the community'}
+                            disabled={isLoading || (!draft.content && !draft.characterId) || !canAddDraftToCommunity(draft)}
+                            title={!auth.user.subscription || auth.user.subscription.stripe_status !== 'active' ? 'Requires active subscription' : !canAddDraftToCommunity(draft) ? 'Daily word limit would be exceeded' : 'Add your draft to the community'}
                           >
                             {isLoading ? <i className="fas fa-spinner fa-spin me-1"></i> : <i className="fas fa-users me-1"></i>}
                             Add to Community

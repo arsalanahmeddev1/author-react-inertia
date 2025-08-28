@@ -173,6 +173,34 @@ class StoriesController extends Controller
             'original_story_id' => 'required|integer|exists:stories,id',
         ]);
 
+        // Check daily word limit before creating the story
+        $packageWordsLimit = $user->subscription->package->words_limit ?? 0;
+        if ($packageWordsLimit > 0) {
+            // Get today's date
+            $today = now()->startOfDay();
+            
+            // Get daily word usage (from community stories added today)
+            $dailyStories = Story::where('user_id', $user->id)
+                ->where('is_community', true)
+                ->whereDate('created_at', $today)
+                ->get();
+                
+            // Calculate current daily word usage
+            $currentDailyWords = $dailyStories->sum(function($story) {
+                return str_word_count(strip_tags($story->content));
+            });
+            
+            // Calculate new story word count
+            $newStoryWords = str_word_count(strip_tags($data['content']));
+            
+            // Check if adding this story would exceed the daily limit
+            if (($currentDailyWords + $newStoryWords) > $packageWordsLimit) {
+                return response()->json([
+                    'error' => "Daily word limit exceeded. You have used {$currentDailyWords} words today out of {$packageWordsLimit} allowed. This story would add {$newStoryWords} words, exceeding your limit by " . (($currentDailyWords + $newStoryWords) - $packageWordsLimit) . " words."
+                ], 422);
+            }
+        }
+
         // Get the original story
         $originalStory = Story::findOrFail($data['original_story_id']);
 

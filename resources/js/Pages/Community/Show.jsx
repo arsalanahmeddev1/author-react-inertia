@@ -85,7 +85,7 @@ export default function CommunityShow({ story }) {
                         <p key={index} className="mb-3">{paragraph}</p>
                       ))}
                     </div>
-                    <div className="story-content mb-4">
+                    <div className="story-content mb-4 line-clamp-3">
                       {story.content ? (
                         <div dangerouslySetInnerHTML={{ __html: story.content }} />
                       ) : (

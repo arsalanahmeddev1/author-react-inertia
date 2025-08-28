@@ -498,13 +498,41 @@
 }
 
 .usage-display .usage-label {
-  font-size: 0.875rem;
+  font-size: 15px;
   color: #6b7280;
 }
 
 .usage-display .usage-value {
-  font-size: 0.875rem;
+  font-size: 15px;
   font-weight: 600;
+}
+
+.usage-display .progress {
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.usage-display .progress-bar {
+  transition: width 0.3s ease;
+}
+
+.usage-display .progress-bar.bg-success {
+  background-color: #10b981 !important;
+}
+
+.usage-display .progress-bar.bg-danger {
+  background-color: #ef4444 !important;
+}
+
+.usage-display small.text-danger {
+  color: #dc3545 !important;
+  font-weight: 500;
+}
+
+.usage-display small.text-success {
+  color: #28a745 !important;
+  font-weight: 500;
 }
 
 @keyframes fadeIn {
