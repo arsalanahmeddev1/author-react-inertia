@@ -29,15 +29,15 @@ const PublishSuccess = ({ publishRequest, session }) => {
             <div className="col-md-10 col-lg-8">
               {/* Success Header */}
               <div className="text-center mb-5">
-                <div className="mb-4">
+                <div className="mb-10">
                   <Icons.CheckCircle className="text-success" style={{ fontSize: '4rem' }} />
                 </div>
-                <h1 className="text-success mb-3">Publication Request Submitted!</h1>
-                <p className="text-muted lead">Your story has been submitted for review and payment has been processed successfully.</p>
+                <h1 className="text-success mb-10">Publication Request Submitted!</h1>
+                <p className="text-muted lead mb-30" style={{fontSize: '2rem'}}>Your story has been submitted for review and payment has been processed successfully.</p>
               </div>
 
               {/* Story Details Card */}
-              <div className="card border-0 shadow-sm mb-4">
+              <div className="card border-0 shadow-sm mb-30">
                 <div className="card-header bg-primary-theme py-20 text-white">
                   <h4 className="mb-0 d-flex align-items-center fs-20">
                     <Icons.Book className="me-2" />
@@ -61,7 +61,7 @@ const PublishSuccess = ({ publishRequest, session }) => {
                   <div className="row">
                     <div className="col-md-6 mb-3">
                       <div className="d-flex align-items-center">
-                        <Icons.Type className="text-info me-2" />
+                        <Icons.Words className="text-info me-2" />
                         <div>
                           <strong>{publishRequest?.genre || 'N/A'}</strong>
                           <p className="text-muted mb-0 small">Genre</p>
@@ -70,7 +70,7 @@ const PublishSuccess = ({ publishRequest, session }) => {
                     </div>
                     <div className="col-md-6 mb-3">
                       <div className="d-flex align-items-center">
-                        <Icons.Person className="text-warning me-2" />
+                        <Icons.User className="text-warning me-2" />
                         <div>
                           <strong>{publishRequest?.character || 'N/A'}</strong>
                           <p className="text-muted mb-0 small">Main Character</p>
@@ -135,7 +135,7 @@ const PublishSuccess = ({ publishRequest, session }) => {
                   <hr />
                   
                   <div className="row">
-                    <div className="col-md-6 mb-3">
+                    {/* <div className="col-md-6 mb-3">
                       <div className="d-flex align-items-center">
                         <Icons.Info className="text-info me-2" />
                         <div>
@@ -143,7 +143,7 @@ const PublishSuccess = ({ publishRequest, session }) => {
                           <p className="text-muted mb-0 small">Stripe Session ID</p>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="col-md-6 mb-3">
                       <div className="d-flex align-items-center">
                         <Icons.Clock className="text-primary me-2" />
@@ -158,8 +158,8 @@ const PublishSuccess = ({ publishRequest, session }) => {
               </div>
 
               {/* Next Steps */}
-              <div className="card border-0 shadow-sm mb-4">
-                <div className="card-header bg-info text-white py-20">
+              <div className="card next-step-wrapper border-0 shadow-sm mb-30">
+                <div className="card-header text-white py-20">
                   <h4 className="mb-0 d-flex align-items-center fs-20">
                     <Icons.Info className="me-2" />
                     What Happens Next?
@@ -169,28 +169,28 @@ const PublishSuccess = ({ publishRequest, session }) => {
                   <div className="row">
                     <div className="col-md-4 mb-3 text-center">
                       <div className="step-item">
-                        <div className="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style={{ width: '40px', height: '40px' }}>
+                        <div className="step-number bg-primary-theme text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-10" style={{ width: '40px', height: '40px' }}>
                           1
                         </div>
-                        <h6>Review Process</h6>
+                        <h6 className='mb-10'>Review Process</h6>
                         <p className="small text-muted">Our team will review your story for quality and content guidelines.</p>
                       </div>
                     </div>
                     <div className="col-md-4 mb-3 text-center">
                       <div className="step-item">
-                        <div className="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style={{ width: '40px', height: '40px' }}>
+                        <div className="step-number bg-primary-theme text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-10" style={{ width: '40px', height: '40px' }}>
                           2
                         </div>
-                        <h6>Feedback</h6>
+                        <h6 className='mb-10'>Feedback</h6>
                         <p className="small text-muted">You'll receive feedback and any necessary revisions within 5-7 business days.</p>
                       </div>
                     </div>
                     <div className="col-md-4 mb-3 text-center">
                       <div className="step-item">
-                        <div className="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style={{ width: '40px', height: '40px' }}>
+                        <div className="step-number bg-primary-theme text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-10" style={{ width: '40px', height: '40px' }}>
                           3
                         </div>
-                        <h6>Publication</h6>
+                        <h6 className='mb-10'>Publication</h6>
                         <p className="small text-muted">Once approved, your story will be published and available to readers.</p>
                       </div>
                     </div>
@@ -205,17 +205,10 @@ const PublishSuccess = ({ publishRequest, session }) => {
                     <Icons.Book className="me-2" />
                     View My Stories
                   </Link>
-                  <Link href="/stories/create" className="btn btn-outline-primary btn-lg">
-                    <Icons.Plus className="me-2" />
-                    Write Another Story
-                  </Link>
-                </div>
-                
-                <div className="mt-4">
-                  <p className="text-muted small mb-0">
-                    You will receive email updates about your publication request status. 
-                    Need help? Contact our support team.
-                  </p>
+                    {/* <Link href="/stories/create" className="btn btn-outline-primary btn-lg">
+                      <Icons.Plus className="me-2" />
+                      Write Another Story
+                    </Link> */}
                 </div>
               </div>
             </div>
@@ -227,3 +220,6 @@ const PublishSuccess = ({ publishRequest, session }) => {
 }
 
 export default PublishSuccess
+
+
+

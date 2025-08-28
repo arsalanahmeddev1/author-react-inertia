@@ -79,7 +79,7 @@ const Packages = ({ story, publishPackages = [] }) => {
                     {/* CTA Button */}
                     <div className="d-grid">
                       {story?.id ? (
-                        <Link 
+                        <a 
                           href={route('stories.publish.form', { 
                             story: story.id,
                             package: pkg.id,
@@ -89,7 +89,7 @@ const Packages = ({ story, publishPackages = [] }) => {
                           className="btn btn-primary btn-lg package-cta-button"
                         >
                           Get Started Now
-                        </Link> 
+                        </a> 
                       ): (
                           <button className="btn btn-secondary btn-lg" disabled>
                             Loading...
