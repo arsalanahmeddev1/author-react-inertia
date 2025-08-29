@@ -124,3 +124,11 @@ strong {
   align-items: center;
   color: #fea257;
 }
+.bg-primary {
+  background-color: #fea257 !important;
+}
+
+.form-control:focus {
+  box-shadow: none !important;
+  border-color: var(--cui-border-color) !important;
+}

@@ -81,11 +81,40 @@ const UserIndex = ({ users, flash }) => {
                 <div className="alert alert-success mb-3">{flash.success}</div>
               )}
               
+              {/* Search Bar */}
+              <div className="mb-3">
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search by username, name, or email..."
+                        id="userSearch"
+                        onChange={(e) => {
+                          const searchTerm = e.target.value;
+                          if (searchTerm.length > 2 || searchTerm.length === 0) {
+                            router.get(route('admin-dashboard.users.index'), 
+                              { search: searchTerm }, 
+                              { preserveState: true, preserveScroll: true }
+                            );
+                          }
+                        }}
+                      />
+                      <button className="btn btn-outline-secondary" type="button">
+                        <i className="fas fa-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
               <CTable hover responsive>
                                   <CTableHead>
                     <CTableRow>
                       <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Username</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">Full Name</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Subscription</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Created</CTableHeaderCell>
@@ -97,7 +126,10 @@ const UserIndex = ({ users, flash }) => {
                     users.data.map((user) => (
                       <CTableRow key={user.id}>
                         <CTableHeaderCell scope="row">{user.id}</CTableHeaderCell>
-                        <CTableDataCell>{user.name}</CTableDataCell>
+                        <CTableDataCell>
+                          <span className="badge bg-primary">{user.username || 'N/A'}</span>
+                        </CTableDataCell>
+                        <CTableDataCell>{user.full_name || user.name}</CTableDataCell>
                         <CTableDataCell>{user.email}</CTableDataCell>
                         <CTableDataCell>
                           {user.subscription ? (

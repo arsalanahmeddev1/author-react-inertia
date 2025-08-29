@@ -20,10 +20,20 @@ class UserController extends Controller
         $this->cleanupOldGuestUsers();
         
         // Get regular users (non-guest) for admin panel with subscription data
-        $users = User::where('is_guest', false)
-                    ->with(['subscription.package'])
-                    ->latest()
-                    ->paginate(10);
+        $query = User::where('is_guest', false)->with(['subscription.package']);
+        
+        // Add search functionality
+        if (request()->has('search') && !empty(request('search'))) {
+            $searchTerm = request('search');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('username', 'like', "%{$searchTerm}%")
+                  ->orWhere('full_name', 'like', "%{$searchTerm}%")
+                  ->orWhere('name', 'like', "%{$searchTerm}%")
+                  ->orWhere('email', 'like', "%{$searchTerm}%");
+            });
+        }
+        
+        $users = $query->latest()->paginate(10);
 
         // Get guest users count for admin info
         $guestUsersCount = User::where('is_guest', true)->count();
@@ -59,15 +69,24 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users|regex:/^[a-zA-Z0-9_]+$/',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+        ], [
+            'username.regex' => 'Username can only contain letters, numbers, and underscores.',
+            'username.unique' => 'This username is already taken. Please choose another one.',
         ]);
 
         $user = User::create([
-            'name' => $validated['name'],
+            'name' => $validated['full_name'], // Keep name for backward compatibility
+            'full_name' => $validated['full_name'],
+            'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'role' => 'user',
+            'is_guest' => false,
+            'is_active' => true,
         ]);
 
         return redirect()->route('admin-dashboard.users.index')
@@ -102,13 +121,19 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255',
+            'username' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z0-9_]+$/', Rule::unique('users')->ignore($user->id)],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:8',
+        ], [
+            'username.regex' => 'Username can only contain letters, numbers, and underscores.',
+            'username.unique' => 'This username is already taken. Please choose another one.',
         ]);
 
         $userData = [
-            'name' => $validated['name'],
+            'name' => $validated['full_name'], // Keep name for backward compatibility
+            'full_name' => $validated['full_name'],
+            'username' => $validated['username'],
             'email' => $validated['email'],
         ];
 

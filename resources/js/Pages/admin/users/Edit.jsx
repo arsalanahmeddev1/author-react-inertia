@@ -25,7 +25,8 @@ const themeColors = {
 const Edit = ({ user, flash }) => {
   const [error, setError] = useState('');
   const { data, setData, put, processing, errors } = useForm({
-    name: user.name,
+    full_name: user.full_name || user.name,
+    username: user.username || '',
     email: user.email,
     password: '',
   });
@@ -45,7 +46,10 @@ const Edit = ({ user, flash }) => {
   // Warn user about unsaved changes
   useEffect(() => {
     const handleBeforeUnload = (e) => {
-      if (data.name !== user.name || data.email !== user.email || data.password) {
+      if (data.full_name !== (user.full_name || user.name) || 
+          data.username !== user.username || 
+          data.email !== user.email || 
+          data.password) {
         e.preventDefault();
         e.returnValue = '';
       }
@@ -91,7 +95,8 @@ const Edit = ({ user, flash }) => {
         
         // Show specific error messages
         let errorMessage = 'Please check your input.';
-        if (errors.name) errorMessage = errors.name;
+        if (errors.full_name) errorMessage = errors.full_name;
+        else if (errors.username) errorMessage = errors.username;
         else if (errors.email) errorMessage = errors.email;
         else if (errors.password) errorMessage = errors.password;
         
@@ -137,15 +142,25 @@ const Edit = ({ user, flash }) => {
 
               <CForm onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <CFormLabel htmlFor="name">Name</CFormLabel>
+                  <CFormLabel htmlFor="full_name">Full Name</CFormLabel>
                   <CFormInput
-                    id="name"
-                    value={data.name}
-                    onChange={(e) => setData('name', e.target.value)}
-                    invalid={errors.name ? true : false}
-                    feedback={errors.name}
+                    id="full_name"
+                    value={data.full_name}
+                    onChange={(e) => setData('full_name', e.target.value)}
+                    invalid={errors.full_name ? true : false}
                   />
-                  {errors.name && <div className="text-danger">{errors.name}</div>}
+                  {errors.full_name && <div className="text-danger">{errors.full_name}</div>}
+                </div>
+
+                <div className="mb-3">
+                  <CFormLabel htmlFor="username">Username</CFormLabel>
+                  <CFormInput
+                    id="username"
+                    value={data.username}
+                    onChange={(e) => setData('username', e.target.value)}
+                    invalid={errors.username ? true : false}
+                  />
+                  {errors.username && <div className="text-danger">{errors.username}</div>}
                 </div>
 
                 <div className="mb-3">

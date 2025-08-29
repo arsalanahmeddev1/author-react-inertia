@@ -7,7 +7,8 @@ import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
+        full_name: '',
+        username: '',
         email: '',
         password: '',
         password_confirmation: '',
@@ -27,20 +28,36 @@ export default function Register() {
 
             <form onSubmit={submit} className="auth-form">
                 <div className="mb-3">
-                    <CustomInputLabel htmlFor="name" value="Full Name" />
+                    <CustomInputLabel htmlFor="full_name" value="Full Name" />
 
                     <CustomTextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
+                        id="full_name"
+                        name="full_name"
+                        value={data.full_name}
                         className="form-control mb-2"
                         autoComplete="name"
                         isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
+                        onChange={(e) => setData('full_name', e.target.value)}
                         required
                     />
 
-                    <CustomInputError message={errors.name} />
+                    <CustomInputError message={errors.full_name} />
+                </div>
+
+                <div className="mb-3">
+                    <CustomInputLabel htmlFor="username" value="Username" />
+
+                    <CustomTextInput
+                        id="username"
+                        name="username"
+                        value={data.username}
+                        className="form-control mb-2"
+                        autoComplete="username"
+                        onChange={(e) => setData('username', e.target.value)}
+                        required
+                    />
+                    <small className="text-muted">Choose a unique username (e.g., john_doe, writer123)</small>
+                    <CustomInputError message={errors.username} />
                 </div>
 
                 <div className="mb-3">
@@ -52,7 +69,7 @@ export default function Register() {
                         name="email"
                         value={data.email}
                         className="form-control mb-2"
-                        autoComplete="username"
+                        autoComplete="email"
                         onChange={(e) => setData('email', e.target.value)}
                         required
                     />
