@@ -27,7 +27,7 @@ const heroSlides = [
 const HeroBanner = () => {
     const sliderRef = useRef(null);
     const settings = {
-        dots: true,
+        dots: false,
         arrows: false,
         fade: true,
         infinite: true,

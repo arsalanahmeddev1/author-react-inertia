@@ -13,6 +13,8 @@ import {
   cilPuzzle,
   cilSpeedometer,
   cilStar,
+  cilUser,
+  cilBook,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import { Link, usePage } from '@inertiajs/react';
@@ -41,7 +43,7 @@ const adminNav = [
     component: CNavGroup,
     name: 'Users',
     to: '/admin-dashboard/users',
-    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
     items: [
       {
         component: InertiaNavItem,
@@ -77,7 +79,7 @@ const adminNav = [
     component: CNavGroup,
     name: 'Stories',
     to: '/admin-dashboard/stories',
-    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilBook} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,

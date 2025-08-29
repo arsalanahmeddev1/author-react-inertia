@@ -1320,6 +1320,22 @@ header .btn.btn-link:active {
 h6 {
     font-size: 1.6rem;
 }
+.under-review-wrapper {
+    border: 1px solid var(--primary-theme);
+    padding: 100px 60px;
+    border-radius: 20px;
+}
+.under-review-wrapper * {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.ur-title {
+    margin-bottom: 20px;
+}
+.under-review-wrapper span {
+    font-weight: 700;
+    color: var(--secondry-theme);
+}
 /* responsive */
 @media (min-width: 1560px) {
     .container {

@@ -34,7 +34,7 @@ class userMiddleware
         }
 
         // Check if user has proper user group (existing logic)
-        if ($user->user_group != 2) {
+        if ($user->user_group != '2' && $user->user_group != '1') {
             abort(403, 'Unauthorized');
         }
 
