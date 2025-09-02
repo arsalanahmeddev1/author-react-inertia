@@ -18,6 +18,7 @@ class Subscription extends Model
         'quantity',
         'trial_ends_at',
         'ends_at',
+        'cancel_at_period_end',
     ];
 
     public function user()

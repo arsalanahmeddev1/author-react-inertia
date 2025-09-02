@@ -62,22 +62,26 @@ class StripeWebhookController extends Controller
                     }
                     break;
 
-                case 'customer.subscription.created':
-                case 'customer.subscription.updated':
-                case 'customer.subscription.deleted':
-                    $sub = $event->data->object; // \Stripe\Subscription
-                    Log::info("Subscription event: {$event->type} for {$sub->id}");
-
-                    $local = Subscription::where('stripe_id', $sub->id)->first();
-                    if ($local) {
-                        $local->update([
-                            'stripe_status' => $sub->status,
-                            'trial_ends_at' => $sub->trial_end ? Carbon::createFromTimestamp($sub->trial_end) : null,
-                            'ends_at'       => $sub->cancel_at ? Carbon::createFromTimestamp($sub->cancel_at) : null,
-                        ]);
-                        Log::info("Local subscription {$sub->id} updated: status {$sub->status}");
-                    }
-                    break;
+                    case 'customer.subscription.created':
+                        case 'customer.subscription.updated':
+                        case 'customer.subscription.deleted':
+                            $sub = $event->data->object; // \Stripe\Subscription
+                            Log::info("Subscription event: {$event->type} for {$sub->id}");
+                        
+                            Subscription::updateOrCreate(
+                                ['stripe_id' => $sub->id],
+                                [
+                                    'user_id'       => $sub->metadata->user_id ?? null, // Agar tum metadata me user_id bhej rahe ho
+                                    'type'          => 'default',
+                                    'stripe_status' => $sub->status,
+                                    'trial_ends_at' => $sub->trial_end ? Carbon::createFromTimestamp($sub->trial_end) : null,
+                                    'ends_at'       => $sub->cancel_at ? Carbon::createFromTimestamp($sub->cancel_at) : null,
+                                    'cancel_at_period_end' => $sub->cancel_at_period_end,
+                                ]
+                            );
+                        
+                            Log::info("Local subscription {$sub->id} synced: status {$sub->status}");
+                            break;
 
                 default:
                     Log::info("Unhandled Stripe event: {$event->type}");

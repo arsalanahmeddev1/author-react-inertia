@@ -132,3 +132,7 @@ strong {
   box-shadow: none !important;
   border-color: var(--cui-border-color) !important;
 }
+
+.border-none {
+  border: none !important;
+}

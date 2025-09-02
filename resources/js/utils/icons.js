@@ -28,7 +28,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoSpeedometerOutline } from "react-icons/io5";
 import { IoPencil } from "react-icons/io5";
 import { RiPassExpiredFill } from "react-icons/ri";
-import { BsLightbulb, BsArrowUp, BsArrowUpCircle, BsPercent, BsInfoCircle, BsClock, BsClockHistory, BsCalendar, BsExclamationTriangle, BsArrowLeftCircle, BsStar, BsCheckCircle, BsXCircle, BsPerson, BsBox, BsType } from "react-icons/bs";
+import { BsLightbulb, BsArrowUp, BsArrowUpCircle, BsPercent, BsInfoCircle, BsClock, BsClockHistory, BsCalendar, BsExclamationTriangle, BsArrowLeftCircle, BsStar, BsCheckCircle, BsXCircle, BsPerson, BsBox, BsType, BsToggleOn, BsToggleOff, BsX } from "react-icons/bs";
 
 
 
@@ -89,4 +89,8 @@ export const Icons = {
   Package: BsBox,
   Words: BsType,
   Status: BsInfoCircle,
+  // Toggle icons
+  ToggleOn: BsToggleOn,
+  ToggleOff: BsToggleOff,
+  X: BsX,
 }

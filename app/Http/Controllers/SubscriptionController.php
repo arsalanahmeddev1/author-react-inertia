@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
 use Stripe\Customer;
 use Stripe\Subscription;
-use App\Models\Subscription as LocalSubscription;
-
+use App\Models\Subscription as LocalSubscription;   
+use Stripe\StripeClient;
 
 class SubscriptionController extends Controller
 {
@@ -17,7 +17,7 @@ class SubscriptionController extends Controller
     {
         try {
             Stripe::setApiKey(env('STRIPE_SECRET'));
-            
+
             $user = $request->user();
             $paymentMethod = $request->input('payment_method');
 
@@ -56,7 +56,6 @@ class SubscriptionController extends Controller
             Log::info('Subscription created for user ' . $user->id . ' with status: ' . $subscription->status);
 
             return response()->json(['success' => true, 'subscription_id' => $subscription->id]);
-            
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
@@ -77,7 +76,7 @@ class SubscriptionController extends Controller
         ]);
 
         $user->update(['stripe_customer_id' => $customer->id]);
-        
+
         return $customer;
     }
 
@@ -99,7 +98,7 @@ class SubscriptionController extends Controller
     {
         try {
             $user = $request->user();
-            
+
             // Check if user has an active subscription
             $subscription = $user->subscription;
             if (!$subscription) {
@@ -120,7 +119,7 @@ class SubscriptionController extends Controller
 
             // Get the current Stripe subscription
             $stripeSubscription = \Stripe\Subscription::retrieve($subscription->stripe_id);
-            
+
             // Check if user has a default payment method
             if (!$stripeSubscription->default_payment_method) {
                 return response()->json(['error' => 'No payment method found. Please add a payment method first.'], 400);
@@ -191,10 +190,54 @@ class SubscriptionController extends Controller
             } else {
                 throw new \Exception('Payment failed with status: ' . $paymentIntent->status);
             }
-
         } catch (\Exception $e) {
             Log::error('Subscription renewal failed: ' . $e->getMessage());
             return response()->json(['error' => 'Renewal failed: ' . $e->getMessage()], 500);
+        }
+    }
+
+
+    public function toggleRenewal($id)
+    {
+        try {
+            $subscription = LocalSubscription::findOrFail($id);
+
+            // Stripe client init
+            $stripe = new StripeClient(config('services.stripe.secret'));
+
+            // Fetch current subscription from Stripe
+            $stripeSub = $stripe->subscriptions->retrieve($subscription->stripe_id);
+
+            // Check if subscription is canceled
+            if ($stripeSub->status === 'canceled') {
+                return response()->json([
+                    'error' => 'Cannot toggle renewal for a canceled subscription. Please create a new subscription.'
+                ], 400);
+            }
+
+            // Toggle cancel_at_period_end
+            $newValue = !$stripeSub->cancel_at_period_end;
+
+            $updatedSub = $stripe->subscriptions->update($subscription->stripe_id, [
+                'cancel_at_period_end' => $newValue,
+            ]);
+
+            // Update local DB
+            $subscription->update([
+                'cancel_at_period_end' => $updatedSub->cancel_at_period_end,
+                'ends_at' => $updatedSub->cancel_at ? \Carbon\Carbon::createFromTimestamp($updatedSub->cancel_at) : null,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => $newValue
+                    ? 'Auto-renewal disabled, subscription will end at period end.'
+                    : 'Auto-renewal enabled, subscription will continue.',
+                'subscription' => $subscription
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Toggle renewal failed: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to toggle renewal: ' . $e->getMessage()], 500);
         }
     }
 
@@ -207,12 +250,12 @@ class SubscriptionController extends Controller
         if (isset($package->price_cents) && $package->price_cents > 0) {
             return (int)$package->price_cents; // Already in cents
         }
-        
+
         // Fallback to price field if price_cents is not set
         if (isset($package->price) && $package->price > 0) {
             return (int)($package->price * 100); // Convert dollars to cents
         }
-        
+
         // Default prices if not set in database
         switch (strtolower($package->name)) {
             case 'basic':
@@ -234,6 +277,4 @@ class SubscriptionController extends Controller
     {
         return '$' . number_format($amountInCents / 100, 2);
     }
-
-    
 }

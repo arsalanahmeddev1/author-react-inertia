@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import DashboardLayout from '../../Layouts/DashboardLayout'
 import { usePage } from '@inertiajs/react'
 import { CCard, CCardBody, CRow, CCol } from '@coreui/react'
@@ -9,6 +9,9 @@ import axios from 'axios'
 const UserDashboard = () => {
   const { user, metrics } = usePage().props;
   // const { user, metrics } = usePage().props
+  
+  // State for toggle switch
+  const [isAutoRenewalEnabled, setIsAutoRenewalEnabled] = useState(!metrics?.cancelAtPeriodEnd);
 
   // Helper function to get subscription status styling
   const getSubscriptionStatusStyle = (status) => {
@@ -25,6 +28,117 @@ const UserDashboard = () => {
         return { color: 'text-primary', icon: 'star' };
       default:
         return { color: 'text-muted', icon: 'user' };
+    }
+  };
+
+  const handleToggleRenewal = async (event) => {
+    if (!metrics?.subscriptionId) {
+      Swal.fire({
+        title: 'No Subscription Found',
+        text: 'You need an active subscription to toggle renewal settings.',
+        icon: 'warning',
+        confirmButtonColor: '#6c757d',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    // Check if subscription is canceled or inactive
+    if (metrics?.subscriptionStatus === 'Canceled' || metrics?.subscriptionStatus === 'canceled') {
+      Swal.fire({
+        title: 'Subscription Canceled',
+        text: 'Your subscription has been canceled and cannot be toggled for renewal.',
+        icon: 'warning',
+        confirmButtonColor: '#6c757d',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    // Check if subscription is not active
+    if (metrics?.subscriptionStatus !== 'Active' && metrics?.subscriptionStatus !== 'active') {
+      Swal.fire({
+        title: 'Subscription Not Active',
+        text: `Your subscription status is "${metrics?.subscriptionStatus}". Only active subscriptions can toggle renewal settings.`,
+        icon: 'warning',
+        confirmButtonColor: '#6c757d',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    // Get current toggle state
+    const newState = !isAutoRenewalEnabled;
+
+    // Show loading toast
+    const loadingToast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 0,
+      didOpen: (toast) => {
+        Swal.showLoading();
+      }
+    });
+    
+    loadingToast.fire({
+      title: 'Updating auto-renewal...'
+    });
+
+    try {
+      // Make API call directly
+      const response = await axios.post(route('subscription.toggle-renewal', metrics?.subscriptionId));
+      
+      // Close loading toast
+      Swal.close();
+      
+      if (response.data.success) {
+        // Update the toggle state
+        setIsAutoRenewalEnabled(newState);
+        
+        // Show success toast
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        });
+        
+        Toast.fire({
+          icon: 'success',
+          title: response.data.message || 'Auto-renewal updated successfully!'
+        });
+      }
+    } catch (error) {
+      // Close loading toast
+      Swal.close();
+      
+      // Reset toggle state on error - no need to do anything as state wasn't updated yet
+      
+      const errorMessage = error.response?.data?.error || 'Failed to update auto-renewal settings';
+      
+      // Show error toast
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      });
+      
+      Toast.fire({
+        icon: 'error',
+        title: errorMessage
+      });
     }
   };
 
@@ -274,6 +388,91 @@ const UserDashboard = () => {
           .swal-wide .alert li {
             margin-bottom: 0.25rem;
           }
+          
+          /* Toggle Switch Styles */
+          .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+          }
+          
+          .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+          
+          .toggle-label {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+          }
+          
+          .toggle-label:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          }
+          
+          .toggle-switch input:checked + .toggle-label {
+            background-color: #fea257;
+          }
+          
+          .toggle-switch input:checked + .toggle-label:before {
+            transform: translateX(26px);
+          }
+          
+          .toggle-switch input:focus + .toggle-label {
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+          }
+          
+          .toggle-switch.warning input:checked + .toggle-label {
+            background-color: #ffc107;
+          }
+          
+          .toggle-switch.warning input:focus + .toggle-label {
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.25);
+          }
+          
+          .toggle-switch.disabled .toggle-label {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            opacity: 0.6;
+          }
+          
+          .toggle-switch.disabled input:checked + .toggle-label {
+            background-color: #e9ecef;
+          }
+          
+          .toggle-switch.disabled .toggle-label:before {
+            background-color: #adb5bd;
+          }
+          
+          /* Hover effects */
+          .toggle-switch:not(.disabled):hover .toggle-label {
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+          }
+          
+          .toggle-switch.warning:not(.disabled):hover .toggle-label {
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+          }
         `}
       </style>
       <DashboardLayout>
@@ -479,6 +678,60 @@ const UserDashboard = () => {
             </div>
           </div>
         </div>
+        <div className="col-md-4 col-lg-3">
+          <div className='dashboard-card-wrapper d-flex align-items-center gap-2'>
+            <div>
+              <div className="dcw-icon">
+                <Icons.ExpiredFill />
+              </div>
+            </div>
+            <div>
+              
+              <div className="small text-body-secondary">
+                {metrics?.subscriptionStatus === 'Canceled' || metrics?.subscriptionStatus === 'canceled' ? (
+                  <div className="d-flex align-items-center gap-2">
+                    <div className="toggle-switch disabled">
+                      <input type="checkbox" id="toggle-canceled" disabled />
+                      <label htmlFor="toggle-canceled" className="toggle-label">
+                        <span className="toggle-slider"></span>
+                      </label>
+                    </div>
+                    <span className="text-muted">
+                      <Icons.X className="me-1" />
+                      Subscription Canceled
+                    </span>
+                  </div>
+                ) : metrics?.subscriptionStatus !== 'Active' && metrics?.subscriptionStatus !== 'active' ? (
+                  <div className="d-flex align-items-center gap-2">
+                    <div className="toggle-switch warning">
+                      <input type="checkbox" id="toggle-inactive" onClick={(e) => handleToggleRenewal(e)} />
+                      <label htmlFor="toggle-inactive" className="toggle-label">
+                        <span className="toggle-slider"></span>
+                      </label>
+                    </div>
+                    <span className="text-warning">
+                      <Icons.ExclamationTriangle className="me-1" />
+                      Subscription Inactive
+                    </span>
+                  </div>
+                ) : (
+                  <div className="d-flex align-items-center gap-2">
+                    <div className="toggle-switch">
+                      <input type="checkbox" id="toggle-renewal" checked={isAutoRenewalEnabled} onChange={(e) => handleToggleRenewal(e)} />
+                      <label htmlFor="toggle-renewal" className="toggle-label">
+                        <span className="toggle-slider"></span>
+                      </label>
+                    </div>
+                    <span className="text-black">
+                      {/* <Icons.ToggleOn className="me-1" /> */}
+                      Auto Renewal
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Daily Limits Section */}
@@ -663,7 +916,7 @@ const UserDashboard = () => {
               <p className="text-muted mb-0 small">Upgrade, renew, or manage your subscription</p>
             </div>
             
-            <div className="col-lg-6 col-md-12">
+            <div className="col-lg-12 col-md-12">
               <div className="card border-0 shadow-sm h-100">
                 <div className="card-body">
                   <div className="d-flex align-items-center justify-content-between mb-3">
@@ -702,7 +955,7 @@ const UserDashboard = () => {
               </div>
             </div>
             
-            <div className="col-lg-6 col-md-12">
+            {/* <div className="col-lg-6 col-md-12">
               <div className="card border-0 shadow-sm h-100">
                 <div className="card-body">
                   <div className="d-flex align-items-center justify-content-between mb-3">
@@ -748,7 +1001,7 @@ const UserDashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         ) : (
           // User has INACTIVE/EXPIRED subscription - show renewal card

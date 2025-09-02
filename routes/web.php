@@ -44,6 +44,7 @@ Route::middleware('web')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/subscribe/{package}', [SubscriptionController::class, 'subscribe'])->name('subscribe');
     Route::post('/subscription/renew', [SubscriptionController::class, 'renew'])->name('subscription.renew');
+    Route::post('/subscription/{id}/toggle-renewal', [SubscriptionController::class, 'toggleRenewal'])->name('subscription.toggle-renewal');
     Route::get('/subscription-success', [SubscriptionController::class, 'success'])->name('subscription.success');
 });
 
