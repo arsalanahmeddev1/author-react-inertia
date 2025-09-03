@@ -36,7 +36,7 @@ const UserIndex = ({ users, flash }) => {
       });
     }
   };
-  
+
   const confirmDelete = (user) => {
     Swal.fire({
       title: 'Confirm Delete',
@@ -69,7 +69,7 @@ const UserIndex = ({ users, flash }) => {
                 <FaUserCircle className="me-2" /> Users
               </strong>
               <Link className='text-decoration-none' href={route('admin-dashboard.users.create')}>
-                <CButton 
+                <CButton
                   color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
                 >
                   <FaUserPlus className="me-2" /> <span>Create User</span>
@@ -80,7 +80,7 @@ const UserIndex = ({ users, flash }) => {
               {flash?.success && (
                 <div className="alert alert-success mb-3">{flash.success}</div>
               )}
-              
+
               {/* Search Bar */}
               <div className="mb-3">
                 <div className="row">
@@ -94,8 +94,8 @@ const UserIndex = ({ users, flash }) => {
                         onChange={(e) => {
                           const searchTerm = e.target.value;
                           if (searchTerm.length > 2 || searchTerm.length === 0) {
-                            router.get(route('admin-dashboard.users.index'), 
-                              { search: searchTerm }, 
+                            router.get(route('admin-dashboard.users.index'),
+                              { search: searchTerm },
                               { preserveState: true, preserveScroll: true }
                             );
                           }
@@ -108,37 +108,34 @@ const UserIndex = ({ users, flash }) => {
                   </div>
                 </div>
               </div>
-              
+
               <CTable hover responsive>
-                                  <CTableHead>
-                    <CTableRow>
-                      <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Username</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Full Name</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Email</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Subscription</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Created</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
-                    </CTableRow>
-                  </CTableHead>
+                <CTableHead>
+                  <CTableRow>
+                    <CTableHeaderCell scope="col">Username</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Full Name</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Email</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Subscription</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Created</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
                 <CTableBody>
                   {users.data.length > 0 ? (
                     users.data.map((user) => (
                       <CTableRow key={user.id}>
-                        <CTableHeaderCell scope="row">{user.id}</CTableHeaderCell>
                         <CTableDataCell>
-                          <span className="badge bg-primary">{user.username || 'N/A'}</span>
+                          <span className="">{user.username || 'N/A'}</span>
                         </CTableDataCell>
                         <CTableDataCell>{user.full_name || user.name}</CTableDataCell>
                         <CTableDataCell>{user.email}</CTableDataCell>
                         <CTableDataCell>
                           {user.subscription ? (
                             <div>
-                              <span className={`badge ${
-                                user.subscription.stripe_status === 'active' ? 'bg-success' : 
-                                user.subscription.stripe_status === 'trialing' ? 'bg-info' : 
-                                user.subscription.stripe_status === 'past_due' ? 'bg-warning' : 'bg-danger'
-                              }`}>
+                              <span className={`badge ${user.subscription.stripe_status === 'active' ? 'bg-success' :
+                                  user.subscription.stripe_status === 'trialing' ? 'bg-info' :
+                                    user.subscription.stripe_status === 'past_due' ? 'bg-warning' : 'bg-danger'
+                                }`}>
                                 {user.subscription.stripe_status}
                               </span>
                               <br />
@@ -153,7 +150,7 @@ const UserIndex = ({ users, flash }) => {
                           <div className="d-flex align-items-center gap-2">
                             <CTooltip content="View User">
                               <Link href={route('admin-dashboard.users.show', user.id)}>
-                                <CButton 
+                                <CButton
                                   className="p-0 d-flex align-items-center justify-content-center"
                                 >
                                   <Icons.View />
@@ -162,8 +159,8 @@ const UserIndex = ({ users, flash }) => {
                             </CTooltip>
                             <CTooltip content="Edit User">
                               <Link href={route('admin-dashboard.users.edit', user.id)}>
-                                <CButton 
-                                 
+                                <CButton
+
                                   size="sm"
                                   className="p-0 d-flex align-items-center justify-content-center"
                                 >
@@ -172,7 +169,7 @@ const UserIndex = ({ users, flash }) => {
                               </Link>
                             </CTooltip>
                             <CTooltip content="Delete User">
-                              <CButton 
+                              <CButton
                                 onClick={() => confirmDelete(user)}
                                 className="p-0 d-flex align-items-center justify-content-center"
                               >
@@ -199,9 +196,9 @@ const UserIndex = ({ users, flash }) => {
                     <CPaginationItem
                       key={index}
                       active={link.active}
-                      style={link.active ? { 
-                        backgroundColor: themeColors.primary, 
-                        borderColor: themeColors.primary 
+                      style={link.active ? {
+                        backgroundColor: themeColors.primary,
+                        borderColor: themeColors.primary
                       } : {}}
                       disabled={!link.url}
                       onClick={() => link.url && router.visit(link.url)}

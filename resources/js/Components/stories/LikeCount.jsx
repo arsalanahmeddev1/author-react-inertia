@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const LikeCount = ({ storyId, className = '' }) => {
+const LikeCount = ({ storyId, className = '', likeText = false, likecountnumberClass = '' }) => {
   const [likesCount, setLikesCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,7 +25,8 @@ const LikeCount = ({ storyId, className = '' }) => {
   return (
     <div className={`d-flex align-items-center ${className}`}>
       <i className="far fa-heart text-primary-theme me-1"></i>
-      <span>{isLoading ? '...' : likesCount}</span>
+      <span className={likecountnumberClass}>{isLoading ? '...' : likesCount}</span>
+      {likeText && <span className='fs-14'>{likesCount > 1 ? 'Likes' : 'Like'}</span>}
     </div>
   );
 };

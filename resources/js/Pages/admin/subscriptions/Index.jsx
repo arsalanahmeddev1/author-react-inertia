@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Head, Link, router } from '@inertiajs/react'
 import DashboardLayout from '../../../Layouts/DashboardLayout'
 import { Icons } from '../../../utils/icons'
+import Swal from 'sweetalert2'
+import axios from 'axios'
 import {
   CCard,
   CCardBody,
@@ -22,6 +24,9 @@ import {
 } from '@coreui/react'
 
 const Index = ({ subscriptions, stats, filters }) => {
+  // State for tracking toggle states
+  const [toggleStates, setToggleStates] = useState({});
+
   const getStatusBadge = (status) => {
     const statusConfig = {
       'active': { color: 'success', text: 'Active' },
@@ -43,9 +48,171 @@ const Index = ({ subscriptions, stats, filters }) => {
     return `/admin-dashboard/subscriptions?${params.toString()}`
   }
 
+  const handleToggleRenewal = async (subscriptionId, currentState) => {
+    const newState = !currentState;
+
+    // Show loading toast
+    const loadingToast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 0,
+      didOpen: (toast) => {
+        Swal.showLoading();
+      }
+    });
+    
+    loadingToast.fire({
+      title: 'Updating auto-renewal...'
+    });
+
+    try {
+      // Make API call directly
+      const response = await axios.post(route('subscription.toggle-renewal', subscriptionId));
+      
+      // Close loading toast
+      Swal.close();
+      
+      if (response.data.success) {
+        // Update the toggle state
+        setToggleStates(prev => ({
+          ...prev,
+          [subscriptionId]: newState
+        }));
+        
+        // Show success toast
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        });
+        
+        Toast.fire({
+          icon: 'success',
+          title: response.data.message || 'Auto-renewal updated successfully!'
+        });
+      }
+    } catch (error) {
+      // Close loading toast
+      Swal.close();
+      
+      const errorMessage = error.response?.data?.error || 'Failed to update auto-renewal settings';
+      
+      // Show error toast
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      });
+      
+      Toast.fire({
+        icon: 'error',
+        title: errorMessage
+      });
+    }
+  };
+
+  const getToggleState = (subscription) => {
+    // Check if we have a state for this subscription, otherwise use the default
+    if (toggleStates.hasOwnProperty(subscription.id)) {
+      return toggleStates[subscription.id];
+    }
+    // Default state based on cancel_at_period_end
+    return !subscription.cancel_at_period_end;
+  };
+
   return (
-    <DashboardLayout>
-      <Head title="Subscription Management" />
+    <>
+      <style>
+        {`
+          /* Toggle Switch Styles */
+          .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+          }
+          
+          .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+          
+          .toggle-label {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+          }
+          
+          .toggle-label:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          }
+          
+          .toggle-switch input:checked + .toggle-label {
+            background-color: #fea257;
+          }
+          
+          .toggle-switch input:checked + .toggle-label:before {
+            transform: translateX(26px);
+          }
+          
+          .toggle-switch input:focus + .toggle-label {
+            box-shadow: 0 0 0 3px rgba(254, 162, 87, 0.25);
+          }
+          
+          .toggle-switch.disabled .toggle-label {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            opacity: 0.6;
+          }
+          
+          .toggle-switch.disabled input:checked + .toggle-label {
+            background-color: #e9ecef;
+          }
+          
+          .toggle-switch.disabled .toggle-label:before {
+            background-color: #adb5bd;
+          }
+          
+          /* Hover effects */
+          .toggle-switch:not(.disabled):hover .toggle-label {
+            box-shadow: 0 0 0 3px rgba(254, 162, 87, 0.1);
+          }
+        `}
+      </style>
+      <DashboardLayout>
+        <Head title="Subscription Management" />
       
       {/* Statistics Cards */}
       <div className="d-flex flex-wrap gap-3 mb-4">
@@ -157,10 +324,11 @@ const Index = ({ subscriptions, stats, filters }) => {
               <CTable hover responsive>
                 <CTableHead>
                   <CTableRow>
-                    <CTableHeaderCell scope="col">ID</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">User Name</CTableHeaderCell>
                     <CTableHeaderCell scope="col">User</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Package</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Auto Renewal</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Created</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Expires</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
@@ -170,10 +338,10 @@ const Index = ({ subscriptions, stats, filters }) => {
                   {subscriptions.data.length > 0 ? (
                     subscriptions.data.map((subscription) => (
                       <CTableRow key={subscription.id}>
-                        <CTableHeaderCell scope="row">{subscription.id}</CTableHeaderCell>
+                        <CTableDataCell>{subscription.user?.username || 'N/A'}</CTableDataCell>
                         <CTableDataCell>
                           <div>
-                            <div className="fw-medium">{subscription.user?.name || 'N/A'}</div>
+                          {/* <div className="fw-medium">{subscription.user?.name || 'N/A'}</div> */}
                             <small className="text-muted">{subscription.user?.email || 'N/A'}</small>
                           </div>
                         </CTableDataCell>
@@ -182,6 +350,24 @@ const Index = ({ subscriptions, stats, filters }) => {
                         </CTableDataCell>
                         <CTableDataCell>
                           {getStatusBadge(subscription.stripe_status)}
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          <div className="d-flex align-items-center gap-2">
+                            <div className="toggle-switch">
+                              <input 
+                                type="checkbox" 
+                                id={`toggle-${subscription.id}`} 
+                                checked={getToggleState(subscription)} 
+                                onChange={() => handleToggleRenewal(subscription.id, getToggleState(subscription))} 
+                              />
+                              <label htmlFor={`toggle-${subscription.id}`} className="toggle-label">
+                                <span className="toggle-slider"></span>
+                              </label>
+                            </div>
+                            <small className="text-muted">
+                              {getToggleState(subscription) ? 'Enabled' : 'Disabled'}
+                            </small>
+                          </div>
                         </CTableDataCell>
                         <CTableDataCell>
                           {subscription.created_at ? new Date(subscription.created_at).toLocaleDateString() : 'N/A'}
@@ -217,7 +403,7 @@ const Index = ({ subscriptions, stats, filters }) => {
                     ))
                   ) : (
                     <CTableRow>
-                      <CTableDataCell colSpan="7" className="text-center">
+                      <CTableDataCell colSpan="8" className="text-center">
                         No subscriptions found
                       </CTableDataCell>
                     </CTableRow>
@@ -244,7 +430,8 @@ const Index = ({ subscriptions, stats, filters }) => {
           </CCard>
         </CCol>
       </CRow>
-    </DashboardLayout>
+      </DashboardLayout>
+    </>
   )
 }
 

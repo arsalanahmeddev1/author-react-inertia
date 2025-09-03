@@ -8,7 +8,7 @@ import HeroBanner from '@/Components/home/HeroBanner'
 
 
 const Home = () => {
-  const { auth, latestStories } = usePage().props;
+  const { auth, latestStories, featuredStories } = usePage().props;
 
 
   return (
@@ -21,7 +21,7 @@ const Home = () => {
             <div className="col-lg-6">
               <h2 className='hd-lg fw-500 mb-40 text-center text-lg-start'>Featured Stories</h2>
               <div className="fearured-stories-card">
-                <div className="row justify-content-center row-gap-40">
+                {/* <div className="row justify-content-center row-gap-40">
                   <div className="col-lg-4 fearured-stories-card-inner">
                     <img src="/assets/images/featured-01.png" className='mb-10 fsc-image' alt="featured-stories-card-01" />
                     <h6 className='text-sm text-uppercase text-center' >Death at Fallow End</h6>
@@ -31,6 +31,27 @@ const Home = () => {
                     <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>
 
                   </div>
+                  <div className="col-lg-4 fearured-stories-card-inner">
+                    <img src="/assets/images/featured-03.png" className='mb-10 fsc-image' alt="featured-stories-card-03" />
+                    <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>
+                  </div>
+                </div> */}
+                <div className="row justify-content-center row-gap-40">
+                  {/* <div className="col-lg-4 fearured-stories-card-inner">
+                    <img src="/assets/images/featured-01.png" className='mb-10 fsc-image' alt="featured-stories-card-01" />
+                    <h6 className='text-sm text-uppercase text-center' >Death at Fallow End</h6>
+                  </div>
+                  <div className="col-lg-4 fearured-stories-card-inner">
+                    <img src="/assets/images/featured-02.png" className='mb-10 fsc-image' alt="featured-stories-card-02 " />
+                    <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>
+
+                  </div> */}
+                  {featuredStories && featuredStories.slice(0, 3).map((story, index) => (
+                    <div key={story.id} className="col-lg-4 fearured-stories-card-inner">
+                      <img src={story.cover_image ? `/storage/${story.cover_image}` : `/assets/images/featured-0${index + 1}.png`} className='mb-10 fsc-image' alt="featured-stories-card-01" />
+                      <h6 className='text-sm text-uppercase text-center'>{story.title}</h6>
+                    </div>
+                  ))}
                   <div className="col-lg-4 fearured-stories-card-inner">
                     <img src="/assets/images/featured-03.png" className='mb-10 fsc-image' alt="featured-stories-card-03" />
                     <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>

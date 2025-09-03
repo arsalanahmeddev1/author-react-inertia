@@ -13,6 +13,11 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
+        $featuredStories = Story::where('user_id', $user->id)->orderByRaw('
+        (read_count * 0.5) + (comment_count * 0.3) + (likes_count * 0.2) DESC
+    ')->take(5)->get();
+
         // Get the latest 3 non-community stories for the "Other Stories" section
         $latestStories = Story::where('is_community', false)
             ->latest()
@@ -24,9 +29,6 @@ class HomeController extends Controller
         foreach ($latestStories as $key => $story) {
             $latestStories[$key] = $story->fresh();
         }
-
-        // Log the stories to the Laravel log
-        Log::info('Latest stories for home page:', ['count' => $latestStories->count(), 'stories' => $latestStories->toArray()]);
 
         // Ensure the data is properly formatted for Inertia
         $formattedStories = $latestStories->map(function ($story) {
@@ -47,6 +49,7 @@ class HomeController extends Controller
 
         return Inertia::render('Home', [
             'latestStories' => $formattedStories,
+            'featuredStories' => $featuredStories,
         ]);
     }
 }

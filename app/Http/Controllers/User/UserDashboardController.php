@@ -147,6 +147,7 @@ class UserDashboardController extends Controller
                 'subscriptionPurchasedDate' => $subscriptionPurchasedDate,
                 'subscriptionExpireDate' => $subscriptionExpireDate,
                 'subscriptionId' => $user->subscription?->id,
+                'cancelAtPeriodEnd' => $user->subscription?->cancel_at_period_end,
                 'dailyWords' => $dailyWords,
                 'dailyWordLimit' => $dailyWordLimit,
                 'monthlyStories' => $monthlyStories,

@@ -58,7 +58,8 @@ const LikeButton = ({ storyId, className = '' }) => {
           <i className={`${liked ? 'fas' : 'far'} fa-heart`}></i>
         )}
       </button>
-      <span className="ms-1">{likesCount}</span>
+      <span className="ms-1 fs-14">{likesCount}</span>
+      <span className="ms-2 fs-14">{likesCount > 1 ? 'Likes' : 'Like'}</span>
     </div>
   );
 };

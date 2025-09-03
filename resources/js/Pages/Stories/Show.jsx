@@ -5,10 +5,11 @@ import Layout from '@/Layouts/Layout';
 import StoryModal from '@/Components/stories/StoryModal';
 import CharacterModal from '@/Components/stories/CharacterModal';
 import LoginPromptModal from '@/Components/stories/LoginPromptModal';
-import LikeButton from '@/Components/stories/LikeButton';
 import '@/assets/styles/stories.css';
 import '@/assets/styles/story-modal.css';
 import '@/assets/styles/character-modal.css';
+import LikeCount from '@/Components/stories/LikeCount';
+
 
 export default function Show({ story }) {
   const { auth } = usePage().props;
@@ -81,20 +82,23 @@ export default function Show({ story }) {
                 <div className="row">
                   <div className="col-md-4 mb-4 mb-md-0">
                      <img
-                      src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'}
+                      src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/image-not-available.jpg'}
                       className="img-fluid rounded-3 mb-3 w-100"
                       alt={story.title}
                     />
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                      <span className="fs-18 secondry-font">
-                        <i className="fas fa-eye me-2 text-primary-theme"></i> {story.read_count} reads
+                      <span className="fs-14 secondry-font">
+                          <i className="fas fa-eye me-2 text-primary-theme"></i> {story.read_count} {story.read_count > 1 ? 'Reads' : 'read'}
+                        </span>
+                      <span className="fs-14 secondry-font">
+                        <i className="fas fa-comment me-2 text-primary-theme"></i> {commentCount} {commentCount > 1 ? 'Comments' : 'Comment'}
                       </span>
-                      <span className="fs-18 secondry-font">
-                        <i className="fas fa-comment me-2 text-primary-theme"></i> {commentCount}
+                      <span className="fs-14 secondry-font">
+                      <LikeCount className='gap-10' storyId={story.id} likeText={true} likecountnumberClass='fs-14' />
                       </span>
+                      
                     </div>
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                      <LikeButton storyId={story.id} className="fs-18 secondry-font" />
                     </div>
                     <div className="mb-3">
                       <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">

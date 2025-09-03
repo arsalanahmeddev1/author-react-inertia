@@ -17,11 +17,6 @@ const Publish = () => {
             <p className='text-black fs-22 fw-400 mb-30' style={{ maxWidth: '800px' }}>
               Turn your story into an immersive multimedia experience. Engage new audiences, expand your reach, and maximize your earnings.
             </p>
-            <Button className='btn btn-primary fw-500 mb-30' style={{ maxWidth: '250px' }}>Join Our Waitlist</Button>
-            <p className='text-black fs-16 fw-400 mb-20' style={{ maxWidth: '800px' }}>
-              Push the boundaries of storytelling. Create richer, more immersive stories, connect with a global network of creators and fans, and unlock the full potential of your creativity.
-            </p>
-
           </div>
           <div className="row row-gap-40">
             <div className="col-lg-6">

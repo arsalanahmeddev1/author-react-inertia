@@ -527,7 +527,7 @@ const StoryModal = ({ show, onHide, story }) => {
   };
 
   return (
-    <div className={`story-modal-overlay ${show ? 'show' : ''}`} onClick={onHide}>
+    <div className={`story-modal-overlay ${show ? 'show' : ''}`}>
       <div className="story-modal-content" onClick={e => e.stopPropagation()}>
         <div className="story-modal-header">
           <h3 className="mb-0 primary-font">{story?.title}</h3>

@@ -11,7 +11,16 @@ const UserDashboard = () => {
   // const { user, metrics } = usePage().props
   
   // State for toggle switch
-  const [isAutoRenewalEnabled, setIsAutoRenewalEnabled] = useState(!metrics?.cancelAtPeriodEnd);
+  // When cancelAtPeriodEnd is true, auto-renewal is disabled, so toggle should be false
+  // When cancelAtPeriodEnd is false/undefined, auto-renewal is enabled, so toggle should be true
+  const [isAutoRenewalEnabled, setIsAutoRenewalEnabled] = useState(metrics?.cancelAtPeriodEnd === false);
+  
+  // Debug logging to understand the toggle state
+  console.log('Toggle Debug:', {
+    cancelAtPeriodEnd: metrics?.cancelAtPeriodEnd,
+    isAutoRenewalEnabled: isAutoRenewalEnabled,
+    subscriptionStatus: metrics?.subscriptionStatus
+  });
 
   // Helper function to get subscription status styling
   const getSubscriptionStatusStyle = (status) => {

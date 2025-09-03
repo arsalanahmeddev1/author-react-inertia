@@ -3,10 +3,11 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import axios from 'axios';
 import Layout from '@/Layouts/Layout';
 import CommentSection from '@/Components/comments/CommentSection';
-import LikeButton from '@/Components/stories/LikeButton';
 import '@/assets/styles/stories.css';
 import '@/assets/styles/story-read.css';
 import '@/assets/styles/comments.css';
+import LikeCount from '@/Components/stories/LikeCount';
+
 
 export default function CommunityShow({ story }) {
   const { auth } = usePage().props;
@@ -56,16 +57,18 @@ export default function CommunityShow({ story }) {
                       }}
                     />
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                      <span className="fs-18 secondry-font">
+                      <span className="fs-14 secondry-font">
                         <i className="fas fa-eye me-2 text-primary-theme"></i> {story.read_count} reads
                       </span>
-                      <span className="fs-18 secondry-font">
+                      <span className="fs-14 secondry-font">
                         <i className="fas fa-comment me-2 text-primary-theme"></i> {commentCount} comments
                       </span>
+                    <span className="fs-14 secondry-font">
+                      <LikeCount className='gap-10' storyId={story.id} likeText={true} likecountnumberClass='fs-14' />
+                      </span>
                     </div>
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <LikeButton storyId={story.id} className="fs-18 secondry-font" />
-                    </div>
+                    {/* <div className="d-flex justify-content-between align-items-center mb-3">
+                    </div> */}
                     <div className="mb-3">
                       <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
                         {story.genre}

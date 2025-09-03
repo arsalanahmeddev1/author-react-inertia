@@ -133,7 +133,7 @@ export default function Index({ stories, genres, filters, flash }) {
                     />
                   </div>
                 </div>
-                <div>
+                {/* <div>
                   <select
                     className="form-select secondry-font"
                     value={genre}
@@ -144,7 +144,7 @@ export default function Index({ stories, genres, filters, flash }) {
                       <option key={g} value={g}>{g}</option>
                     ))}
                   </select>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -176,7 +176,7 @@ export default function Index({ stories, genres, filters, flash }) {
                     <div className="d-flex justify-content-between align-items-center mb-20">
                       <div className='d-flex align-items-center gap-10'>
                         <i className="fas fa-eye text-primary-theme"></i>
-                        <h6 className="text-black fs-18 mb-0">{story.read_count} People Read This Story</h6>
+                        <h6 className="text-black fs-18 mb-0">{story.read_count} {story.read_count > 1 ? 'Reads' : 'Read'}</h6>
                       </div>
                         <LikeCount className='gap-10' storyId={story.id} />
                     </div>

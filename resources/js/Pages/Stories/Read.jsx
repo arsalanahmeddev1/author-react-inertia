@@ -9,6 +9,7 @@ import "@/assets/styles/comments.css";
 import { motion } from "framer-motion";
 import HTMLFlipBook from "react-pageflip";
 import Book from "../../Components/Book";
+import LikeButton from "@/Components/stories/LikeButton";
 import usePaginateByHeight from "@/hooks/usePaginateByHeight";
 
 export default function Read({ story, auth }) {
@@ -147,25 +148,26 @@ export default function Read({ story, auth }) {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                 >
+                    <div onClick={() => setShowCover(false)} className="sr-close-btn position-absolute">
+                        <span ><i className="fas fa-times"></i></span>
+                    </div>
                     <div className="book-cover-container">
                         <div className="book-cover-wrapper">
                             <img
                                 src={
                                     story.cover_image
                                         ? `/storage/${story.cover_image}`
-                                        : "/assets/images/default-cover.jpg"
+                                        // ? `/assets/images/image-not-available.jpg`
+                                        : "/assets/images/image-not-available.jpg"
                                 }
                                 className="book-cover-image"
                                 alt={story.title}
                             />
                             <div className="book-cover-details">
                                 <h1 className="book-title">{story.title}</h1>
-                                <h3 className="book-author">
-                                    By {story.author}
-                                </h3>
-                                <p className="book-genre">
+                                {/* <p className="book-genre text-black">
                                     {story.genre} • {story.style}
-                                </p>
+                                </p> */}
                                 <motion.button
                                     className="btn btn-lg btn-primary start-reading-btn"
                                     onClick={startReading}
@@ -209,7 +211,7 @@ export default function Read({ story, auth }) {
                                         src={
                                             story.cover_image
                                                 ? `/storage/${story.cover_image}`
-                                                : "/assets/images/default-cover.jpg"
+                                                : "/assets/images/image-not-available.jpg"
                                         }
                                         className="mini-cover mb-3 me-3"
                                         alt={story.title}
@@ -285,10 +287,10 @@ export default function Read({ story, auth }) {
                                     onClick={flipNext}
                                     disabled={
                                         (totalPages || storyPages.length) ===
-                                            0 ||
+                                        0 ||
                                         currentPage >=
-                                            (totalPages || storyPages.length) -
-                                                1
+                                        (totalPages || storyPages.length) -
+                                        1
                                     }
                                 >
                                     Next Page{" "}
@@ -311,14 +313,17 @@ export default function Read({ story, auth }) {
                                             </span>
                                         )}
                                     </div>
-                                    <div className="reading-stats">
+                                    <div className="reading-stats d-flex align-items-center">
                                         <span className="fs-18 secondry-font">
                                             <i className="fas fa-eye me-2 text-primary-theme"></i>{" "}
-                                            {story.read_count} reads
+                                            {story.read_count} {story.read_count > 1 ? 'Reads' : 'Read'}
                                         </span>
                                         <span className="ms-3 fs-18 secondry-font">
                                             <i className="fas fa-comment me-2 text-primary-theme"></i>{" "}
-                                            {commentCount} comments
+                                            {commentCount} {commentCount > 1 ? 'Comments' : 'Comment'}
+                                        </span>
+                                        <span className="ms-3 fs-18 secondry-font">
+                                            <LikeButton storyId={story.id} className="fs-18 secondry-font" />
                                         </span>
                                     </div>
                                 </div>

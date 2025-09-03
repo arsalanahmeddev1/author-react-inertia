@@ -1336,6 +1336,20 @@ h6 {
     font-weight: 700;
     color: var(--secondry-theme);
 }
+.sr-close-btn {
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1;
+    color: var(--secondry-theme);
+}
 /* responsive */
 @media (min-width: 1560px) {
     .container {

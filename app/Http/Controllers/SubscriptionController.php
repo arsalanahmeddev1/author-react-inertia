@@ -200,7 +200,15 @@ class SubscriptionController extends Controller
     public function toggleRenewal($id)
     {
         try {
+            $user = auth()->user();
             $subscription = LocalSubscription::findOrFail($id);
+
+            // Check if user is admin or owns the subscription
+            if (!$user->is_admin && $subscription->user_id !== $user->id) {
+                return response()->json([
+                    'error' => 'Unauthorized. You can only toggle your own subscription.'
+                ], 403);
+            }
 
             // Stripe client init
             $stripe = new StripeClient(config('services.stripe.secret'));
