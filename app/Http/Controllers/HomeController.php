@@ -13,10 +13,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        $featuredStories = Story::where('user_id', $user->id)->orderByRaw('
-        (read_count * 0.5) + (comment_count * 0.3) + (likes_count * 0.2) DESC
-    ')->take(5)->get();
+        // $user = auth()->user();
+        $featuredStories = Story::orderByRaw('
+    (read_count * 0.5) + (comment_count * 0.3) + (likes_count * 0.2) DESC
+')->take(5)->get();
 
         // Get the latest 3 non-community stories for the "Other Stories" section
         $latestStories = Story::where('is_community', false)
