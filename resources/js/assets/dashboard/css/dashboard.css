@@ -136,3 +136,10 @@ strong {
 .border-none {
   border: none !important;
 }
+:root {
+  --cui-primary: #fea257;
+  --cui-secondary: #74989e;
+}
+.dropdown-menu {
+  
+}

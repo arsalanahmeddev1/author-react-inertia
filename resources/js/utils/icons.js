@@ -29,6 +29,10 @@ import { IoSpeedometerOutline } from "react-icons/io5";
 import { IoPencil } from "react-icons/io5";
 import { RiPassExpiredFill } from "react-icons/ri";
 import { BsLightbulb, BsArrowUp, BsArrowUpCircle, BsPercent, BsInfoCircle, BsClock, BsClockHistory, BsCalendar, BsExclamationTriangle, BsArrowLeftCircle, BsStar, BsCheckCircle, BsXCircle, BsPerson, BsBox, BsType, BsToggleOn, BsToggleOff, BsX } from "react-icons/bs";
+import { PiUsersThreeFill } from "react-icons/pi";
+import { FaDollarSign } from "react-icons/fa6";
+
+
 
 
 
@@ -93,4 +97,6 @@ export const Icons = {
   ToggleOn: BsToggleOn,
   ToggleOff: BsToggleOff,
   X: BsX,
+  Users: PiUsersThreeFill,
+  Dollar: FaDollarSign,
 }

@@ -26,10 +26,9 @@ import {
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 
-const AppHeader = () => {
+const AppHeader = ({ sidebarShow, setSidebarShow }) => {
   const headerRef = useRef()
   const [colorMode, setColorMode] = useState(localStorage.getItem('theme') || 'light')
-  const [sidebarShow, setSidebarShow] = useState(true)
 
   useEffect(() => {
     document.addEventListener('scroll', () => {

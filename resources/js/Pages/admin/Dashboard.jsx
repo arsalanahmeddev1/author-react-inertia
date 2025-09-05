@@ -43,7 +43,7 @@ import {
   cilUser,
   cilUserFemale,
 } from '@coreui/icons'
-
+import { Icons } from '../../utils/icons'
 import avatar1 from '../../assets/admin/images/avatars/1.jpg'
 import avatar2 from '../../assets/admin/images/avatars/2.jpg'
 import avatar3 from '../../assets/admin/images/avatars/3.jpg'
@@ -73,7 +73,7 @@ import MainChart from '../../Components/MainChart'
 
 
 const Dashboard = () => {
-  const { metrics,today  } = usePage().props;
+  const { metrics, today } = usePage().props;
   const max = Math.max(metrics.visits, metrics.uniqueUsers, metrics.pageviews, metrics.newUsers);
   const getPercentage = (value) => {
     return max ? Math.round((value / max) * 100) : 0;
@@ -89,17 +89,80 @@ const Dashboard = () => {
 
 
       <>
-        <WidgetsDropdown 
-          className="mb-4" 
-          communityStoriesCount={metrics.communityStoriesCount}  
-          usersCount={metrics.totalUsers} 
-          labels={metrics.userCountsByMonth} 
-          adminStoriesCount={metrics.adminStoriesCount} 
+        {/* <WidgetsDropdown
+          className="mb-4"
+          communityStoriesCount={metrics.communityStoriesCount}
+          usersCount={metrics.totalUsers}
+          labels={metrics.userCountsByMonth}
+          adminStoriesCount={metrics.adminStoriesCount}
           userCountsByMonth={metrics.userCountsByMonth}
           monthlyIncome={metrics.monthlyIncome}
           totalIncome={metrics.totalIncome}
           monthlyPaymentData={metrics.monthlyPaymentData}
-        />
+        /> */}
+        <div className="row row-gap-3" style={{ marginBottom: '50px' }}>
+          <div className="col-md-4 col-lg-3">
+            <div className='dashboard-card-wrapper d-flex align-items-center gap-2'>
+              <div>
+                <div className="dcw-icon">
+                  <Icons.Users />
+                </div>
+              </div>
+              <div>
+                <h4 id="traffic" className="card-title mb-2 fw-medium">
+                  Total Users
+                </h4>
+                <div className="small text-body-secondary">{metrics?.totalUsers || 0}</div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4 col-lg-3">
+            <div className='dashboard-card-wrapper d-flex align-items-center gap-2'>
+              <div>
+                <div className="dcw-icon">
+                  <Icons.Dollar />
+                </div>
+              </div>
+              <div>
+                <h4 id="traffic" className="card-title mb-2 fw-medium">
+                  Monthly Income
+                </h4>
+                <div className="small text-body-secondary">{metrics?.monthlyIncome || 0}</div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4 col-lg-3">
+            <div className='dashboard-card-wrapper d-flex align-items-center gap-2'>
+              <div>
+                <div className="dcw-icon">
+                  <Icons.Book />
+                </div>
+              </div>
+              <div>
+                <h4 id="traffic" className="card-title mb-2 fw-medium">
+                  Community Stories
+                </h4>
+                <div className="small text-body-secondary">{metrics?.communityStoriesCount || 0}</div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4 col-lg-3">
+            <div className='dashboard-card-wrapper d-flex align-items-center gap-2'>
+              <div>
+                <div className="dcw-icon">
+                  <Icons.Book />
+                </div>
+              </div>
+              <div>
+                <h4 id="traffic" className="card-title mb-2 fw-medium">
+                My Stories
+                </h4>
+                <div className="small text-body-secondary">{metrics?.adminStoriesCount || 0}</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
         <CCard className="mb-4">
           <CCardBody>
             <CRow>

@@ -1615,10 +1615,6 @@ h6 {
         margin-top: 0;
     }
 
-    .fearured-stories-card .text-sm {
-        font-size: 38px;
-    }
-
     .fearured-stories .row-gap-40 {
         row-gap: 80px;
     }
@@ -1685,7 +1681,12 @@ h6 {
         max-width: 460px;
         display: flex;
         justify-content: center;
-        margin: 0 auto;
+    }
+    .fearured-stories-card .slick-dots {
+        bottom: -19px;
+    }
+    .fearured-stories-card-inner a {
+        align-items: center;
     }
 }
 

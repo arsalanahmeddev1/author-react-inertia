@@ -18,11 +18,10 @@ import { sygnet } from '../../assets/admin/brand/sygnet'
 // sidebar nav config
 import { getNavItems } from '../../constants/nav'
 
-const AppSidebar = () => {
+const AppSidebar = ({ sidebarShow, setSidebarShow }) => {
   const {
     auth: { user },
   } = usePage().props;
-  const [sidebarShow, setSidebarShow] = useState(true)
   const [unfoldable, setUnfoldable] = useState(false)
 
   return (
@@ -49,9 +48,9 @@ const AppSidebar = () => {
       </CSidebarHeader>
       <AppSidebarNav items={getNavItems(user?.role)} />
       <CSidebarFooter className="border-top d-none d-lg-flex">
-        <CSidebarToggler
+        {/* <CSidebarToggler
           onClick={() => setUnfoldable(!unfoldable)}
-        />
+        /> */}
       </CSidebarFooter>
     </CSidebar>
   )
