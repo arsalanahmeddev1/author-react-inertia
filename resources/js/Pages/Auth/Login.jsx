@@ -20,7 +20,7 @@ export default function Login({ status, canResetPassword }) {
         post(route('login'), {
             onFinish: () => {
                 reset('password');
-                window.location.href = route('dashboard'); // force reload
+                window.location.replace(route('dashboard'));
             },
         });
     };

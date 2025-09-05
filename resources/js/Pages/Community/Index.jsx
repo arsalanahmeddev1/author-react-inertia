@@ -104,9 +104,7 @@ export default function CommunityIndex({ stories, genres, filters }) {
                       alt={story.title}
                       onError={(e) => {
                         const fallbackImages = [
-                          "/assets/images/book-03.png",
-                          "/assets/images/book-02.png",
-                          "/assets/images/book-04.png"
+                          "/assets/images/image-not-found.png",
                         ];
                         e.target.src = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
                       }}
@@ -116,7 +114,7 @@ export default function CommunityIndex({ stories, genres, filters }) {
                       <h4 className="light-black story-title">{story.title}</h4>
                       <div className='d-flex align-items-center gap-10'>
                         <span className='fs-18 text-primary-theme'>
-                        <i class="fa-solid fa-comment"></i>
+                        <i className="fa-solid fa-comment"></i>
                         </span>
                         <span className="pl-10">{story.comment_count || 0}</span>
                       </div>

@@ -1,62 +1,113 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import Button from '../Components/common/Button'
 import Layout from '@/Layouts/Layout'
 import { Link, Head, usePage } from '@inertiajs/react'
 import StoryOfTheMonth from '@/Components/StoryOfTheMonth'
 import Testimonials from '@/Components/Testimonials';
 import HeroBanner from '@/Components/home/HeroBanner'
+import Slider from 'react-slick'
+import { Icons } from '../utils/icons'
 
+
+// Custom Arrows for Featured Stories
+const PrevArrow = ({ onClick }) => (
+  <div className="featured-arrow custom-prev" onClick={onClick}>
+    <Icons.ArrowLeft />
+  </div>
+);
+
+const NextArrow = ({ onClick }) => (
+  <div className="featured-arrow custom-next" onClick={onClick}>
+    <Icons.ArrowRight />
+  </div>
+);
 
 const Home = () => {
   const { auth, latestStories, featuredStories } = usePage().props;
+  const featuredSliderRef = useRef(null);
+
+  // Featured Stories Slider Settings
+  const featuredSliderSettings = {
+    dots: true,
+    arrows: false,
+    infinite: true,
+    speed: 600,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    // autoplay: true,
+    autoplaySpeed: 2000,
+    pauseOnDotsHover: false,
+    customPaging: i => (
+      <span className="dot-number">{i + 1}</span>
+    ),
+    appendDots: dots => (
+      <div className="custom-dots">
+        <ul className="featured-stories-dots">{dots}</ul>
+      </div>
+    ),
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
 
 
   return (
     <Layout headerClass="pt-30 home-page-wrapper" mainClass="home-page-wrapper">
       <Head title="Home" />
-      <HeroBanner />  
+      <HeroBanner />
       <section className='fearured-stories'>
         <div className="container-xxl">
           <div className="row row-gap-40">
             <div className="col-lg-6">
               <h2 className='hd-lg fw-500 mb-40 text-center text-lg-start'>Featured Stories</h2>
-              <div className="fearured-stories-card">
-                {/* <div className="row justify-content-center row-gap-40">
-                  <div className="col-lg-4 fearured-stories-card-inner">
-                    <img src="/assets/images/featured-01.png" className='mb-10 fsc-image' alt="featured-stories-card-01" />
-                    <h6 className='text-sm text-uppercase text-center' >Death at Fallow End</h6>
-                  </div>
-                  <div className="col-lg-4 fearured-stories-card-inner">
-                    <img src="/assets/images/featured-02.png" className='mb-10 fsc-image' alt="featured-stories-card-02 " />
-                    <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>
+              <div className="fearured-stories-card overflow-hidden">
+                {featuredStories && featuredStories.length > 0 ? (
+                  <>
+                    <Slider ref={featuredSliderRef} {...featuredSliderSettings}>
+                      {featuredStories.map((story, index) => (
+                        <div key={story.id} className="fearured-stories-card-inner">
+                          <Link href={`/stories/${story.id}`} className=' text-black'>
+                            <img
+                              src={story.cover_image ? `/storage/${story.cover_image}` : `/assets/images/featured-0${(index % 3) + 1}.png`}
+                              className='mb-10 fsc-image'
+                              alt={story.title}
+                            />
+                            <h6 className='text-sm text-uppercase mb-5'>{story.title}</h6>
+                            <h6 className='fs-20 fw-400  mb-5' style={{ color: '#fea257' }}> <span className='text-black fw-500'>By</span> {story.author}</h6>
+                            Read More
+                          </Link>
+                        </div>
+                      ))}
+                    </Slider>
 
-                  </div>
-                  <div className="col-lg-4 fearured-stories-card-inner">
-                    <img src="/assets/images/featured-03.png" className='mb-10 fsc-image' alt="featured-stories-card-03" />
-                    <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>
-                  </div>
-                </div> */}
-                <div className="row justify-content-center row-gap-40">
-                  {/* <div className="col-lg-4 fearured-stories-card-inner">
-                    <img src="/assets/images/featured-01.png" className='mb-10 fsc-image' alt="featured-stories-card-01" />
-                    <h6 className='text-sm text-uppercase text-center' >Death at Fallow End</h6>
-                  </div>
-                  <div className="col-lg-4 fearured-stories-card-inner">
-                    <img src="/assets/images/featured-02.png" className='mb-10 fsc-image' alt="featured-stories-card-02 " />
-                    <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>
-
-                  </div> */}
-                  {featuredStories && featuredStories.slice(0, 3).map((story, index) => (
-                    <div key={story.id} className="col-lg-4 fearured-stories-card-inner">
-                      <img src={story.cover_image ? `/storage/${story.cover_image}` : `/assets/images/featured-0${index + 1}.png`} className='mb-10 fsc-image' alt="featured-stories-card-01" />
-                      <h6 className='text-sm text-uppercase text-center'>{story.title}</h6>
+                    {/* Custom Navigation Arrows */}
+                    <div className="featured-custom-arrows mt-30 d-flex justify-content-start gap-20">
+                      {/* <div className="prev-arrow" onClick={() => featuredSliderRef.current.slickPrev()}>
+                        <Icons.ArrowLeft className="fs-30 text-black" />
+                      </div>
+                      <div className="next-arrow" onClick={() => featuredSliderRef.current.slickNext()}>
+                        <Icons.ArrowRight className="fs-30 text-black" />
+                      </div> */}
                     </div>
-                  ))}
-                  <div className="col-lg-4 fearured-stories-card-inner">
-                    <img src="/assets/images/featured-03.png" className='mb-10 fsc-image' alt="featured-stories-card-03" />
-                    <h6 className='text-sm text-uppercase text-center'>Death at Fallow End</h6>
+                  </>
+                ) : (
+                  <div className="col-12">
+                    <p className="text-muted">No featured stories found. Be the first to share your story!</p>
                   </div>
-                </div>
+                )}
               </div>
             </div>
             <div className="col-lg-6">
@@ -144,7 +195,11 @@ const Home = () => {
                       <span className="text-primary secondary-font text-20">{story.author}</span>
                     )} */}
                     <p className='text-black secondary-font mb-20 mt-10'>
-                      {story.read_count || 0} People Read This Story
+                      {story.read_count === 0
+                        ? 'No one has read this story'
+                        : story.read_count === 1
+                          ? '1 person has read this story'
+                          : `${story.read_count} people have read this story`}
                     </p>
                     {/* {story.genre && (
                       <div className="mb-3">

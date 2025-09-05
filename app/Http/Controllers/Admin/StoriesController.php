@@ -119,7 +119,7 @@ class StoriesController extends Controller
 
         // Handle cover image upload
         if ($request->hasFile('cover_image')) {
-            $path = $request->file('cover_image')->store('cover_images', 'public');
+            $path = $request->file('cover_image')->store('admin_stories/cover_images', 'public');
             $storyData['cover_image'] = $path;
         }
 
@@ -249,10 +249,10 @@ class StoriesController extends Controller
      */
     public function destroy(Story $story)
     {
-        // Delete the cover image if it exists
-        if ($story->cover_image) {
-            Storage::disk('public')->delete($story->cover_image);
-        }
+        // Keep cover images for story page display - do not delete cover images
+        // if ($story->cover_image) {
+        //     Storage::disk('public')->delete($story->cover_image);
+        // }
 
         // Delete associated data (comments, likes, etc.)
         $story->comments()->delete();

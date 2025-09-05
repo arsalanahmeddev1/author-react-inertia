@@ -51,7 +51,7 @@ export default function CommunityShow({ story }) {
                     <img
                       src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/book-03.png'}
                       alt={story.title}
-                      className="img-fluid rounded-3 mb-3"
+                      className="img-fluid w-100 rounded-3 mb-3"
                       onError={(e) => {
                         e.target.src = "/assets/images/book-03.png";
                       }}

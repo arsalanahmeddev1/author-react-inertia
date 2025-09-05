@@ -263,7 +263,8 @@ const StoryModal = ({ show, onHide, story }) => {
 
       // Prepare the data for the API call
       const data = {
-        title: `${story.title} - Continued by ${selectedCharacter ? 'Character' : 'User'}`,
+        // title: `${story.title} - Continued by ${selectedCharacter ? `${characterDetails.name}` : 'User'}`,
+        title: `${story.title}`,
         content: content,
         character_id: selectedCharacter || null,
         original_story_id: story.id,
