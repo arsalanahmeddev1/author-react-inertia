@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class GoogleController extends Controller
 {
@@ -15,16 +16,21 @@ class GoogleController extends Controller
     }
 
     public function callback()
-    {
-        $googleUser = Socialite::driver('google')->user();
-        dd($googleUser);
-        $user = User::firstOrCreate(
-            ['email' => $googleUser->getEmail()],
-            ['name' => $googleUser->getName()]
-        );
+{
+    $googleUser = Socialite::driver('google')->user();
 
-        Auth::login($user);
+    $user = User::updateOrCreate(
+        ['email' => $googleUser->getEmail()],
+        [
+            'name' => $googleUser->getName(),
+            'username' => \Illuminate\Support\Str::slug($googleUser->getName()) . '_' . \Illuminate\Support\Str::random(5),
+            'avatar' => $googleUser->getAvatar(),
+            'password' => bcrypt(Str::random(16)),
+        ]
+    );
 
-        return redirect()->route('home');
-    }
+    Auth::login($user);
+
+    return redirect()->route('home');
+}
 }

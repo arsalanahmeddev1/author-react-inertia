@@ -31,7 +31,7 @@ import { RiPassExpiredFill } from "react-icons/ri";
 import { BsLightbulb, BsArrowUp, BsArrowUpCircle, BsPercent, BsInfoCircle, BsClock, BsClockHistory, BsCalendar, BsExclamationTriangle, BsArrowLeftCircle, BsStar, BsCheckCircle, BsXCircle, BsPerson, BsBox, BsType, BsToggleOn, BsToggleOff, BsX } from "react-icons/bs";
 import { PiUsersThreeFill } from "react-icons/pi";
 import { FaDollarSign } from "react-icons/fa6";
-
+import { CiDiscount1 } from "react-icons/ci";
 
 
 
@@ -99,4 +99,5 @@ export const Icons = {
   X: BsX,
   Users: PiUsersThreeFill,
   Dollar: FaDollarSign,
+  Discount: CiDiscount1,
 }

@@ -139,7 +139,26 @@ const adminNav = [
     name: 'Publish Requests',
     to: '/admin-dashboard/publish-requests',
     icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
-  }
+  },
+
+  {
+    component: CNavGroup,
+    name: 'Coupons',
+    to: '/admin-dashboard/coupons',
+    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'List',
+        to: '/admin-dashboard/coupons',
+      },
+      {
+        component: CNavItem,
+        name: 'Create',
+        to: '/admin-dashboard/coupons/create',
+      },
+    ],
+  },
 ]
 
 const userNav = [
