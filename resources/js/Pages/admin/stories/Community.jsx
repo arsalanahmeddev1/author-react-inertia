@@ -259,7 +259,7 @@ const Community = ({ stories, flash }) => {
               <CTable hover responsive>
                 <CTableHead>
                   <CTableRow>
-                    <CTableHeaderCell scope="col">ID</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Username</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Title</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Author</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Genre</CTableHeaderCell>
@@ -273,7 +273,9 @@ const Community = ({ stories, flash }) => {
                   {stories.data.length > 0 ? (
                     stories.data.map((story) => (
                       <CTableRow key={story.id}>
-                        <CTableHeaderCell scope="row">{story.id}</CTableHeaderCell>
+                        <CTableDataCell>
+                          <span className="">{story.user?.username || 'N/A'}</span>
+                        </CTableDataCell>
                         <CTableDataCell>{story.title}</CTableDataCell>
                         <CTableDataCell>{story.author}</CTableDataCell>
                         <CTableDataCell>{story.genre}</CTableDataCell>

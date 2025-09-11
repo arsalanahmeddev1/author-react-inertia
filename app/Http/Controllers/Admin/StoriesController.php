@@ -62,7 +62,9 @@ class StoriesController extends Controller
 
     public function communityStories(Request $request)
     {
-        $query = Story::where('is_community', true)->with('user');
+        $query = Story::where('is_community', true)->with(['user' => function($query) {
+            $query->select('id', 'name', 'username', 'email');
+        }]);
     
         if ($request->has('search')) {
             $query->where(function ($q) use ($request) {

@@ -26,10 +26,17 @@ import {
   CTabContent,
   CTabPane,
   CFormSelect,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
 } from '@coreui/react'
 
-const Index = ({ communityStories, publishedStories, flash }) => {
-  const [activeTab, setActiveTab] = useState('published');
+const Index = ({ communityStories, publishedStories, publishRequests, flash }) => {
+  const [activeTab, setActiveTab] = useState('community');
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   // Handle flash messages with SweetAlert
   useEffect(() => {
@@ -252,6 +259,152 @@ const Index = ({ communityStories, publishedStories, flash }) => {
     );
   };
 
+  const handleViewContent = (request) => {
+    setSelectedRequest(request);
+    setShowModal(true);
+  };
+
+  const getStatusBadge = (status) => {
+    const statusConfig = {
+      'pending': { color: 'warning', text: 'Pending', icon: 'Clock' },
+      'approved': { color: 'success', text: 'Approved', icon: 'Check' },
+      'rejected': { color: 'danger', text: 'Rejected', icon: 'X' },
+    };
+
+    const config = statusConfig[status] || { color: 'secondary', text: status, icon: 'Question' };
+    
+    const IconComponent = Icons[config.icon];
+    return (
+      <CBadge color={config.color} className="">
+        <IconComponent style={{ fontSize: '0.875rem' }} />
+        {config.text}
+      </CBadge>
+    );
+  };
+
+  const truncateText = (text, maxLength = 50) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
+
+  const getStatusMessage = (status) => {
+    switch (status) {
+      case 'pending':
+        return 'Your publish request is currently under review. We will notify you once it has been processed.';
+      case 'approved':
+        return 'Congratulations! Your publish request has been approved. Your story is now available for publishing.';
+      case 'rejected':
+        return 'Unfortunately, your publish request was not approved. Please review the feedback and consider resubmitting.';
+      default:
+        return 'Status information not available.';
+    }
+  };
+
+  const renderPublishRequestsTable = (requests) => {
+    if (!requests || requests.data.length === 0) {
+      return (
+        <CTableRow>
+          <CTableDataCell colSpan="8" className="text-center py-5">
+            <div className="d-flex flex-column align-items-center">
+              <Icons.FileText className="text-muted mb-3" style={{ fontSize: '3rem' }} />
+              <h5 className="text-muted">No Publish Requests Found</h5>
+              <p className="text-muted mb-3">You haven't submitted any publish requests yet.</p>
+              <CButton 
+                color="primary" 
+                onClick={() => router.visit(route('community.index'))}
+                className="d-flex align-items-center gap-2"
+              >
+                <Icons.Plus style={{ fontSize: '0.875rem' }} />
+                Submit Your First Request
+              </CButton>
+            </div>
+          </CTableDataCell>
+        </CTableRow>
+      );
+    }
+
+    return requests.data.map((request) => (
+      <CTableRow key={request.id}>
+        <CTableDataCell>
+          <div className="fw-medium">{request.title}</div>
+          {request.story && (
+            <small className="text-muted">Story ID: {request.story.id}</small>
+          )}
+        </CTableDataCell>
+        <CTableDataCell>
+          {request.cover_image ? (
+            <img 
+              src={`/storage/${request.cover_image}`} 
+              alt="Cover" 
+              style={{ width: '50px', height: '50px', objectFit: 'cover', objectPosition: 'top', borderRadius: '4px' }}
+            />
+          ) : (
+            <div className="bg-light d-flex align-items-center justify-content-center" 
+                 style={{ width: '50px', height: '50px', borderRadius: '4px' }}>
+              <Icons.Image className="text-muted" style={{ fontSize: '0.875rem' }} />
+            </div>
+          )}
+        </CTableDataCell>
+        <CTableDataCell>
+          <CBadge color="info">{request.genre}</CBadge>
+        </CTableDataCell>
+        <CTableDataCell>{request.character}</CTableDataCell>
+        <CTableDataCell>
+          <CTooltip content={request.content}>
+            <span className="text-muted">{truncateText(request.content, 30)}</span>
+          </CTooltip>
+        </CTableDataCell>
+        <CTableDataCell>
+          {getStatusBadge(request.status)}
+        </CTableDataCell>
+        <CTableDataCell>
+          <div className="small text-muted">
+            {new Date(request.created_at).toLocaleDateString()}
+          </div>
+          <div className="small text-muted">
+            {new Date(request.created_at).toLocaleTimeString()}
+          </div>
+        </CTableDataCell>
+        <CTableDataCell>
+          <CButton
+            color="outline-primary"
+            size="sm"
+            onClick={() => handleViewContent(request)}
+            className="d-flex align-items-center gap-1"
+          >
+            <Icons.Eye style={{ fontSize: '0.875rem' }} />
+            View Details
+          </CButton>
+        </CTableDataCell>
+      </CTableRow>
+    ));
+  };
+
+  const renderPublishRequestsPagination = (requests) => {
+    if (!requests || requests.last_page <= 1) return null;
+
+    return (
+      <CPagination align="center" className="mt-4">
+        {requests.links.map((link, index) => (
+          <CPaginationItem
+            key={index}
+            active={link.active}
+            disabled={!link.url}
+            onClick={() => {
+              if (link.url) {
+                const url = new URL(link.url);
+                const page = url.searchParams.get('page');
+                router.visit(route('user-dashboard.stories.index', { page, tab: 'publish-requests' }));
+              }
+            }}
+          >
+            {link.label.replace('&laquo;', '«').replace('&raquo;', '»')}
+          </CPaginationItem>
+        ))}
+      </CPagination>
+    );
+  };
+
   return (
     <DashboardLayout>
       <Head title="My Stories" />
@@ -268,7 +421,7 @@ const Index = ({ communityStories, publishedStories, flash }) => {
             </CCardHeader>
             <CCardBody>
               <CNav variant="tabs" className="mb-4">
-                <CNavItem>
+                {/* <CNavItem>
                   <CNavLink
                     active={activeTab === 'published'}
                     onClick={() => setActiveTab('published')}
@@ -276,7 +429,7 @@ const Index = ({ communityStories, publishedStories, flash }) => {
                   >
                     Published Stories ({publishedStories?.total || 0})
                   </CNavLink>
-                </CNavItem>
+                </CNavItem> */}
                 <CNavItem>
                   <CNavLink
                     active={activeTab === 'community'}
@@ -286,10 +439,19 @@ const Index = ({ communityStories, publishedStories, flash }) => {
                     Community Stories ({communityStories?.total || 0})
                   </CNavLink>
                 </CNavItem>
+                <CNavItem>
+                  <CNavLink
+                    active={activeTab === 'publish-requests'}
+                    onClick={() => setActiveTab('publish-requests')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Publish Requests ({publishRequests?.total || 0})
+                  </CNavLink>
+                </CNavItem>
               </CNav>
 
               <CTabContent>
-                <CTabPane visible={activeTab === 'published'}>
+                {/* <CTabPane visible={activeTab === 'published'}>
                   <CTable hover responsive>
                     <CTableHead>
                       <CTableRow>
@@ -297,7 +459,7 @@ const Index = ({ communityStories, publishedStories, flash }) => {
                         <CTableHeaderCell>Author</CTableHeaderCell>
                         <CTableHeaderCell>Stats</CTableHeaderCell>
                         <CTableHeaderCell>Status</CTableHeaderCell>
-                        {/* <CTableHeaderCell>Actions</CTableHeaderCell> */}
+                        <CTableHeaderCell>Actions</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
@@ -305,7 +467,7 @@ const Index = ({ communityStories, publishedStories, flash }) => {
                     </CTableBody>
                   </CTable>
                   {renderPagination(publishedStories, 'published')}
-                </CTabPane>
+                </CTabPane> */}
 
                 <CTabPane visible={activeTab === 'community'}>
                   <CTable hover responsive>
@@ -324,11 +486,104 @@ const Index = ({ communityStories, publishedStories, flash }) => {
                   </CTable>
                   {renderPagination(communityStories, 'community')}
                 </CTabPane>
+
+                <CTabPane visible={activeTab === 'publish-requests'}>
+                  <CTable hover responsive>
+                    <CTableHead>
+                      <CTableRow>
+                        <CTableHeaderCell>Title</CTableHeaderCell>
+                        <CTableHeaderCell>Cover Image</CTableHeaderCell>
+                        <CTableHeaderCell>Genre</CTableHeaderCell>
+                        <CTableHeaderCell>Character</CTableHeaderCell>
+                        <CTableHeaderCell>Content Preview</CTableHeaderCell>
+                        <CTableHeaderCell>Status</CTableHeaderCell>
+                        <CTableHeaderCell>Submitted On</CTableHeaderCell>
+                        <CTableHeaderCell>Actions</CTableHeaderCell>
+                      </CTableRow>
+                    </CTableHead>
+                    <CTableBody>
+                      {renderPublishRequestsTable(publishRequests)}
+                    </CTableBody>
+                  </CTable>
+                  {renderPublishRequestsPagination(publishRequests)}
+                </CTabPane>
               </CTabContent>
             </CCardBody>
           </CCard>
         </CCol>
       </CRow>
+
+      {/* Content Modal */}
+      <CModal 
+        visible={showModal} 
+        onClose={() => setShowModal(false)}
+        size="lg"
+      >
+        <CModalHeader onClose={() => setShowModal(false)}>
+          <CModalTitle>Publish Request Details</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          {selectedRequest && (
+            <div>
+              <div className="row mb-3">
+                <div className="col-md-6">
+                  <strong>Title:</strong> {selectedRequest.title}
+                </div>
+                <div className="col-md-6">
+                  <strong>Genre:</strong> 
+                  <CBadge color="info" className="ms-2">{selectedRequest.genre}</CBadge>
+                </div>
+              </div>
+              <div className="row mb-3">
+                <div className="col-md-6">
+                  <strong>Character:</strong> {selectedRequest.character}
+                </div>
+                <div className="col-md-6">
+                  <strong>Status:</strong> {getStatusBadge(selectedRequest.status)}
+                </div>
+              </div>
+              <div className="row mb-3">
+                <div className="col-md-6">
+                  <strong>Submitted:</strong> {new Date(selectedRequest.created_at).toLocaleString()}
+                </div>
+                <div className="col-md-6">
+                  <strong>Last Updated:</strong> {new Date(selectedRequest.updated_at).toLocaleString()}
+                </div>
+              </div>
+              
+              {/* Status Message */}
+              <div className="alert alert-info mb-3">
+                <Icons.Info className="me-2" />
+                <strong>Status Update:</strong> {getStatusMessage(selectedRequest.status)}
+              </div>
+              
+              {selectedRequest.cover_image && (
+                <div className="mb-3">
+                  <strong>Cover Image:</strong>
+                  <div className="mt-2">
+                    <img 
+                      src={`/storage/${selectedRequest.cover_image}`} 
+                      alt="Cover" 
+                      style={{ maxWidth: '200px', height: 'auto', borderRadius: '8px' }}
+                    />
+                  </div>
+                </div>
+              )}
+              <div className="mb-3">
+                <strong>Content:</strong>
+                <div className="mt-2 p-3 bg-light rounded" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                  {selectedRequest.content}
+                </div>
+              </div>
+            </div>
+          )}
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </DashboardLayout>
   );
 };

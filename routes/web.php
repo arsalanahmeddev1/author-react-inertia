@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CouponController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\GoogleController;
@@ -116,6 +117,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/stories/publish/packages', [StoriesController::class, 'showPackages'])->name('stories.publish.packages');
     Route::post('/story/publish-request', [MainStoriesController::class, 'storePublishRequest'])->name('story.publish.request');
+    Route::get('/publish-requests', [\App\Http\Controllers\User\PublishRequestController::class, 'index'])->name('user.publish-requests');
 });
 
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
@@ -155,6 +157,14 @@ Route::prefix('admin-dashboard')->name('admin-dashboard.')->middleware(['auth', 
 
     Route::get('publish-requests', [PublishRequestController::class, 'index'])->name('publish-requests');
     Route::patch('publish-requests/{publishRequest}/status', [PublishRequestController::class, 'updateStatus'])->name('admin.publish-requests.update-status');
+    
+    // Coupons routes
+    Route::get('coupons', [\App\Http\Controllers\Admin\CouponController::class, 'index'])->name('coupons.index');
+    Route::get('coupons/create', [\App\Http\Controllers\Admin\CouponController::class, 'create'])->name('coupons.create');
+    Route::post('coupons', [\App\Http\Controllers\Admin\CouponController::class, 'store'])->name('coupons.store');
+    Route::put('coupons/{coupon}', [\App\Http\Controllers\Admin\CouponController::class, 'update'])->name('coupons.update');
+    Route::delete('coupons/{coupon}', [\App\Http\Controllers\Admin\CouponController::class, 'destroy'])->name('coupons.destroy');
+
 });
 
 Route::prefix('user-dashboard')->name('user-dashboard.')->middleware(['auth', 'user'])->group(function() {

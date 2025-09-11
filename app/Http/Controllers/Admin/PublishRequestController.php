@@ -11,7 +11,9 @@ class PublishRequestController extends Controller
 {
     public function index()
     {
-        $publishRequests = PublishRequest::with(['user', 'story'])
+        $publishRequests = PublishRequest::with(['user' => function($query) {
+            $query->select('id', 'name', 'username', 'email');
+        }, 'story'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 

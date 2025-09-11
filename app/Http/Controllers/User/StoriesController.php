@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Story;
+use App\Models\PublishRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -26,9 +27,18 @@ class StoriesController extends Controller
             ->orderByDesc('id')
             ->paginate(10);
 
+        // Get publish requests
+        $publishRequests = PublishRequest::where('user_id', $userId)
+            ->with(['story' => function($query) {
+                $query->select('id', 'title', 'user_id');
+            }])
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
         return Inertia::render('user/stories/Index', [
             'communityStories' => $communityStories,
             'publishedStories' => $publishedStories,
+            'publishRequests' => $publishRequests,
         ]);
     }
 

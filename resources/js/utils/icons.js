@@ -32,6 +32,12 @@ import { BsLightbulb, BsArrowUp, BsArrowUpCircle, BsPercent, BsInfoCircle, BsClo
 import { PiUsersThreeFill } from "react-icons/pi";
 import { FaDollarSign } from "react-icons/fa6";
 import { CiDiscount1 } from "react-icons/ci";
+import { FiRefreshCcw } from "react-icons/fi";
+import { FiGift } from "react-icons/fi";
+import { BsQuestionCircle, BsFileText, BsImage, BsEye } from "react-icons/bs";
+
+
+
 
 
 
@@ -100,4 +106,10 @@ export const Icons = {
   Users: PiUsersThreeFill,
   Dollar: FaDollarSign,
   Discount: CiDiscount1,
+  Refresh: FiRefreshCcw,
+  Gift: FiGift,
+  Question: BsQuestionCircle,
+  FileText: BsFileText,
+  Image: BsImage,
+  Eye: BsEye,
 }

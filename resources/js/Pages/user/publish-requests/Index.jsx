@@ -24,46 +24,32 @@ import {
   CModalBody,
   CModalFooter,
   CBadge,
-  CFormSelect,
 } from '@coreui/react'
 
 function Index({ publishRequests, flash }) {
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [updatingStatus, setUpdatingStatus] = useState({});
 
     const handleViewContent = (request) => {
         setSelectedRequest(request);
         setShowModal(true);
     };
 
-    const handleStatusChange = (requestId, newStatus) => {
-        setUpdatingStatus(prev => ({ ...prev, [requestId]: true }));
-        
-        router.patch(route('admin-dashboard.admin.publish-requests.update-status', requestId), {
-            status: newStatus
-        }, {
-            onSuccess: () => {
-                setUpdatingStatus(prev => ({ ...prev, [requestId]: false }));
-                // The page will refresh automatically due to Inertia redirect
-            },
-            onError: (errors) => {
-                setUpdatingStatus(prev => ({ ...prev, [requestId]: false }));
-                console.error('Error updating status:', errors);
-            }
-        });
-    };
-
     const getStatusBadge = (status) => {
         const statusConfig = {
-            'pending': { color: 'warning', text: 'Pending' },
-            'approved': { color: 'success', text: 'Approved' },
-            'rejected': { color: 'danger', text: 'Rejected' },
+            'pending': { color: 'warning', text: 'Pending', icon: 'Clock' },
+            'approved': { color: 'success', text: 'Approved', icon: 'Check' },
+            'rejected': { color: 'danger', text: 'Rejected', icon: 'X' },
         };
 
-        const config = statusConfig[status] || { color: 'secondary', text: status };
+        const config = statusConfig[status] || { color: 'secondary', text: status, icon: 'Question' };
         
-        return <CBadge color={config.color}>{config.text}</CBadge>;
+        return (
+            <CBadge color={config.color} className="d-flex align-items-center gap-1">
+                {/* <Icons[config.icon] size="sm" /> */}
+                {config.text}
+            </CBadge>
+        );
     };
 
     const truncateText = (text, maxLength = 50) => {
@@ -71,43 +57,66 @@ function Index({ publishRequests, flash }) {
         return text.substring(0, maxLength) + '...';
     };
 
+    const getStatusMessage = (status) => {
+        switch (status) {
+            case 'pending':
+                return 'Your publish request is currently under review. We will notify you once it has been processed.';
+            case 'approved':
+                return 'Congratulations! Your publish request has been approved. Your story is now available for publishing.';
+            case 'rejected':
+                return 'Unfortunately, your publish request was not approved. Please review the feedback and consider resubmitting.';
+            default:
+                return 'Status information not available.';
+        }
+    };
+
     return (
         <DashboardLayout>
-            <Head title="Publish Requests Management" />
+            <Head title="My Publish Requests" />
             <CRow>
                 <CCol xs={12}>
                     <CCard className="mb-4">
                         <CCardHeader className="d-flex justify-content-between align-items-center">
-                            <strong>Publish Requests</strong>
+                            <div>
+                                <strong>My Publish Requests</strong>
+                                <p className="text-muted mb-0 small">Track the status of your story publish requests</p>
+                            </div>
+                            <CButton 
+                                color="primary" 
+                                onClick={() => router.visit(route('community.index'))}
+                                className="d-flex align-items-center gap-2"
+                            >
+                                {/* <Icons.Plus size="sm" /> */}
+                                Submit New Request
+                            </CButton>
                         </CCardHeader>
+                        
                         {flash?.success && (
                             <div className="alert alert-success alert-dismissible fade show m-3" role="alert">
-                                <i className="fas fa-check-circle me-2"></i>
+                                {/* <Icons.Check className="me-2" /> */}
                                 {flash.success}
                                 <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         )}
                         {flash?.error && (
                             <div className="alert alert-danger alert-dismissible fade show m-3" role="alert">
-                                <i className="fas fa-exclamation-circle me-2"></i>
+                                {/* <Icons.X className="me-2" /> */}
                                 {flash.error}
                                 <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         )}
+                        
                         <CCardBody>
                             <CTable hover responsive>
                                 <CTableHead>
                                     <CTableRow>
-                                        <CTableHeaderCell scope="col">Username</CTableHeaderCell>
                                         <CTableHeaderCell scope="col">Title</CTableHeaderCell>
                                         <CTableHeaderCell scope="col">Cover Image</CTableHeaderCell>
                                         <CTableHeaderCell scope="col">Genre</CTableHeaderCell>
                                         <CTableHeaderCell scope="col">Character</CTableHeaderCell>
-                                        <CTableHeaderCell scope="col">Content</CTableHeaderCell>
-                                        <CTableHeaderCell scope="col">Author</CTableHeaderCell>
-                                        <CTableHeaderCell scope="col">Submitted By</CTableHeaderCell>
-                                        <CTableHeaderCell scope="col">Submitted On</CTableHeaderCell>
+                                        <CTableHeaderCell scope="col">Content Preview</CTableHeaderCell>
                                         <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                                        <CTableHeaderCell scope="col">Submitted On</CTableHeaderCell>
                                         <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                                     </CTableRow>
                                 </CTableHead>
@@ -115,64 +124,75 @@ function Index({ publishRequests, flash }) {
                                     {publishRequests.data && publishRequests.data.length > 0 ? (
                                         publishRequests.data.map((request) => (
                                             <CTableRow key={request.id}>
-                                                <CTableDataCell>{request.user?.username || 'N/A'}</CTableDataCell>
-                                                <CTableDataCell>{request.title}</CTableDataCell>
+                                                <CTableDataCell>
+                                                    <div className="fw-medium">{request.title}</div>
+                                                    {request.story && (
+                                                        <small className="text-muted">Story ID: {request.story.id}</small>
+                                                    )}
+                                                </CTableDataCell>
                                                 <CTableDataCell>
                                                     {request.cover_image ? (
                                                         <img 
                                                             src={`/storage/${request.cover_image}`} 
                                                             alt="Cover" 
-                                                            style={{ width: '50px', height: '50px', objectFit: 'cover', objectPosition: 'top' }}
+                                                            style={{ width: '50px', height: '50px', objectFit: 'cover', objectPosition: 'top', borderRadius: '4px' }}
                                                         />
                                                     ) : (
-                                                        <span className="text-muted">No image</span>
+                                                        <div className="bg-light d-flex align-items-center justify-content-center" 
+                                                             style={{ width: '50px', height: '50px', borderRadius: '4px' }}>
+                                                            {/* <Icons.Image className="text-muted" size="sm" /> */}
+                                                        </div>
                                                     )}
                                                 </CTableDataCell>
-                                                <CTableDataCell>{request.genre}</CTableDataCell>
+                                                <CTableDataCell>
+                                                    <CBadge color="info">{request.genre}</CBadge>
+                                                </CTableDataCell>
                                                 <CTableDataCell>{request.character}</CTableDataCell>
                                                 <CTableDataCell>
                                                     <CTooltip content={request.content}>
-                                                        <span>{truncateText(request.content, 30)}</span>
+                                                        <span className="text-muted">{truncateText(request.content, 30)}</span>
                                                     </CTooltip>
                                                 </CTableDataCell>
-                                                <CTableDataCell>{request.user?.name || 'N/A'}</CTableDataCell>
-                                                <CTableDataCell>{request.user?.name || 'N/A'}</CTableDataCell>
                                                 <CTableDataCell>
-                                                    {new Date(request.created_at).toLocaleDateString()}
+                                                    {getStatusBadge(request.status)}
                                                 </CTableDataCell>
                                                 <CTableDataCell>
-                                                    <div className="d-flex flex-column gap-2">
-                                                        <CFormSelect
-                                                            size="sm"
-                                                            value={request.status}
-                                                            onChange={(e) => handleStatusChange(request.id, e.target.value)}
-                                                            style={{ minWidth: '120px' }}
-                                                            disabled={updatingStatus[request.id]}
-                                                        >
-                                                            <option value="pending">Pending</option>
-                                                            <option value="approved">Approved</option>
-                                                            <option value="rejected">Rejected</option>
-                                                        </CFormSelect>
-                                                        <div className="mt-1">
-                                                            {updatingStatus[request.id] ? (
-                                                                <CBadge color="info">Updating...</CBadge>
-                                                            ) : (
-                                                                ''
-                                                            )}
-                                                        </div>
+                                                    <div className="small text-muted">
+                                                        {new Date(request.created_at).toLocaleDateString()}
+                                                    </div>
+                                                    <div className="small text-muted">
+                                                        {new Date(request.created_at).toLocaleTimeString()}
                                                     </div>
                                                 </CTableDataCell>
                                                 <CTableDataCell>
-                                                    <button className='btn py-11 px-32 radius-60 btn' style={{ backgroundColor: '#fea257', color: '#fff' }} onClick={() => handleViewContent(request)}>
-                                                    View Content
-                                                    </button>
+                                                    <CButton
+                                                        color="outline-primary"
+                                                        size="sm"
+                                                        onClick={() => handleViewContent(request)}
+                                                        className="d-flex align-items-center gap-1"
+                                                    >
+                                                        {/* <Icons.Eye size="sm" /> */}
+                                                        View Details
+                                                    </CButton>
                                                 </CTableDataCell>
                                             </CTableRow>
                                         ))
                                     ) : (
                                         <CTableRow>
-                                            <CTableDataCell colSpan="11" className="text-center">
-                                                No publish requests found
+                                            <CTableDataCell colSpan="8" className="text-center py-5">
+                                                <div className="d-flex flex-column align-items-center">
+                                                    {/* <Icons.FileText className="text-muted mb-3" size="3x" /> */}
+                                                    <h5 className="text-muted">No Publish Requests Found</h5>
+                                                    <p className="text-muted mb-3">You haven't submitted any publish requests yet.</p>
+                                                    <CButton 
+                                                        color="primary" 
+                                                        onClick={() => router.visit(route('community.index'))}
+                                                        className="d-flex align-items-center gap-2"
+                                                    >
+                                                        {/* <Icons.Plus size="sm" /> */}
+                                                        Submit Your First Request
+                                                    </CButton>
+                                                </div>
                                             </CTableDataCell>
                                         </CTableRow>
                                     )}
@@ -218,7 +238,8 @@ function Index({ publishRequests, flash }) {
                                     <strong>Title:</strong> {selectedRequest.title}
                                 </div>
                                 <div className="col-md-6">
-                                    <strong>Genre:</strong> {selectedRequest.genre}
+                                    <strong>Genre:</strong> 
+                                    <CBadge color="info" className="ms-2">{selectedRequest.genre}</CBadge>
                                 </div>
                             </div>
                             <div className="row mb-3">
@@ -231,12 +252,19 @@ function Index({ publishRequests, flash }) {
                             </div>
                             <div className="row mb-3">
                                 <div className="col-md-6">
-                                    <strong>Author:</strong> {selectedRequest.user?.name || 'N/A'} (@{selectedRequest.user?.username || 'N/A'})
-                                </div>
-                                <div className="col-md-6">
                                     <strong>Submitted:</strong> {new Date(selectedRequest.created_at).toLocaleString()}
                                 </div>
+                                <div className="col-md-6">
+                                    <strong>Last Updated:</strong> {new Date(selectedRequest.updated_at).toLocaleString()}
+                                </div>
                             </div>
+                            
+                            {/* Status Message */}
+                            <div className="alert alert-info mb-3">
+                                {/* <Icons.Info className="me-2" /> */}
+                                <strong>Status Update:</strong> {getStatusMessage(selectedRequest.status)}
+                            </div>
+                            
                             {selectedRequest.cover_image && (
                                 <div className="mb-3">
                                     <strong>Cover Image:</strong>
@@ -244,7 +272,7 @@ function Index({ publishRequests, flash }) {
                                         <img 
                                             src={`/storage/${selectedRequest.cover_image}`} 
                                             alt="Cover" 
-                                            style={{ maxWidth: '200px', height: 'auto' }}
+                                            style={{ maxWidth: '200px', height: 'auto', borderRadius: '8px' }}
                                         />
                                     </div>
                                 </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import DashboardLayout from '../../Layouts/DashboardLayout'
-import { usePage } from '@inertiajs/react'
+import { usePage, router } from '@inertiajs/react'
 import { CCard, CCardBody, CRow, CCol } from '@coreui/react'
 import { Icons } from '../../utils/icons'
 import Swal from 'sweetalert2'
@@ -561,6 +561,23 @@ const UserDashboard = () => {
               </h4>
               <div className="small text-body-secondary">
                 {metrics?.totalComments || 0}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-4 col-lg-3">
+          <div className='dashboard-card-wrapper d-flex align-items-center gap-2' style={{ cursor: 'pointer' }} onClick={() => router.visit(route('user.publish-requests'))}>
+            <div>
+              <div className="dcw-icon">
+                <Icons.FileText />
+              </div>
+            </div>
+            <div>
+              <h4 className='text-black card-title' id="card-title mb-2 fw-medium">
+                Publish Requests
+              </h4>
+              <div className="small text-body-secondary">
+                View & Track Status
               </div>
             </div>
           </div>
