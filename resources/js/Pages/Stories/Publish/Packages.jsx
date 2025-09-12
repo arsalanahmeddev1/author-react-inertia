@@ -22,7 +22,7 @@ const Packages = ({ story, publishPackages = [] }) => {
           <div className="row justify-content-center">
             {publishPackages.length > 0 ? (
               publishPackages.map((pkg, index) => (
-                <div key={pkg.id} className="col-lg-8 col-xl-6">
+                <div key={pkg.id} className="col-lg-4">
                   {/* Package Card */}
                   <div className="publish-card package-card">
                     {/* Premium Badge */}

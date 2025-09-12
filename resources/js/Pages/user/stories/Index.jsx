@@ -318,7 +318,7 @@ const Index = ({ communityStories, publishedStories, publishRequests, flash }) =
     const IconComponent = Icons[config.icon];
     return (
       <CBadge color={config.color} className="">
-        <IconComponent style={{ fontSize: '0.875rem' }} />
+        <IconComponent style={{ marginRight: '0.25rem', fontSize: '0.875rem' }} />
         {config.text}
       </CBadge>
     );
