@@ -92,8 +92,8 @@ const Home = () => {
                       {featuredStories.map((story, index) => (
                         <div key={story.id} className="fearured-stories-card-inner">
                           <Link href={`/stories/${story.id}`} className=' text-black'>
-                            <img
-                              src={story.cover_image ? `/storage/${story.cover_image}` : `/assets/images/featured-0${(index % 3) + 1}.png`}
+                            <img style={{ minHeight: '180px' }}
+                              src={story.cover_image ? `/storage/${story.cover_image}` : `/assets/images/image-not-found.png`}
                               className='mb-10 fsc-image'
                               alt={story.title}
                             />
