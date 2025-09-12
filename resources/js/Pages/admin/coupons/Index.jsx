@@ -29,7 +29,7 @@ function Index({ coupons, flash }) {
                 title: flash.success,
                 showConfirmButton: false,
                 timer: 1500,
-                confirmButtonColor: '#C67C19',
+                confirmButtonColor: '#FEA257',
                 background: '#fff',
                 customClass: {
                     popup: 'swal2-custom-popup',
@@ -76,7 +76,7 @@ function Index({ coupons, flash }) {
                             title: 'Coupon deleted successfully!',
                             showConfirmButton: false,
                             timer: 1500,
-                            confirmButtonColor: '#C67C19',
+                            confirmButtonColor: '#FEA257',
                             background: '#fff',
                             customClass: {
                                 popup: 'swal2-custom-popup',
@@ -90,7 +90,7 @@ function Index({ coupons, flash }) {
                             icon: 'error',
                             title: 'Error deleting coupon!',
                             text: 'An unexpected error occurred.',
-                            confirmButtonColor: '#C67C19',
+                            confirmButtonColor: '#FEA257',
                             background: '#fff',
                             customClass: {
                                 popup: 'swal2-custom-popup',
@@ -113,7 +113,7 @@ function Index({ coupons, flash }) {
             html: `Are you sure you want to ${action} the coupon: <strong>${coupon.code}</strong>?`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#C67C19',
+            confirmButtonColor: '#FEA257',
             cancelButtonColor: '#6c757d',
             confirmButtonText: `Yes, ${action}`,
             cancelButtonText: 'Cancel',
@@ -136,7 +136,7 @@ function Index({ coupons, flash }) {
                             title: `Coupon ${action} successfully!`,
                             showConfirmButton: false,
                             timer: 1500,
-                            confirmButtonColor: '#C67C19',
+                            confirmButtonColor: '#FEA257',
                             background: '#fff',
                             customClass: {
                                 popup: 'swal2-custom-popup',

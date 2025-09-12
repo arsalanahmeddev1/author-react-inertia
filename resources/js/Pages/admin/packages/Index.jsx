@@ -30,7 +30,7 @@ function Index({ packages, flash }) {
                 title: flash.success,
                 showConfirmButton: false,
                 timer: 1500,
-                confirmButtonColor: '#C67C19',
+                confirmButtonColor: '#FEA257',
                 background: '#fff',
                 customClass: {
                     popup: 'swal2-custom-popup',
@@ -81,7 +81,7 @@ function Index({ packages, flash }) {
                             title: 'Package deleted successfully!',
                             showConfirmButton: false,
                             timer: 1500,
-                            confirmButtonColor: '#C67C19',
+                            confirmButtonColor: '#FEA257',
                             background: '#fff',
                             customClass: {
                                 popup: 'swal2-custom-popup',
@@ -95,7 +95,7 @@ function Index({ packages, flash }) {
                             icon: 'error',
                             title: 'Error deleting package!',
                             text: 'An unexpected error occurred.',
-                            confirmButtonColor: '#C67C19',
+                            confirmButtonColor: '#FEA257',
                             background: '#fff',
                             customClass: {
                                 popup: 'swal2-custom-popup',

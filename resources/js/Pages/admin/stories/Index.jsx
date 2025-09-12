@@ -34,7 +34,7 @@ const Index = ({ stories, flash }) => {
         title: flash.success,
         showConfirmButton: false,
         timer: 1500,
-        confirmButtonColor: '#C67C19',
+        confirmButtonColor: '#FEA257',
         background: '#fff',
         customClass: {
           popup: 'swal2-custom-popup',
@@ -81,7 +81,7 @@ const Index = ({ stories, flash }) => {
               title: 'Story deleted successfully!',
               showConfirmButton: false,
               timer: 1500,
-              confirmButtonColor: '#C67C19',
+              confirmButtonColor: '#FEA257',
               background: '#fff',
               customClass: {
                 popup: 'swal2-custom-popup',
@@ -95,7 +95,7 @@ const Index = ({ stories, flash }) => {
               icon: 'error',
               title: 'Error deleting story!',
               text: 'An unexpected error occurred.',
-              confirmButtonColor: '#C67C19',
+              confirmButtonColor: '#FEA257',
               background: '#fff',
               customClass: {
                 popup: 'swal2-custom-popup',

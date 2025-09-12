@@ -138,4 +138,28 @@ class CouponController extends Controller
 
         return redirect()->back()->with('success', 'Coupon deleted successfully!');
     }
+
+    public function validateDiscountCode(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string'
+        ]);
+        
+        $coupon = Coupon::where('code', $request->code)
+            ->where('is_used', false)
+            ->first();
+        
+        if (!$coupon) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid or expired discount code'
+            ]);
+        }
+        
+        return response()->json([
+            'success' => true,
+            'discount' => $coupon->discount,
+            'message' => 'Discount code applied successfully!'
+        ]);
+    }
 }

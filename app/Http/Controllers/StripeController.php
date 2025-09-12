@@ -88,6 +88,9 @@ class StripeController extends Controller
                             'user_id' => $user->id,
                             'story_title' => $storyTitle,
                             'story_id' => $storyData['story_id'],
+                            'discount_applied' => $request->input('discount_applied') ? 'true' : 'false',
+                            'discount_code' => $request->input('discount_code', ''),
+                            'final_price' => $request->input('final_price', $amount / 100),
                         ],
                     ]);
                 } else {
@@ -113,6 +116,9 @@ class StripeController extends Controller
                             'user_id' => $user->id,
                             'story_title' => $storyTitle,
                             'story_id' => $storyData['story_id'],
+                            'discount_applied' => $request->input('discount_applied', false),
+                            'discount_code' => $request->input('discount_code', ''),
+                            'final_price' => $request->input('final_price', $amount / 100),
                         ],
                     ]);
                 }
@@ -245,6 +251,16 @@ class StripeController extends Controller
                     'payment_method' => 'card',
                     'description' => 'Story Publishing Package - ' . $storyData['title'],
                 ]);
+                
+                // Mark coupon as used if discount was applied
+                if ($session->metadata && isset($session->metadata['discount_applied']) && $session->metadata['discount_applied'] === 'true') {
+                    $discountCode = $session->metadata['discount_code'] ?? '';
+                    if ($discountCode) {
+                        \App\Models\Coupon::where('code', $discountCode)
+                            ->where('is_used', false)
+                            ->update(['is_used' => true]);
+                    }
+                }
                 
                 // Clear the session data after successful creation
                 session()->forget('story_publish_data');

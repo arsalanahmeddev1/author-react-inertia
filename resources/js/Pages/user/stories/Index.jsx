@@ -46,7 +46,7 @@ const Index = ({ communityStories, publishedStories, publishRequests, flash }) =
         title: flash.success,
         showConfirmButton: false,
         timer: 1500,
-        confirmButtonColor: '#C67C19',
+        confirmButtonColor: '#FEA257',
         background: '#fff',
         customClass: {
           popup: 'swal2-custom-popup',
@@ -93,7 +93,7 @@ const Index = ({ communityStories, publishedStories, publishRequests, flash }) =
               title: 'Story deleted successfully!',
               showConfirmButton: false,
               timer: 1500,
-              confirmButtonColor: '#C67C19',
+              confirmButtonColor: '#FEA257',
               background: '#fff',
               customClass: {
                 popup: 'swal2-custom-popup',
@@ -107,7 +107,7 @@ const Index = ({ communityStories, publishedStories, publishRequests, flash }) =
               icon: 'error',
               title: 'Error deleting story!',
               text: 'An unexpected error occurred.',
-              confirmButtonColor: '#C67C19',
+              confirmButtonColor: '#FEA257',
               background: '#fff',
               customClass: {
                 popup: 'swal2-custom-popup',
@@ -121,11 +121,39 @@ const Index = ({ communityStories, publishedStories, publishRequests, flash }) =
     });
   };
 
+  const handlePublishStory = (story) => {
+    // Store story data in session and redirect to packages
+    router.post(route('story.draft.session'), {
+      story_id: story.id,
+      character_name: story.character || 'HERO',
+      content: story.content || story.description || ''
+    }, {
+      onSuccess: () => {
+        // Redirect to packages page
+        router.visit(route('stories.publish.packages'));
+      },
+      onError: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error preparing story for publishing!',
+          text: 'An unexpected error occurred.',
+          confirmButtonColor: '#FEA257',
+          background: '#fff',
+          customClass: {
+            popup: 'swal2-custom-popup',
+            title: 'swal2-custom-title',
+            content: 'swal2-custom-content'
+          }
+        });
+      }
+    });
+  };
+
   const renderStoryTable = (stories, type) => {
     if (!stories || stories.data.length === 0) {
       return (
         <CTableRow>
-          <CTableDataCell colSpan="7" className="text-center">
+          <CTableDataCell colSpan={type === 'community' ? "5" : "4"} className="text-center">
             No {type} stories found
           </CTableDataCell>
         </CTableRow>
@@ -182,6 +210,20 @@ const Index = ({ communityStories, publishedStories, publishRequests, flash }) =
             {story.status || 'Draft'}
           </CBadge>
         </CTableDataCell>
+        {type === 'community' && (
+          <CTableDataCell>
+            <CButton
+              color="primary"
+              size="sm"
+              onClick={() => handlePublishStory(story)}
+              className="d-flex align-items-center gap-1"
+              style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
+            >
+              <Icons.ArrowUp style={{ fontSize: '0.875rem' }} />
+              Publish
+            </CButton>
+          </CTableDataCell>
+        )}
         {/* <CTableDataCell>
           <div className="d-flex gap-2">
             <CFormSelect
@@ -198,7 +240,7 @@ const Index = ({ communityStories, publishedStories, publishRequests, flash }) =
                       title: `Story ${newStatus ? 'activated' : 'deactivated'} successfully!`,
                       showConfirmButton: false,
                       timer: 1500,
-                      confirmButtonColor: '#C67C19',
+                      confirmButtonColor: '#FEA257',
                       background: '#fff',
                       customClass: {
                         popup: 'swal2-custom-popup',
@@ -212,7 +254,7 @@ const Index = ({ communityStories, publishedStories, publishRequests, flash }) =
                       icon: 'error',
                       title: 'Error updating story status!',
                       text: 'An unexpected error occurred.',
-                      confirmButtonColor: '#C67C19',
+                      confirmButtonColor: '#FEA257',
                       background: '#fff',
                       customClass: {
                         popup: 'swal2-custom-popup',
@@ -309,14 +351,14 @@ const Index = ({ communityStories, publishedStories, publishRequests, flash }) =
               <Icons.FileText className="text-muted mb-3" style={{ fontSize: '3rem' }} />
               <h5 className="text-muted">No Publish Requests Found</h5>
               <p className="text-muted mb-3">You haven't submitted any publish requests yet.</p>
-              <CButton 
-                color="primary" 
-                onClick={() => router.visit(route('community.index'))}
-                className="d-flex align-items-center gap-2"
+              <a href={route('stories.index')}
+                // color="primary" 
+                // onClick={() => router.visit(route('stories.index'))}
+                className="d-flex  btn btn-primary align-items-center gap-2"
               >
                 <Icons.Plus style={{ fontSize: '0.875rem' }} />
                 Submit Your First Request
-              </CButton>
+              </a>
             </div>
           </CTableDataCell>
         </CTableRow>
@@ -477,7 +519,7 @@ const Index = ({ communityStories, publishedStories, publishRequests, flash }) =
                         <CTableHeaderCell>Author</CTableHeaderCell>
                         <CTableHeaderCell>Stats</CTableHeaderCell>
                         <CTableHeaderCell>Status</CTableHeaderCell>
-                        {/* <CTableHeaderCell>Actions</CTableHeaderCell> */}
+                        <CTableHeaderCell>Actions</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>

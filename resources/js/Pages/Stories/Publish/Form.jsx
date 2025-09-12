@@ -9,7 +9,7 @@ import { Icons } from '@/utils/icons';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
-const CheckoutForm = ({ story, character, storyText, package: packageData }) => {
+const CheckoutForm = ({ story, character, storyText, package: packageData, finalPrice, discountApplied, discountCode, discountAmount, originalPrice }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState('');
@@ -18,7 +18,7 @@ const CheckoutForm = ({ story, character, storyText, package: packageData }) => 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card");
 
   // Debug logging
-  console.log('CheckoutForm props:', { story, character, storyText, packageData });
+  console.log('CheckoutForm props:', { story, character, storyText, packageData, finalPrice, discountApplied, discountCode, discountAmount, originalPrice });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,7 +78,7 @@ const CheckoutForm = ({ story, character, storyText, package: packageData }) => 
       // Log the request payload for debugging
       const requestPayload = {
         mode: 'payment', // One-time payment
-        amount: packageData ? Math.round(parseFloat(packageData.price) * 100) : 1900, // Convert to cents
+        amount: finalPrice ? Math.round(parseFloat(finalPrice) * 100) : (packageData ? Math.round(parseFloat(packageData.price) * 100) : 1900), // Convert to cents
         story_title: story.title,
         story_id: story.id,
         character: character,
@@ -90,6 +90,9 @@ const CheckoutForm = ({ story, character, storyText, package: packageData }) => 
         package_name: packageData.name,
         package_price: packageData.price,
         stripe_price_id: packageData?.stripe_price_id, // Add stripe price ID
+        discount_applied: discountApplied,
+        discount_code: discountCode,
+        final_price: finalPrice
       };
       
       console.log('Request payload:', requestPayload);
@@ -183,7 +186,12 @@ const CheckoutForm = ({ story, character, storyText, package: packageData }) => 
                 <p className="price">
                   {packageData ? (
                     <>
-                      ${parseFloat(packageData.price).toFixed(2)} / {packageData.name}
+                      ${(finalPrice || parseFloat(packageData.price) || 0).toFixed(2)} / {packageData.name}
+                      {discountApplied && (
+                        <span className="text-success small d-block">
+                          (Original: ${(originalPrice || parseFloat(packageData.price) || 0).toFixed(2)} - {discountAmount || 0}% off)
+                        </span>
+                      )}
                     </>
                   ) : (
                     '$19.00 / Publication Review'
@@ -268,17 +276,78 @@ const CheckoutForm = ({ story, character, storyText, package: packageData }) => 
 
 const Form = ({ prefill, story, package: packageData }) => {
   const { auth } = usePage().props;
+  
+  // Function to strip HTML tags and clean up text
+  const stripHtmlTags = (html) => {
+    if (!html) return '';
+    // Create a temporary div element
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    // Get text content and clean up extra whitespace
+    return temp.textContent || temp.innerText || '';
+  };
+
   const [character, setCharacter] = useState('');
   const [storyText, setStoryText] = useState('');
+  const [discountCode, setDiscountCode] = useState('');
+  const [discountApplied, setDiscountApplied] = useState(false);
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [originalPrice, setOriginalPrice] = useState(parseFloat(packageData?.price) || 0);
+  const [finalPrice, setFinalPrice] = useState(parseFloat(packageData?.price) || 0);
+  const [discountError, setDiscountError] = useState('');
+  const [isValidatingDiscount, setIsValidatingDiscount] = useState(false);
   const [formData, setFormData] = useState({
     title: story.title || '',
     genre: story.genre || '',
     character: prefill.character_name || '',
-    content: prefill.content || '',
+    content: stripHtmlTags(prefill.content || ''),
   });
 
   // Debug logging
   console.log('Form props:', { prefill, story, packageData });
+
+  // Discount code validation function
+  const validateDiscountCode = async () => {
+    if (!discountCode.trim()) {
+      setDiscountError('Please enter a discount code');
+      return;
+    }
+
+    setIsValidatingDiscount(true);
+    setDiscountError('');
+
+    try {
+      const response = await fetch('/api/validate-discount-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ code: discountCode })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setDiscountApplied(true);
+        setDiscountAmount(data.discount);
+        const currentPrice = originalPrice || parseFloat(packageData?.price) || 0;
+        const discountValue = (currentPrice * data.discount) / 100;
+        setFinalPrice(currentPrice - discountValue);
+        setDiscountError('');
+      } else {
+        setDiscountError(data.message || 'Invalid discount code');
+        setDiscountApplied(false);
+        setFinalPrice(originalPrice || parseFloat(packageData?.price) || 0);
+      }
+    } catch (error) {
+      setDiscountError('Error validating discount code');
+      setDiscountApplied(false);
+      setFinalPrice(originalPrice || parseFloat(packageData?.price) || 0);
+    } finally {
+      setIsValidatingDiscount(false);
+    }
+  };
 
   // Check user validation on component mount
   useEffect(() => {
@@ -306,9 +375,19 @@ const Form = ({ prefill, story, package: packageData }) => {
   useEffect(() => {
     if (prefill) {
       setCharacter(prefill.character_name || '');
-      setStoryText(prefill.content || '');
+      // Strip HTML tags from the content before setting it
+      setStoryText(stripHtmlTags(prefill.content || ''));
     }
   }, [prefill]);
+
+  // Update prices when packageData changes
+  useEffect(() => {
+    if (packageData?.price) {
+      const price = parseFloat(packageData.price) || 0;
+      setOriginalPrice(price);
+      setFinalPrice(price);
+    }
+  }, [packageData]);
 
   return (
     <Elements stripe={stripePromise}>
@@ -349,12 +428,63 @@ const Form = ({ prefill, story, package: packageData }) => {
                     <label className='label-field' htmlFor="title">Description</label>
                     <textarea name="your_story" className="input-field textarea-field" value={storyText} id="your_story" readOnly></textarea>
                   </div>
+                  
+                  {/* Discount Code Section */}
+                  <div className="field-wrapper discount-code-wrapper">
+                    <label className='label-field '>Discount Code (Optional)</label>
+                    <div className="d-flex mb-12">
+                      <input 
+                        type="text" 
+                        className="input-field discount-code-field" 
+                        placeholder="Enter your discount code"
+                        value={discountCode}
+                        onChange={(e) => setDiscountCode(e.target.value)}
+                        disabled={isValidatingDiscount}
+                      />
+                      <button 
+                        type="button" 
+                        className="btn btn-primary"
+                        onClick={validateDiscountCode}
+                        disabled={isValidatingDiscount || !discountCode.trim()}
+                      >
+                        {isValidatingDiscount ? 'Validating...' : 'Apply'}
+                      </button>
+                    </div>
+                    {discountError && <div className="text-danger small mb-12">{discountError}</div>}
+                    
+                    {/* Price Display */}
+                    <div className="bg-light input-field p-3 rounded">
+                      <div className="d-flex justify-content-between mb-8">
+                        <span>Original Price:</span>
+                        <span>${(originalPrice || 0).toFixed(2)}</span>
+                      </div>
+                      {discountApplied && (
+                        <>
+                          <div className="d-flex justify-content-between text-success mb-8">
+                            <span>Discount ({discountAmount}%):</span>
+                            <span>-${(((originalPrice || 0) * discountAmount) / 100).toFixed(2)}</span>
+                          </div>
+                          <hr className="my-8" />
+                          <div className="d-flex justify-content-between fw-bold">
+                            <span>Final Price:</span>
+                            <span className="text-success">${(finalPrice || 0).toFixed(2)}</span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  
                   <h4 className='pay-hd'>Pay With Stripe</h4>
                   <CheckoutForm
                     story={story}
                     character={character}
                     storyText={storyText}
                     package={packageData}
+                    finalPrice={finalPrice}
+                    discountApplied={discountApplied}
+                    discountCode={discountCode}
+                    discountAmount={discountAmount}
+                    originalPrice={originalPrice}
                   />
                 </div>
               </div>

@@ -66,7 +66,7 @@ const UserIndex = ({ users, flash }) => {
           <CCard className="mb-4">
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <strong className="d-flex align-items-center">
-                <FaUserCircle className="me-2" /> Users
+                 Users
               </strong>
               <Link className='text-decoration-none' href={route('admin-dashboard.users.create')}>
                 <CButton

@@ -127,7 +127,7 @@ const Dashboard = () => {
                 <h4 id="traffic" className="card-title mb-2 fw-medium">
                   Monthly Income
                 </h4>
-                <div className="small text-body-secondary">{metrics?.monthlyIncome || 0}</div>
+                <div className="small text-body-secondary">${metrics?.monthlyIncome || 0}</div>
               </div>
             </div>
           </div>

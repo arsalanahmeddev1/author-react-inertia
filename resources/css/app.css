@@ -121,8 +121,8 @@
 }
 
 .swal2-confirm {
-  background-color: #C67C19 !important;
-  border-color: #C67C19 !important;
+  background-color: #FEA257 !important;
+  border-color: #FEA257 !important;
   border-radius: 8px !important;
   padding: 12px 24px !important;
   font-weight: 500 !important;
@@ -158,7 +158,7 @@
 }
 
 .swal2-loading .swal2-title {
-  color: #C67C19 !important;
+  color: #FEA257 !important;
 }
 
 /* Success icon color */

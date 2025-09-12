@@ -22,7 +22,7 @@ import { Icons } from '../../../utils/icons';
 
 // Define theme colors
 const themeColors = {
-  primary: '#C67C19',
+  primary: '#FEA257',
   secondary: '#74989E',
 };
 

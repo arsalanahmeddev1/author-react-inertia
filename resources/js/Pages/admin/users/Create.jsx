@@ -18,7 +18,7 @@ import { FaArrowLeft, FaSave, FaUserPlus } from 'react-icons/fa';
 
 // Define theme colors
 const themeColors = {
-  primary: '#C67C19',
+  primary: '#FEA257',
   secondary: '#74989E',
 };
 
@@ -123,7 +123,7 @@ const Create = ({ flash }) => {
           <CCard className="mb-4">
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center">
-                <strong className='d-flex align-items-center'><FaUserPlus className="me-2" /> Create New User</strong>
+                <strong className='d-flex align-items-center'> Create New User</strong>
               </div>
               <Link href={route('admin-dashboard.users.index')}>
                 <CButton 
