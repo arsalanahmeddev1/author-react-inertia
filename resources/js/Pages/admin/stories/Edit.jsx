@@ -46,7 +46,10 @@ const Edit = ({ story, flash }) => {
 
   // Add state for new character input
   const [newCharacter, setNewCharacter] = useState({ name: '', description: '' });
-  const [preview, setPreview] = useState(story.cover_image ? `/storage/${story.cover_image}` : null);
+  const [preview, setPreview] = useState({
+    cover_image: story?.cover_image ? `/storage/${story.cover_image}` : null,
+    backcover_image: story?.backcover_image ? `/storage/${story.backcover_image}` : null,
+  });
 
   // Handle flash messages with SweetAlert
   useEffect(() => {
@@ -70,8 +73,8 @@ const Edit = ({ story, flash }) => {
   // Warn user about unsaved changes
   useEffect(() => {
     const handleBeforeUnload = (e) => {
-      if (data.title !== story.title || data.description !== story.description || 
-          data.author !== story.author || data.content !== story.content) {
+      if (data.title !== story.title || data.description !== story.description ||
+        data.author !== story.author || data.content !== story.content) {
         e.preventDefault();
         e.returnValue = '';
       }
@@ -83,7 +86,7 @@ const Edit = ({ story, flash }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Show loading state
     Swal.fire({
       title: 'Updating story...',
@@ -92,7 +95,7 @@ const Edit = ({ story, flash }) => {
         Swal.showLoading();
       }
     });
-    
+
     post(route('admin-dashboard.stories.update', story.id), {
       preserveScroll: true,
       onSuccess: () => {
@@ -120,7 +123,7 @@ const Edit = ({ story, flash }) => {
         else if (errors.genre) errorMessage = errors.genre;
         else if (errors.content) errorMessage = errors.content;
         else if (errors.cover_image) errorMessage = errors.cover_image;
-        
+
         Swal.fire({
           icon: 'error',
           title: 'Error updating story!',
@@ -142,17 +145,20 @@ const Edit = ({ story, flash }) => {
     setData('content', content);
   };
 
-  const handleCoverImageChange = (e) => {
-    if (e.target.files[0]) {
-      setData('cover_image', e.target.files[0]);
-      setPreview(URL.createObjectURL(e.target.files[0]));
+  const handleImageChange = (e, field) => {
+    if (e.target.files && e.target.files[0]) {
+      setData(field, e.target.files[0]);
+      setPreview((prev) => ({
+        ...prev,
+        [field]: URL.createObjectURL(e.target.files[0]),
+      }));
     }
   };
 
   // Handle adding a new character
   const handleAddCharacter = () => {
     if (newCharacter.name.trim() === '') return;
-    
+
     setData('characters', [...data.characters, { ...newCharacter, is_new: true }]);
     setNewCharacter({ name: '', description: '' });
   };
@@ -161,7 +167,7 @@ const Edit = ({ story, flash }) => {
   const handleUpdateCharacter = (index, field, value) => {
     const updatedCharacters = [...data.characters];
     updatedCharacters[index][field] = value;
-    
+
     // Track changes for existing characters
     if (updatedCharacters[index].id) {
       const charUpdates = { ...data.character_updates };
@@ -171,7 +177,7 @@ const Edit = ({ story, flash }) => {
       charUpdates[updatedCharacters[index].id][field] = value;
       setData('character_updates', charUpdates);
     }
-    
+
     setData('characters', updatedCharacters);
   };
 
@@ -180,12 +186,12 @@ const Edit = ({ story, flash }) => {
     const character = data.characters[index];
     const updatedCharacters = [...data.characters];
     updatedCharacters.splice(index, 1);
-    
+
     // If it's an existing character, mark it for deletion
     if (character.id) {
       setData('character_deletes', [...data.character_deletes, character.id]);
     }
-    
+
     setData('characters', updatedCharacters);
   };
 
@@ -210,7 +216,7 @@ const Edit = ({ story, flash }) => {
               <strong>Edit Story: {story.title}</strong>
             </CCardHeader>
             <CCardBody>
-              
+
               <CForm onSubmit={handleSubmit} encType="multipart/form-data">
                 <CRow className="mb-3">
                   <CCol md={6}>
@@ -225,7 +231,7 @@ const Edit = ({ story, flash }) => {
                       <div className="text-danger">{errors.title}</div>
                     )}
                   </CCol>
-                  
+
                   <CCol md={6}>
                     <CFormLabel htmlFor="author">Author</CFormLabel>
                     <CFormInput
@@ -239,7 +245,7 @@ const Edit = ({ story, flash }) => {
                     )}
                   </CCol>
                 </CRow>
-                
+
                 <CRow className="mb-3">
                   <CCol md={6}>
                     <CFormLabel htmlFor="genre">Genre</CFormLabel>
@@ -254,7 +260,7 @@ const Edit = ({ story, flash }) => {
                       <div className="text-danger">{errors.genre}</div>
                     )}
                   </CCol>
-                  
+
                   <CCol md={6}>
                     <CFormLabel htmlFor="style">Writing Style</CFormLabel>
                     <CFormInput
@@ -269,7 +275,7 @@ const Edit = ({ story, flash }) => {
                     )}
                   </CCol>
                 </CRow>
-                
+
                 <CRow className="mb-3">
                   <CCol md={12}>
                     <CFormLabel htmlFor="description">Description</CFormLabel>
@@ -285,27 +291,50 @@ const Edit = ({ story, flash }) => {
                     )}
                   </CCol>
                 </CRow>
-                
+
                 <CRow className="mb-3">
-                  <CCol md={12}>
-                    <CFormLabel htmlFor="cover_image">Cover Image</CFormLabel>
+                  <CCol md={6}>
+                    <CFormLabel htmlFor="cover_image">Cover</CFormLabel>
                     <CFormInput
                       type="file"
                       id="cover_image"
-                      onChange={handleCoverImageChange}
+                      onChange={(e) => handleImageChange(e, 'cover_image')}
                       invalid={errors.cover_image}
                       accept="image/*"
                     />
                     {errors.cover_image && (
                       <div className="text-danger">{errors.cover_image}</div>
                     )}
-                    
-                    {preview && (
+
+                    {preview.cover_image && (
                       <div className="mt-2">
-                        <img 
-                          src={preview} 
-                          alt="Cover preview" 
-                          style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }} 
+                        <img
+                          src={preview.cover_image}
+                          alt="Cover preview"
+                          style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }}
+                        />
+                      </div>
+                    )}
+                  </CCol>
+                  <CCol md={6}>
+                    <CFormLabel htmlFor="backcover_image">Back Cover</CFormLabel>
+                    <CFormInput
+                      type="file"
+                      id="backcover_image"
+                      onChange={(e) => handleImageChange(e, 'backcover_image')}
+                      invalid={errors.backcover_image}
+                      accept="image/*"
+                    />
+                    {errors.backcover_image && (
+                      <div className="text-danger">{errors.backcover_image}</div>
+                    )}
+
+                    {preview.backcover_image && (
+                      <div className="mt-2">
+                        <img
+                          src={preview.backcover_image}
+                          alt="Cover preview"
+                          style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }}
                         />
                       </div>
                     )}
@@ -316,29 +345,29 @@ const Edit = ({ story, flash }) => {
                 <CRow className="mb-3">
                   <CCol md={12}>
                     <CFormLabel>Story Characters</CFormLabel>
-                    
+
                     {/* Character Input Form */}
                     <CInputGroup className="mb-3">
                       <CInputGroupText>Name</CInputGroupText>
                       <CFormInput
                         value={newCharacter.name}
-                        onChange={(e) => setNewCharacter({...newCharacter, name: e.target.value})}
+                        onChange={(e) => setNewCharacter({ ...newCharacter, name: e.target.value })}
                         placeholder="Character name"
                       />
                       <CInputGroupText>Description</CInputGroupText>
                       <CFormInput
                         value={newCharacter.description}
-                        onChange={(e) => setNewCharacter({...newCharacter, description: e.target.value})}
+                        onChange={(e) => setNewCharacter({ ...newCharacter, description: e.target.value })}
                         placeholder="Brief character description"
                       />
-                      <CButton 
+                      <CButton
                         color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
                         onClick={handleAddCharacter}
                       >
                         Add Character
                       </CButton>
                     </CInputGroup>
-                    
+
                     {/* Character List */}
                     {data.characters.length > 0 && (
                       <CListGroup className="mb-3">
@@ -352,8 +381,8 @@ const Edit = ({ story, flash }) => {
                                   onChange={(e) => handleUpdateCharacter(index, 'name', e.target.value)}
                                   placeholder="Character name"
                                 />
-                                <CButton 
-                                 color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
+                                <CButton
+                                  color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
                                   onClick={() => handleRemoveCharacter(index)}
                                 >
                                   Remove
@@ -371,13 +400,13 @@ const Edit = ({ story, flash }) => {
                         ))}
                       </CListGroup>
                     )}
-                    
+
                     {errors.characters && (
                       <div className="text-danger">{errors.characters}</div>
                     )}
                   </CCol>
                 </CRow>
-                
+
                 <CRow className="mb-3">
                   <CCol md={12}>
                     <CFormLabel htmlFor="content">Story Content</CFormLabel>
@@ -394,12 +423,12 @@ const Edit = ({ story, flash }) => {
                     )}
                   </CCol>
                 </CRow>
-                
+
                 <CRow>
                   <CCol xs={12} className="d-flex justify-content-end gap-2">
-                    <CButton 
-                      type="button" 
-                      color="secondary" 
+                    <CButton
+                      type="button"
+                      color="secondary"
                       onClick={() => window.history.back()}
                     >
                       Cancel

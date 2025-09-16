@@ -15,7 +15,7 @@ const About = () => {
             {/* Section 1 */}
             <div className="row align-items-center mb-100">
               <div className="col-lg-6 mb-4 mb-lg-0 d-flex justify-content-center">
-                <img src={aboutLeft} alt="Team Image" className="img-fluid rounded shadow" style={{ maxWidth: '480px' }} />
+                <img src={aboutLeft} alt="Team Image" className="img-fluid rounded" style={{ maxWidth: '480px' }} />
               </div>
               <div className="col-lg-6">
                 <h2 className="text-black fs-30 fw-600 mb-20">Craft Your Story, Choose Your Package</h2>
@@ -33,7 +33,7 @@ const About = () => {
           <div className="container">
             <div className="row align-items-center flex-lg-row-reverse">
               <div className="col-lg-6 mb-4 mb-lg-0 d-flex justify-content-center">
-                <img src={aboutRight} alt="Workspace Image" className="img-fluid rounded shadow" style={{ maxWidth: '480px' }} />
+                <img src={aboutRight} alt="Workspace Image" className="img-fluid rounded" style={{ maxWidth: '480px' }} />
               </div>
               <div className="col-lg-6">
                 <h2 className="text-white fs-30 fw-600 mb-20">

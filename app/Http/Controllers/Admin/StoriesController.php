@@ -100,6 +100,7 @@ class StoriesController extends Controller
             'style' => 'nullable|string|max:255',
             'content' => 'required|string',
             'cover_image' => 'nullable|image|max:2048', // Max 2MB
+            'backcover_image' => 'required|image|max:2048', // Max 2MB
             'characters' => 'nullable|array',
             'characters.*.name' => 'required|string|max:255',
             'characters.*.description' => 'nullable|string',
@@ -112,11 +113,11 @@ class StoriesController extends Controller
             'genre' => $validated['genre'],
             'style' => $validated['style'] ?? null,
             'content' => $validated['content'],
+            'backcover_image' => $validated['backcover_image'],
             'is_community' => false, // Admin-created stories are not community stories
             'read_count' => 0,
             'likes_count' => 0,
             'comment_count' => 0,
-
         ];
 
         // Handle cover image upload
@@ -124,6 +125,12 @@ class StoriesController extends Controller
             $path = $request->file('cover_image')->store('admin_stories/cover_images', 'public');
             $storyData['cover_image'] = $path;
         }
+
+        if ($request->hasFile('backcover_image')) {
+            $path = $request->file('backcover_image')->store('admin_stories/backcover_images', 'public');
+            $storyData['backcover_image'] = $path;
+        }
+        
 
         $story = Story::create($storyData);
 
@@ -180,6 +187,7 @@ class StoriesController extends Controller
             'style' => 'nullable|string|max:255',
             'content' => 'required|string',
             'cover_image' => 'nullable|image|max:2048', // Max 2MB
+            'backcover_image' => 'required|image|max:2048', // Max 2MB
             'characters' => 'nullable|array',
             'characters.*.name' => 'required|string|max:255',
             'characters.*.description' => 'nullable|string',
@@ -194,17 +202,18 @@ class StoriesController extends Controller
             'genre' => $validated['genre'],
             'style' => $validated['style'] ?? $story->style,
             'content' => $validated['content'],
+            'backcover_image' => $validated['backcover_image'],
         ];
 
         // Handle cover image upload
         if ($request->hasFile('cover_image')) {
-            // // Delete the old image if it exists
-            // if ($story->cover_image) {
-            //     Storage::disk('public')->delete($story->cover_image);
-            // }
-
             $path = $request->file('cover_image')->store('cover_images', 'public');
             $storyData['cover_image'] = $path;
+        }
+
+        if ($request->hasFile('backcover_image')) {
+            $path = $request->file('backcover_image')->store('admin_stories/backcover_images', 'public');
+            $storyData['backcover_image'] = $path;
         }
 
         $story->update($storyData);

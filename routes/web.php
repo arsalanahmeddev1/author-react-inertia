@@ -181,6 +181,18 @@ Route::get('/about', function () {
     return Inertia::render('About');
 })->name('about');
 
+Route::get('/terms-and-conditions', function () {
+    return Inertia::render('Terms');
+})->name('terms-and-conditions');
+
+Route::get('/privacy-policy', function () {
+    return Inertia::render('PrivacyPolicy');
+})->name('privacy-policy');
+
+Route::get('/community-guidelines', function () {
+    return Inertia::render('CommunityGuideLines');
+})->name('community-guidelines');
+
 Route::post('/chatgpt/send', [ChatbotController::class, 'send']);
 
 // new dashboard implementation

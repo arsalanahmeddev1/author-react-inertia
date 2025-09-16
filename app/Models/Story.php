@@ -22,6 +22,7 @@ class Story extends Model
         'author',
         'genre',
         'cover_image',
+        'backcover_image',
         'read_count',
         'comment_count',
         'likes_count',

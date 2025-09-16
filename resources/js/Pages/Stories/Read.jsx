@@ -38,30 +38,36 @@ export default function Read({ story, auth }) {
         600, // height (same as flipbook)
     );
 
+    // Calculate total pages including front cover, story pages, and back cover
+    const calculateTotalPages = () => {
+        if (storyPages.length === 0) return 0;
+        return storyPages.length + 2; // +2 for front and back covers
+    };
+
     useEffect(() => {
-        setTotalPages(storyPages.length);
+        const total = calculateTotalPages();
+        setTotalPages(total);
     }, [storyPages.length]);
 
-    const flipNext = () => bookRef.current?.pageFlip()?.flipNext();
-    const flipPrev = () => bookRef.current?.pageFlip()?.flipPrev();
+    const flipNext = () => {
+        // Check if we can go to next page
+        if (currentPage < totalPages - 1) {
+            bookRef.current?.pageFlip()?.flipNext();
+        }
+    };
+    
+    const flipPrev = () => {
+        // Check if we can go to previous page
+        if (currentPage > 0) {
+            bookRef.current?.pageFlip()?.flipPrev();
+        }
+    };
 
     const handleBookInit = (flipBookInstance) => {
         if (!flipBookInstance) return;
 
-        // Debug: log available methods
-        console.log("FlipBook Instance:", flipBookInstance);
-        console.log(
-            "Available methods:",
-            Object.getOwnPropertyNames(flipBookInstance),
-        );
-        console.log("PageFlip property:", flipBookInstance.pageFlip);
-
-        // Try different possible method names for getting page count
-        const pageCount =
-            flipBookInstance.getPageCount?.() ||
-            flipBookInstance.pageFlip?.getPageCount?.() ||
-            storyPages.length;
-
+        // Use our calculated total pages instead of trying to get it from flipbook
+        const pageCount = calculateTotalPages();
         setTotalPages(pageCount);
         setCurrentPage(0);
 
@@ -257,8 +263,14 @@ export default function Read({ story, auth }) {
                                             ? `/storage/${story.cover_image}`
                                             : "/assets/images/default-cover.jpg"
                                     }
+                                    backcoverImage={
+                                        story.backcover_image
+                                            ? `/storage/${story.backcover_image}`
+                                            : "/assets/images/default-cover.jpg"
+                                    }
                                     onInit={handleBookInit}
                                     onFlip={handleBookFlip}
+                                    allowCloseAfterBackCover={story.allow_close_after_back_cover !== false}
                                 />
                             )}
 
@@ -269,7 +281,7 @@ export default function Read({ story, auth }) {
                                     onClick={flipPrev}
                                     disabled={
                                         currentPage <= 0 ||
-                                        (totalPages || storyPages.length) === 0
+                                        totalPages === 0
                                     }
                                 >
                                     <i className="fas fa-chevron-left me-2"></i>{" "}
@@ -277,20 +289,17 @@ export default function Read({ story, auth }) {
                                 </button>
                                 <div className="chapter-indicator secondry-font">
                                     Page{" "}
-                                    {(totalPages || storyPages.length) > 0
+                                    {totalPages > 0
                                         ? currentPage + 1
                                         : 0}{" "}
-                                    of {totalPages || storyPages.length}
+                                    of {totalPages}
                                 </div>
                                 <button
                                     className="btn btn-primary story-btn chapter-btn"
                                     onClick={flipNext}
                                     disabled={
-                                        (totalPages || storyPages.length) ===
-                                        0 ||
-                                        currentPage >=
-                                        (totalPages || storyPages.length) -
-                                        1
+                                        totalPages === 0 ||
+                                        currentPage >= totalPages - 1
                                     }
                                 >
                                     Next Page{" "}

@@ -3,7 +3,7 @@ import HTMLFlipBook from "react-pageflip";
 import "../../css/book.css";
 
 
-const Book = forwardRef(({ pages = [], onInit, onFlip, coverImage }, bookRef) => {
+const Book = forwardRef(({ pages = [], onInit, onFlip, coverImage, backcoverImage, allowCloseAfterBackCover = true }, bookRef) => {
     const allPages = [
         // Front Cover
         <div key="front-cover" className="book-cover front-cover">
@@ -24,12 +24,21 @@ const Book = forwardRef(({ pages = [], onInit, onFlip, coverImage }, bookRef) =>
         // Back Cover
         <div key="back-cover" className="book-cover back-cover">
             <img
-                src={coverImage || "/assets/images/default-cover.jpg"}
+                src={backcoverImage || "/assets/images/default-cover.jpg"}
                 alt="Back Cover"
                 className="cover-image"
             />
         </div>,
     ];
+
+    const handleFlip = (e) => {
+        // If we don't allow closing after back cover, prevent going to the last page (back cover)
+        if (!allowCloseAfterBackCover && e.data >= allPages.length - 1) {
+            // Don't allow navigation to the back cover
+            return;
+        }
+        onFlip?.(e);
+    };
 
     return (
         <div className="turn-book-wrapper">
@@ -40,7 +49,7 @@ const Book = forwardRef(({ pages = [], onInit, onFlip, coverImage }, bookRef) =>
                 showCover={true}   // covers enable
                 mobileScrollSupport={true}
                 onInit={onInit}
-                onFlip={onFlip}
+                onFlip={handleFlip}
                 useMouseEvents={true}
                 drawShadow={true}
                 maxShadowOpacity={0.5}

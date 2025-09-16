@@ -41,7 +41,7 @@ const Create = ({ flash }) => {
   });
 
   const [newCharacter, setNewCharacter] = useState({ name: '', description: '' });
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState({ cover_image: null, backcover_image: null });
 
   // Handle flash messages with SweetAlert
   useEffect(() => {
@@ -116,6 +116,7 @@ const Create = ({ flash }) => {
         else if (errors.genre) errorMessage = errors.genre;
         else if (errors.content) errorMessage = errors.content;
         else if (errors.cover_image) errorMessage = errors.cover_image;
+        else if (errors.backcover_image) errorMessage = errors.backcover_image;
         
         Swal.fire({
           icon: 'error',
@@ -138,10 +139,10 @@ const Create = ({ flash }) => {
     setData('content', content);
   };
 
-  const handleCoverImageChange = (e) => {
+  const handleImageChange = (e, field) => {
     if (e.target.files[0]) {
-      setData('cover_image', e.target.files[0]);
-      setPreview(URL.createObjectURL(e.target.files[0]));
+      setData(field, e.target.files[0]);
+      setPreview((prev) => ({ ...prev, [field]: URL.createObjectURL(e.target.files[0]) }));
     }
   };
 
@@ -251,23 +252,45 @@ const Create = ({ flash }) => {
                 </CRow>
                 
                 <CRow className="mb-3">
-                  <CCol md={12}>
+                  <CCol md={6}>
                     <CFormLabel htmlFor="cover_image">Cover Image</CFormLabel>
                     <CFormInput
                       type="file"
                       id="cover_image"
-                      onChange={handleCoverImageChange}
+                      onChange={(e) => handleImageChange(e, 'cover_image')}
                       invalid={errors.cover_image}
                       feedback={errors.cover_image}
                       accept="image/*"
                     />
                    
                     
-                    {preview && (
+                    {preview.cover_image && (
                       <div className="mt-2">
                         <img 
-                          src={preview} 
+                          src={preview.cover_image} 
                           alt="Cover preview" 
+                          style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }} 
+                        />
+                      </div>
+                    )}
+                  </CCol>
+                  <CCol md={6}>
+                    <CFormLabel htmlFor="backcover_image">Back Cover Image</CFormLabel>
+                    <CFormInput
+                      type="file"
+                      id="backcover_image"
+                      onChange={(e) => handleImageChange(e, 'backcover_image')}
+                      invalid={errors.backcover_image}
+                      feedback={errors.backcover_image}
+                      accept="image/*"
+                    />
+                   
+                    
+                    {preview.backcover_image && (
+                      <div className="mt-2">
+                        <img 
+                          src={preview.backcover_image} 
+                          alt="Back Cover preview" 
                           style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }} 
                         />
                       </div>
