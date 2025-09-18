@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/react'
 import { Icons } from '@/utils/icons'
 import { howItWorksData } from '@/utils/statics'
 import hiwVideo from '@/assets/videos/howitworks.mp4'
+import thumbnail from '@/assets/videos/hiw-thumbnail.png'
 
 const HowItWorks = () => {
     return (
@@ -18,7 +19,9 @@ const HowItWorks = () => {
                 <div className="container">
                     <h1 className='text-black text-center fs-70 fw-500 mb-80'>How It Works</h1>
                 <div className="hiw-video-content mb-100">
-                    <video src={hiwVideo} autoPlay muted controls loop />
+                    <video src={hiwVideo} autoPlay muted controls loop 
+                    poster={thumbnail} 
+                    />
                 </div>
                 </div>
                 <section className='hiw-sec-01'>
