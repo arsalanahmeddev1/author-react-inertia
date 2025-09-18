@@ -197,6 +197,10 @@ Route::get('/how-it-works', function () {
     return Inertia::render('HowItWorks');
 })->name('how-it-works');
 
+Route::get('/faqs', function () {
+    return Inertia::render('Faqs');
+})->name('faqs');
+
 Route::post('/chatgpt/send', [ChatbotController::class, 'send']);
 
 // new dashboard implementation
