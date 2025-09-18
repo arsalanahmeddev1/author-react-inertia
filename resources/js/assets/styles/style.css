@@ -1417,7 +1417,39 @@ h6 {
     color: #fff;
     font-weight: 700;
 }
-
+.accordion-button {
+    font-size: 22px;
+    font-weight: 500;
+}
+.accordion-button:not(.collapsed) {
+    background-color: #f7f7f7;
+    box-shadow: none;
+    color: var(--primary-theme);
+    font-weight: 500;
+}
+.accordion-body {
+    padding: 0 30px 30px 30px;
+}
+.accordion-button:focus {
+    box-shadow: none;
+}
+.accordion-item {
+    border: none;
+    box-shadow: none;
+    margin-bottom: 20px;
+    background-color: #f7f7f7;
+}
+.accordion-button {
+    padding: 30px;
+    background: #f7f7f7;
+    box-shadow: none;
+}
+.accordion-item:first-of-type>.accordion-header .accordion-button {
+    box-shadow: none;
+}
+/* .accordion-button.collapsed {
+    background-color: #FFF;
+} */
 /* responsive */
 @media (min-width: 1560px) {
     .container {
