@@ -3,15 +3,23 @@ import Layout from '@/Layouts/Layout'
 import { Head } from '@inertiajs/react'
 import { Icons } from '@/utils/icons'
 import { howItWorksData } from '@/utils/statics'
-
+import hiwVideo from '@/assets/videos/howitworks.mp4'
 
 const HowItWorks = () => {
     return (
         <Layout headerClass="inner-header">
             <Head title="How It Works" />
+            <section className='hiw-video-sec'>
+                <div className="container">
+
+                </div>
+            </section>
             <section className='pt-200 pb-100'>
                 <div className="container">
                     <h1 className='text-black text-center fs-70 fw-500 mb-80'>How It Works</h1>
+                <div className="hiw-video-content mb-100">
+                    <video src={hiwVideo} autoPlay muted controls loop />
+                </div>
                 </div>
                 <section className='hiw-sec-01'>
                     <div className="container">
