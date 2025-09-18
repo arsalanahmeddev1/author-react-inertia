@@ -34,6 +34,7 @@ class GuestAuthController extends Controller
         // Create a temporary guest user
         $guestUser = User::create([
             'name' => 'Guest_' . Str::random(8),
+            'username' => 'guest_' . Str::random(10),
             'email' => 'guest_' . Str::random(8) . '@example.com',
             'password' => Hash::make(Str::random(16)),
             'is_guest' => true,

@@ -193,6 +193,10 @@ Route::get('/community-guidelines', function () {
     return Inertia::render('CommunityGuideLines');
 })->name('community-guidelines');
 
+Route::get('/how-it-works', function () {
+    return Inertia::render('HowItWorks');
+})->name('how-it-works');
+
 Route::post('/chatgpt/send', [ChatbotController::class, 'send']);
 
 // new dashboard implementation

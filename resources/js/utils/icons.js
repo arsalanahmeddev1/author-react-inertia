@@ -35,6 +35,15 @@ import { CiDiscount1 } from "react-icons/ci";
 import { FiRefreshCcw } from "react-icons/fi";
 import { FiGift } from "react-icons/fi";
 import { BsQuestionCircle, BsFileText, BsImage, BsEye } from "react-icons/bs";
+import { RiAccountPinCircleLine } from "react-icons/ri";
+import { IoBook } from "react-icons/io5";
+import { MdPublishedWithChanges } from "react-icons/md";
+import { GiProgression } from "react-icons/gi";
+import { GiWorld } from "react-icons/gi";
+
+
+
+
 
 
 
@@ -112,4 +121,9 @@ export const Icons = {
   FileText: BsFileText,
   Image: BsImage,
   Eye: BsEye,
+  Account: RiAccountPinCircleLine,
+  OpenBook: IoBook,
+  PublishedWithChanges: MdPublishedWithChanges,
+  Progression: GiProgression,
+  World: GiWorld,
 }

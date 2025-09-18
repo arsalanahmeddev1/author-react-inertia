@@ -34,6 +34,7 @@ const Header = ({ logoClass, headerClass }) => {
                 <li><Link href="/stories">Stories</Link></li>
                 <li><Link href="/packages">Packages</Link></li>
                 <li><Link href="/community">Community</Link></li>
+                <li><Link href="/how-it-works">How It Works</Link></li>
                 <li><Link href="/publish">Publish</Link></li>
                 <li><Link href="/about">About</Link></li>
                 <div className="d-flex d-lg-none flex-column align-items-center gap-20 justify-content-end justify-content-lg-start">
@@ -49,18 +50,34 @@ const Header = ({ logoClass, headerClass }) => {
           >
             {!auth?.user ? (
               <>
-                <Link href="/login" className="text-primary text-18">Sign in</Link>
+                {/* <Link href="/login" className="text-primary text-18">Sign in</Link>
                 <div className="text-primary fs-25">/</div>
                 <Link href="/register" className="text-primary text-18">Sign Up</Link>
-                <Link href="/guest-login" className="btn btn-primary text-18">Guest Login</Link>
+                <Link href="/guest-login" className="btn btn-primary text-18">Guest Login</Link> */}
+                <div className="dropdown">
+                  <button
+                    className="btn btn-primary dropdown-toggle text-18"
+                    type="button"
+                    id="authDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Account
+                  </button>
+                  <ul className="dropdown-menu user-dropdown dropdown-menu-end" aria-labelledby="authDropdown">
+                    <li><Link href="/login" className="user-dropdown-item">Sign in</Link></li>
+                    <li><Link href="/register" className="user-dropdown-item">Sign Up</Link></li>
+                    <li><Link href="/guest-login" className="user-dropdown-item">Guest Login</Link></li>
+                  </ul>
+                </div>
               </>
             ) : (
               <>
-                {auth.user.is_guest && (
+                {/* {auth.user.is_guest && (
                   <span className="btn btn-secondary d-none d-sm-block">Guest</span>
-                )}
+                )} */}
                 <UserAvatar user={auth.user} className="d-none d-sm-block" />
-               
+
 
                 {/* Logout button */}
                 {/* <Link href="/logout" method="post" as="button" className="btn btn-primary text-white btn-sm d-none d-sm-block">
@@ -72,8 +89,8 @@ const Header = ({ logoClass, headerClass }) => {
 
           {/* Mobile menu toggle button */}
           <div className="d-lg-none">
-            <button 
-              className="btn btn-link text-white p-0" 
+            <button
+              className="btn btn-link text-white p-0"
               onClick={toggleMenu}
               aria-label="Toggle mobile menu"
             >

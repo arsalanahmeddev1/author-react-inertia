@@ -1273,69 +1273,76 @@ header .btn.btn-link:active {
 } */
 
 .demo-book {
-  margin: auto;
-  perspective: 2500px;
+    margin: auto;
+    perspective: 2500px;
 }
 
 /* Each page styling */
 .demoPage {
-  background: #fff;
-  /* padding: 30px; */
-  font-size: 16px;
-  line-height: 1.6;
-  box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
-  border: 1px solid #ddd;
-  position: relative;
+    background: #fff;
+    /* padding: 30px; */
+    font-size: 16px;
+    line-height: 1.6;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    position: relative;
 }
 
 /* Soft shadows for all pages */
 .realistic-book .page {
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Spine effect: darker shadow on left-side pages */
 .realistic-book .page:nth-child(even) {
-  box-shadow: inset 8px 0 15px rgba(0,0,0,0.15);
+    box-shadow: inset 8px 0 15px rgba(0, 0, 0, 0.15);
 }
 
 /* Depth edge: darker on right-side pages */
 .realistic-book .page:nth-child(odd) {
-  box-shadow: inset -8px 0 15px rgba(0,0,0,0.15);
+    box-shadow: inset -8px 0 15px rgba(0, 0, 0, 0.15);
 }
 
 /* Page edge shading for realistic effect */
 .demoPage::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 10px;
-  height: 100%;
-  background: linear-gradient(to left, rgba(0,0,0,0.08), transparent);
-  pointer-events: none;
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 100%;
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.08), transparent);
+    pointer-events: none;
 }
+
 .next-step-wrapper .card-header {
-    background-color: var(--secondry-theme);    
+    background-color: var(--secondry-theme);
 }
+
 h6 {
     font-size: 1.6rem;
 }
+
 .under-review-wrapper {
     border: 1px solid var(--primary-theme);
     padding: 100px 60px;
     border-radius: 20px;
 }
+
 .under-review-wrapper * {
     max-width: 1200px;
     margin: 0 auto;
 }
+
 .ur-title {
     margin-bottom: 20px;
 }
+
 .under-review-wrapper span {
     font-weight: 700;
     color: var(--secondry-theme);
 }
+
 .sr-close-btn {
     top: 20px;
     right: 20px;
@@ -1350,10 +1357,12 @@ h6 {
     z-index: 1;
     color: var(--secondry-theme);
 }
+
 .discount-code-field {
     border-radius: 10px 0px 0 10px !important;
 
 }
+
 .discount-code-wrapper .btn-primary {
     padding: 29px 70px;
     border-radius: 0 10px 10px 0;
@@ -1362,28 +1371,28 @@ h6 {
 
 /* Privacy Policy and Terms Styles */
 
-  
-  .terms-section {
+
+.terms-section {
     padding-left: 20px;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 30px;
-  }
-  
-  .terms-list {
+}
+
+.terms-list {
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-  
-  .terms-list li {
+}
+
+.terms-list li {
     position: relative;
     padding-left: 25px;
     line-height: 1.6;
     color: #333;
-  }
-  
-  .terms-list li::before {
+}
+
+.terms-list li::before {
     content: "•";
     color: var(--secondry-theme, #6c5ce7);
     font-weight: bold;
@@ -1391,11 +1400,24 @@ h6 {
     left: 0;
     top: -7px;
     font-size: 24px;
-  }
-  
-  .terms-list li:last-child {
+}
+
+.terms-list li:last-child {
     margin-bottom: 0;
-  }
+}
+
+.hiw-step-card-icon {
+    background-color: var(--primary-theme);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+}
+
 /* responsive */
 @media (min-width: 1560px) {
     .container {
@@ -1728,9 +1750,11 @@ h6 {
         display: flex;
         justify-content: center;
     }
+
     .fearured-stories-card .slick-dots {
         bottom: -19px;
     }
+
     .fearured-stories-card-inner a {
         align-items: center;
     }
@@ -1896,7 +1920,7 @@ h6 {
     align-items: stretch;
 }
 
-.fearured-stories .slick-slide > div {
+.fearured-stories .slick-slide>div {
     height: 100%;
 }
 
@@ -1921,19 +1945,22 @@ h6 {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     max-width: 180px;
 }
+
 .fearured-stories-card-inner a:focus-visible {
     outline: none;
 }
+
 .featured-stories-dots .slick-active {
     background-color: var(--primary-theme);
     color: var(--default-color);
 }
+
 /* Responsive adjustments for featured stories slider */
 @media (max-width: 768px) {
     .featured-custom-arrows {
         margin-top: 20px;
     }
-    
+
     .featured-custom-arrows .prev-arrow,
     .featured-custom-arrows .next-arrow {
         width: 35px;

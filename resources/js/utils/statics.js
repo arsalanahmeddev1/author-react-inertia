@@ -144,3 +144,37 @@ export const packagesData = [
         isPopular: false
     }
 ];
+
+
+export const howItWorksData = [
+    {
+        id: 1,
+        title: "Create Your Free Account",
+        description: "Sign up to unlock access to the Storie Vault platform and begin your storytelling journey.",
+        icon: "Account",
+    },
+    {
+        id: 2,
+        title: "Choose a Story & Reimagine It",
+        description: "Browse and pick from our curated library of stories and characters and click on them to get started. Select one that inspires you, and rewrite it in any genre or style that suits your imagination.",
+        icon: "OpenBook",
+    },
+    {
+        id: 3,
+        title: "Write, Customize & Publish",
+        description: "Use our built-in editor to craft your story. When you're ready, publish it to your profile—either publicly or privately within the Storie Vault community.",
+        icon: "PublishedWithChanges",
+    },
+    {
+        id: 4,
+        title: "Engage & Grow Your Audience",
+        description: "Share your story link, connect with readers, and receive valuable feedback from fellow writers and enthusiasts.",
+        icon: "Progression",
+    },
+    {
+        id: 5,
+        title: "Expand to Global Platforms",
+        description: "Ready to go beyond? Storie Vault can help you distribute your work to major publishers like Amazon, Barnes & Noble, HarperCollins, and more. (edited)",
+        icon: "World",
+    },
+];
