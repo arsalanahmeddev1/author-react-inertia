@@ -341,12 +341,12 @@ const Packages = ({ packages = [] }) => {
     // Transform database packages to match the expected format
     const transformedPackages = filteredPackages.map((pkg, index) => {
         // Determine badge based on price
-        let badge = "Free";
-        if (pkg.price_cents > 0) {
-            if (pkg.price_cents >= 1900) badge = "Pro";
-            else if (pkg.price_cents >= 3800) badge = "Premium";
-            else badge = "Standard";
-        }
+        let badge = "best Selling";
+        // if (pkg.price_cents > 0) {
+        //     if (pkg.price_cents >= 1900) badge = "Pro";
+        //     else if (pkg.price_cents >= 3800) badge = "Premium";
+        //     else badge = "Standard";
+        // }
 
         // Create features array from database features
         const features =
