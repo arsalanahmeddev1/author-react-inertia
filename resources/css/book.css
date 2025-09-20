@@ -11,17 +11,16 @@
   display: none !important;
 }
 
-.page-content {
+/* .page-content {
   height: 100%;
-  /* padding: 10px 30px; */
   box-sizing: border-box;
-  overflow: hidden; /* hook handle karega height */
+  overflow: hidden; 
   word-wrap: break-word;
   line-height: 1.6;
   font-size: 17px;
   font-family: 'poppins', serif;
   color: #333;
-}
+} */
 
 .book-cover {
   display: flex;
