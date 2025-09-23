@@ -38,6 +38,7 @@ const Edit = ({ story, flash }) => {
     style: story.style || '',
     content: story.content || '',
     cover_image: null,
+    backcover_image: null,
     _method: 'PUT', // For method spoofing (PUT request)
     characters: story.characters || [],
     character_updates: {}, // To track updates to existing characters
@@ -295,6 +296,7 @@ const Edit = ({ story, flash }) => {
                 <CRow className="mb-3">
                   <CCol md={6}>
                     <CFormLabel htmlFor="cover_image">Cover</CFormLabel>
+                    
                     <CFormInput
                       type="file"
                       id="cover_image"

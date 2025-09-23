@@ -187,7 +187,7 @@ class StoriesController extends Controller
             'style' => 'nullable|string|max:255',
             'content' => 'required|string',
             'cover_image' => 'nullable|image|max:2048', // Max 2MB
-            'backcover_image' => 'required|image|max:2048', // Max 2MB
+            'backcover_image' => 'nullable|image|max:2048', // Max 2MB
             'characters' => 'nullable|array',
             'characters.*.name' => 'required|string|max:255',
             'characters.*.description' => 'nullable|string',
@@ -202,7 +202,6 @@ class StoriesController extends Controller
             'genre' => $validated['genre'],
             'style' => $validated['style'] ?? $story->style,
             'content' => $validated['content'],
-            'backcover_image' => $validated['backcover_image'],
         ];
 
         // Handle cover image upload
