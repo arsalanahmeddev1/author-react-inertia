@@ -288,7 +288,9 @@ p {
 }
 
 /* header */
-.header {}
+.header {
+    display: block;
+}
 
 .secondary-nav a,
 .primary-navs a {
@@ -1280,12 +1282,17 @@ header .btn.btn-link:active {
 /* Each page styling */
 .demoPage {
     background: #fff;
-    /* padding: 30px; */
     font-size: 16px;
     line-height: 1.6;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
     border: 1px solid #ddd;
     position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 /* Soft shadows for all pages */

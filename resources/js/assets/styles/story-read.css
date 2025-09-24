@@ -301,7 +301,7 @@
 .page-content {
     padding: 20px;
     height: 100%;
-    overflow: visible;
+    overflow: hidden;
     word-wrap: break-word;
     line-height: 1.6;
     font-size: 17px;
@@ -309,6 +309,9 @@
     font-family: "Georgia", serif;
     box-sizing: border-box;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     /* background: linear-gradient(
         302deg,
         rgb(254 162 87 / 55%) 0%,
@@ -395,4 +398,7 @@
 .turn-book-wrapper {
     perspective: 1000px;
     margin: 0 auto;
+}
+.page-content ol li {
+    list-style-type: disc;
 }
