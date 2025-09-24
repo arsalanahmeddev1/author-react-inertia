@@ -26,7 +26,6 @@ export default function usePaginateByHeight(htmlContent, pageWidth = 460, pageHe
       line-height: 1.6;
       font-size: 17px;
       color: #333;
-      padding: 20px;
       box-sizing: border-box;
       background: #fefefe;
       display: flex;

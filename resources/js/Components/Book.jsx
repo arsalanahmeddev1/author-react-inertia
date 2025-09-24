@@ -6,12 +6,9 @@ import "../../css/book.css";
 const Book = forwardRef(({ pages = [], onInit, onFlip, coverImage, backcoverImage, allowCloseAfterBackCover = true }, bookRef) => {
     const allPages = [
         // Front Cover
+        // add a background image instead of the image tag
         <div key="front-cover" className="book-cover front-cover">
-            <img
-                src={coverImage || "/assets/images/default-cover.jpg"}
-                alt="Front Cover"
-                className="cover-image"
-            />
+            <div className="cover-image" style={{ backgroundImage: `url(${coverImage || "/assets/images/default-cover.jpg"})`, backgroundSize: 'cover', }}></div>,
         </div>,
 
         // Story Pages
