@@ -341,7 +341,7 @@ const Packages = ({ packages = [] }) => {
     // Transform database packages to match the expected format
     const transformedPackages = filteredPackages.map((pkg, index) => {
         // Determine badge based on price
-        let badge = "best Selling";
+        // let badge = "best Selling";
         // if (pkg.price_cents > 0) {
         //     if (pkg.price_cents >= 1900) badge = "Pro";
         //     else if (pkg.price_cents >= 3800) badge = "Premium";
@@ -387,7 +387,7 @@ const Packages = ({ packages = [] }) => {
 
         return {
             id: pkg.id,
-            badge: badge,
+            badge: pkg.badge,
             title: pkg.name,
             price: pkg.price_cents
                 ? `$${(pkg.price_cents / 100).toFixed(2)}`
@@ -630,9 +630,11 @@ const Packages = ({ packages = [] }) => {
                                 <div key={packageItem.id} className="col-md-4">
                                     <div className="publish-card package-card">
                                         {/* Package Badge */}
+                                        {packageItem.badge && 
                                         <div className="package-badge">
                                             {packageItem.badge}
                                         </div>
+                                        }
 
                                         {/* Package Icon */}
                                         <div className="package-icon">

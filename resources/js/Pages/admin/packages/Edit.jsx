@@ -29,6 +29,7 @@ const themeColors = {
 const Edit = ({ package: pkg, flash }) => {
   const { data, setData, post, processing, errors } = useForm({
     name: pkg.name || '',
+    badge: pkg.badge || '',
     price_cents: pkg.price_cents || '',
     interval: pkg.interval || '',
     features: (() => {
@@ -337,7 +338,7 @@ const Edit = ({ package: pkg, flash }) => {
                 </CRow>
 
                 <CRow className="mb-3">
-                  <CCol md={12}>
+                  <CCol md={6}>
                     <CFormLabel htmlFor="stripe_price_id">Stripe Price ID</CFormLabel>
                     <CFormInput
                       id="stripe_price_id"
@@ -347,6 +348,21 @@ const Edit = ({ package: pkg, flash }) => {
                       placeholder="Enter Stripe price ID (optional)"
                     />
                     <small className="text-muted">Enter the Stripe price ID if you have dont have create one</small>
+                    {errors.stripe_price_id && (
+                      <div className="text-danger">{errors.stripe_price_id}</div>
+                    )}
+                    {/* Removed validationErrors.stripe_price_id */}
+                  </CCol>
+                  <CCol md={6}>
+                    <CFormLabel htmlFor="badge">Badge</CFormLabel>
+                    <CFormInput
+                      id="badge"
+                      value={data.badge}
+                      onChange={(e) => setData('badge', e.target.value)}
+                      invalid={!!errors.badge}
+                      placeholder="Enter Badge (optional)"
+                    />
+                    <small className="text-muted">add the badge for the package like best selling, pro, premium, etc.</small>
                     {errors.stripe_price_id && (
                       <div className="text-danger">{errors.stripe_price_id}</div>
                     )}

@@ -34,6 +34,7 @@ class PackagesController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string',
+            'badge' => 'nullable|string',
             'price_cents' => 'nullable|integer|min:0',
             'words_limit' => 'nullable|integer|min:0',
             'stories_limit' => 'nullable|integer|min:0',
@@ -89,6 +90,7 @@ class PackagesController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string',
+            'badge' => 'nullable|string',
             'price_cents' => 'nullable|integer|min:0',
             'interval' => 'nullable|string',
             'words_limit' => 'nullable|integer',

@@ -8,6 +8,7 @@ class Package extends Model
 {
     protected $fillable = [
         'name',
+        'badge',
         'price_cents',
         'words_limit',
         'stories_limit',

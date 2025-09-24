@@ -150,9 +150,7 @@ export default function Read({ story, auth }) {
     return (
         <Layout headerClass="inner-header">
             <Head title={`Reading: ${story.title}`} />
-
-            {/* Book Cover Overlay */}
-            {showCover && (
+            {/* {showCover && (
                 <motion.div
                     className="book-cover-overlay"
                     initial={{ opacity: 0 }}
@@ -168,7 +166,6 @@ export default function Read({ story, auth }) {
                                 src={
                                     story.cover_image
                                         ? `/storage/${story.cover_image}`
-                                        // ? `/assets/images/image-not-available.jpg`
                                         : "/assets/images/image-not-available.jpg"
                                 }
                                 className="book-cover-image"
@@ -176,9 +173,6 @@ export default function Read({ story, auth }) {
                             />
                             <div className="book-cover-details">
                                 <h1 className="book-title">{story.title}</h1>
-                                {/* <p className="book-genre text-black">
-                                    {story.genre} • {story.style}
-                                </p> */}
                                 <motion.button
                                     className="btn btn-lg btn-primary start-reading-btn"
                                     onClick={startReading}
@@ -191,7 +185,7 @@ export default function Read({ story, auth }) {
                         </div>
                     </div>
                 </motion.div>
-            )}
+            )} */}
 
             <section className="reading-container pt-200 pb-100">
                 <div className="container">

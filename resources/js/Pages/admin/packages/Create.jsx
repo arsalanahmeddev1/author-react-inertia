@@ -30,6 +30,7 @@ const themeColors = {
 const Create = ({ flash }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
+        badge: "",
         price_cents: "",
         interval: "",
         features: [""],
@@ -389,7 +390,7 @@ const Create = ({ flash }) => {
                                 </CRow>
 
                                 <CRow className="mb-3">
-                                    <CCol md={12}>
+                                    <CCol md={6}>
                                         <CFormLabel htmlFor="stripe_price_id">
                                             Stripe Price ID
                                         </CFormLabel>
@@ -414,6 +415,33 @@ const Create = ({ flash }) => {
                                         {errors.stripe_price_id && (
                                             <div className="text-danger">
                                                 {errors.stripe_price_id}
+                                            </div>
+                                        )}
+                                    </CCol>
+                                    <CCol md={6}>
+                                        <CFormLabel htmlFor="badge">
+                                            Badge
+                                        </CFormLabel>
+                                        <CFormInput
+                                            id="badge"
+                                            value={data.badge}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "badge",
+                                                    e.target.value,
+                                                )
+                                            }
+                                            invalid={
+                                                !!errors.badge
+                                            }
+                                            placeholder="Enter Badge (optional)"
+                                        />
+                                        <small className="text-muted">
+                                            add the badge for the package like best selling, pro, premium, etc.
+                                        </small>
+                                        {errors.badge && (
+                                            <div className="text-danger">
+                                                {errors.badge}
                                             </div>
                                         )}
                                     </CCol>

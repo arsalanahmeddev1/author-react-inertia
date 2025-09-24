@@ -669,7 +669,7 @@ span.fs-54 {
 
 .signin-book {
     top: -104px;
-    right: 520px;
+    right: 440px;
     animation: moveBook 10s linear infinite;
 }
 
@@ -1511,11 +1511,11 @@ h6 {
     }
 
     .signin-right {
-        max-width: 740px;
+        max-width: 630px;
     }
 
     .signin-book {
-        right: 260px;
+        right: 220px;
     }
 
     .hd-lg {
@@ -1526,10 +1526,13 @@ h6 {
     .testimonials-sec,
     .story-month-bg,
     .collection-sec,
-    .signin-bg,
-    .fearured-stories {
+    .signin-bg {
         padding: 100px 0;
     }
+    .fearured-stories {
+        padding: 100px 0 200px 0;
+    }
+
 
     .collection-sec {
         padding-bottom: 150px;
@@ -1567,6 +1570,13 @@ h6 {
     .sec-2-cover-1 {
         left: -5rem;
     }
+
+    .signin-book {
+        right: 130px;
+    }
+    .signin-right {
+        max-width: 536px;
+    }
 }
 
 @media (max-width: 1280px) {
@@ -1575,11 +1585,11 @@ h6 {
     }
 
     .signin-book {
-        right: 190px;
+        right: 120px;
     }
 
     .signin-right {
-        max-width: 670px;
+        max-width: 570px;
     }
 
     .btn {
@@ -1623,15 +1633,24 @@ h6 {
     .logo img {
         max-width: 100px;
     }
+
+    .signin-right {
+        max-width: 490px;
+    }
+    .signin-book {
+        right: 80px;
+    }
 }
 
 @media (max-width: 1024px) {
     .signin-book {
-        right: 120px;
+        right: 60px;
+        max-width: 320px;
+        top: -4px;
     }
 
     .signin-right {
-        max-width: 600px;
+        max-width: 460px;
     }
 
     :root {
@@ -1686,6 +1705,10 @@ h6 {
     .collection-card-content {
         text-align: center;
     }
+
+    
+    
+    
 
 
 
