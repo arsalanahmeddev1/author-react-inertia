@@ -13,7 +13,7 @@ export default function usePaginateByHeight(htmlContent, pageWidth = 460, pageHe
 
     setIsPaginating(true);
 
-    // Create offscreen container with proper styling
+    // Create offscreen container with proper styling that matches the book page
     const container = document.createElement("div");
     container.style.cssText = `
       position: absolute;
@@ -28,19 +28,20 @@ export default function usePaginateByHeight(htmlContent, pageWidth = 460, pageHe
       color: #333;
       padding: 20px;
       box-sizing: border-box;
+      background: #fefefe;
     `;
     document.body.appendChild(container);
 
     try {
       const resultPages = [];
       
-      // Simple approach: split by sentences and test height
-      const sentences = htmlContent.split(/([.!?]\s+)/);
+      // Better approach: split by paragraphs first, then by sentences
+      const paragraphs = htmlContent.split(/(<\/p>|<br\s*\/?>|<\/div>)/);
       let currentPage = '';
       
-      for (let i = 0; i < sentences.length; i++) {
-        const sentence = sentences[i];
-        const testContent = currentPage + sentence;
+      for (let i = 0; i < paragraphs.length; i++) {
+        const paragraph = paragraphs[i];
+        const testContent = currentPage + paragraph;
         
         // Test if this content fits in the page
         container.innerHTML = testContent;
@@ -48,15 +49,37 @@ export default function usePaginateByHeight(htmlContent, pageWidth = 460, pageHe
         if (container.scrollHeight > pageHeight && currentPage.trim()) {
           // Page is full, save it and start new one
           resultPages.push(currentPage.trim());
-          currentPage = sentence;
+          currentPage = paragraph;
         } else {
-          // Add sentence to current page
+          // Add paragraph to current page
           currentPage = testContent;
         }
       }
       
-      // Add the last page if it has content
-      if (currentPage.trim()) {
+      // If still too long, split by sentences
+      if (currentPage && container.scrollHeight > pageHeight) {
+        const sentences = currentPage.split(/([.!?]\s+)/);
+        let tempPage = '';
+        
+        for (let j = 0; j < sentences.length; j++) {
+          const sentence = sentences[j];
+          const testSentence = tempPage + sentence;
+          
+          container.innerHTML = testSentence;
+          
+          if (container.scrollHeight > pageHeight && tempPage.trim()) {
+            resultPages.push(tempPage.trim());
+            tempPage = sentence;
+          } else {
+            tempPage = testSentence;
+          }
+        }
+        
+        if (tempPage.trim()) {
+          resultPages.push(tempPage.trim());
+        }
+      } else if (currentPage.trim()) {
+        // Add the last page if it has content
         resultPages.push(currentPage.trim());
       }
       
