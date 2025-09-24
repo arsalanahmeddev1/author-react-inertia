@@ -5,6 +5,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../../js/assets/styles/utilities.css';
 import '../../js/assets/styles/style.css';
 import '../../js/assets/styles/auth.css';
+import { Icons } from '../utils/icons';
 
 export default function CustomAuthLayout({ children, title }) {
   useEffect(() => {
@@ -19,7 +20,16 @@ export default function CustomAuthLayout({ children, title }) {
     <div className="sec-bg d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
       <div className="container py-4 py-md-5">
         <div className="row justify-content-center">
+          {/* <div className="col-12">
+          </div> */}
           <div className="col-lg-5 col-md-8 col-sm-10">
+            <button
+              type="button"
+              className="bg-transparent d-flex w-100  justify-content-center align-items-center gap-10 border-0 text-primary-theme fw-600 mb-10"
+              onClick={() => window.history.back()}>
+            <Icons.ArrowLeft />
+              Go Back
+            </button>
             <div className="bg-white p-4 p-md-5 rounded-4 shadow-sm auth-card">
               <div className="text-center mb-4">
                 <Link href="/" className="d-inline-block">

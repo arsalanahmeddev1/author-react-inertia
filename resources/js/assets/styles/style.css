@@ -191,7 +191,7 @@
 .secondry-font {
     font-family: var(--secondry-font);
 }
-
+.nav-link-btn, 
 .primary-navs a {
     color: #fff;
 }
@@ -291,14 +291,14 @@ p {
 .header {
     display: block;
 }
-
+.nav-link-btn,
 .secondary-nav a,
 .primary-navs a {
     color: var(--default-color);
     text-transform: capitalize;
     font-size: var(--text-20);
 }
-
+.nav-link-btn:hover,
 a:hover {
     color: var(--primary-theme);
 }
@@ -1463,6 +1463,10 @@ h6 {
     max-height: 500px;
     object-fit: cover;
     border-radius: 20px;
+}
+.nav-link-btn {
+    background-color: transparent;
+    border: none;
 }
 /* responsive */
 @media (min-width: 1560px) {

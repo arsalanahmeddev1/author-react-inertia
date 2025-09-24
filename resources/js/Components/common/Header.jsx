@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
+// import '@/assets/styles/story-modal.css';
 import UserAvatar from './UserAvatar';
 import { Icons } from '../../utils/icons';
+import LoginPromptModal from '@/Components/stories/LoginPromptModal';
 
 const Header = ({ logoClass, headerClass }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { url } = usePage();
   const { auth } = usePage().props;
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -15,6 +19,19 @@ const Header = ({ logoClass, headerClass }) => {
   // Check if the current URL matches the link
   const isActive = (path) => {
     return url.startsWith(path);
+  };
+
+  // const handleOpenModal = () => {
+  //   // Only allow access if user is logged in and is NOT a guest user
+  //   if (!auth.user) {
+  //     setShowLoginPrompt(true);
+  //   } else {
+  //     window.location.href = '/community';
+  //   }
+  // };
+
+  const handleCloseLoginPrompt = () => {
+    setShowLoginPrompt(false);
   };
   return (
     <header className={`position-absolute top-0 w-100 z-3 ${headerClass}`}>
@@ -34,6 +51,7 @@ const Header = ({ logoClass, headerClass }) => {
                 <li><Link href="/about">About</Link></li>
                 <li><Link href="/stories">Stories</Link></li>
                 <li><Link href="/packages">Packages</Link></li>
+                {/* <li><button className='nav-link-btn'  onClick={handleOpenModal}>Community</button></li> */}
                 <li><Link href="/community">Community</Link></li>
                 <li><Link href="/how-it-works">How It Works</Link></li>
                 <li><Link href="/publish">Publish</Link></li>
@@ -100,7 +118,12 @@ const Header = ({ logoClass, headerClass }) => {
 
         </div>
       </div>
+      {/* <LoginPromptModal
+        show={showLoginPrompt}
+        onHide={handleCloseLoginPrompt}
+      /> */}
     </header>
+    
   )
 };
 
