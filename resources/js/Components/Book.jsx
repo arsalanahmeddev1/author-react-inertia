@@ -55,7 +55,7 @@ const Book = forwardRef(({ pages = [], onInit, onFlip, coverImage, backcoverImag
                 size="stretch"
                 minWidth={315}
                 maxWidth={1000}
-                minHeight={400}
+                minHeight={600}
                 maxHeight={1536}
                 showPageCorners={true}
                 disableFlipByClick={false}

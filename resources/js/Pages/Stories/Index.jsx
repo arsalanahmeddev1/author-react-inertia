@@ -172,7 +172,6 @@ export default function Index({ stories, genres, filters, flash }) {
                         <span className="">{story.comment_count}</span>
                       </div>
                     </div>
-                    {/* <h4 className="fs-20 text-primary-theme text-capitalize mb-20 fw-600 pl-10">{story.author}</h4> */}
                     <div className="d-flex justify-content-between align-items-center mb-20">
                       <div className='d-flex align-items-center gap-10'>
                         <i className="fas fa-eye text-primary-theme"></i>
@@ -205,7 +204,6 @@ export default function Index({ stories, genres, filters, flash }) {
                 <nav aria-label="Page navigation">
                   <ul className="pagination justify-content-center">
                     {stories.links.map((link, index) => {
-                      // Clean up pagination labels
                       let label = link.label;
                       if (label === '&laquo; Previous') {
                         label = '<i class="fas fa-chevron-left"></i>';

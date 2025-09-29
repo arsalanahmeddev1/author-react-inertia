@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function usePaginateByHeight(htmlContent, pageWidth = 460, pageHeight = 500) {
+export default function usePaginateByHeight(htmlContent, pageWidth = 460, pageHeight = 600) {
   const [pages, setPages] = useState([]);
   const [isPaginating, setIsPaginating] = useState(true);
 
@@ -13,7 +13,7 @@ export default function usePaginateByHeight(htmlContent, pageWidth = 460, pageHe
 
     setIsPaginating(true);
 
-    // Create offscreen container with proper styling that matches the book page exactly
+    // Create offscreen container with EXACT styling that matches the book page
     const container = document.createElement("div");
     container.style.cssText = `
       position: absolute;
@@ -22,99 +22,88 @@ export default function usePaginateByHeight(htmlContent, pageWidth = 460, pageHe
       width: ${pageWidth}px;
       height: auto;
       overflow: hidden;
-      font-family: 'Georgia', serif;
+      // font-family: 'Georgia', serif;
       line-height: 1.6;
       font-size: 17px;
       color: #333;
-      box-sizing: border-box;
-      background: #fefefe;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
+      // padding: 20px;
+      // box-sizing: border-box;
+      // background: #fefefe;
+      // word-wrap: break-word;
+      // text-align: justify;
     `;
     document.body.appendChild(container);
 
     try {
       const resultPages = [];
+      const availableHeight = pageHeight - 10; // Very aggressive - use almost all space
       
-      // Create a more intelligent pagination approach
-      // First, split content into manageable chunks
-      let contentChunks = [];
+      // Simple and reliable pagination approach
+      // Split content into meaningful chunks (paragraphs, lists, etc.)
+      const chunks = htmlContent.split(/(<(?:p|div|ul|ol|h[1-6])[^>]*>.*?<\/(?:p|div|ul|ol|h[1-6])>)/gi)
+        .filter(chunk => chunk.trim() && !chunk.match(/^<\/?(p|div|ul|ol|h[1-6])[^>]*>$/));
       
-      // Split by major HTML elements (paragraphs, divs, etc.)
-      const majorElements = htmlContent.split(/(<\/?(?:p|div|h[1-6]|br)[^>]*>)/i);
-      let currentChunk = '';
-      
-      for (let i = 0; i < majorElements.length; i++) {
-        const element = majorElements[i];
-        if (element.trim()) {
-          // If it's a closing tag or line break, add it to current chunk
-          if (element.match(/<\/|<br/i)) {
-            currentChunk += element;
-            if (element.match(/<\/p>|<\/div>|<br/i)) {
-              contentChunks.push(currentChunk);
-              currentChunk = '';
-            }
-          } else {
-            currentChunk += element;
-          }
-        }
-      }
-      
-      // Add any remaining content
-      if (currentChunk.trim()) {
-        contentChunks.push(currentChunk);
-      }
-      
-      // Now paginate based on these chunks
       let currentPage = '';
-      const maxAttempts = 5; // Prevent infinite loops
       
-      for (let i = 0; i < contentChunks.length; i++) {
-        const chunk = contentChunks[i];
-        const testContent = currentPage + chunk;
+      for (const chunk of chunks) {
+        if (!chunk.trim()) continue;
         
-        // Test if this content fits in the page
+        const testContent = currentPage + chunk;
         container.innerHTML = testContent;
         
-        if (container.scrollHeight > pageHeight && currentPage.trim()) {
-          // Page is full, save current page and try with the new chunk
+        // Check if adding this chunk exceeds the page height (be very aggressive)
+        if (container.scrollHeight > (availableHeight + 40) && currentPage.trim()) {
+          // Page is full, save current page
           resultPages.push(currentPage.trim());
           currentPage = chunk;
           
-          // Check if this single chunk is still too long
+          // Check if this single chunk is too long for one page
           container.innerHTML = currentPage;
-          let attempts = 0;
-          
-          while (container.scrollHeight > pageHeight && attempts < maxAttempts) {
-            attempts++;
+          if (container.scrollHeight > (availableHeight + 40)) {
+            // Split by sentences if the chunk is too long
+            const sentences = chunk.split(/(?<=[.!?])\s+/);
+            let partialContent = '';
             
-            // Split chunk further by sentences if it's too long
-            const sentences = currentPage.split(/([.!?]\s+)/);
-            let tempPage = '';
-            let remainder = '';
-            
-            for (let j = 0; j < sentences.length; j++) {
-              const sentence = sentences[j];
-              const testSentence = tempPage + sentence;
+            for (const sentence of sentences) {
+              const testSentence = partialContent + (partialContent ? ' ' : '') + sentence;
               
-              container.innerHTML = testSentence;
+              // Test with HTML wrapper if chunk has HTML tags
+              let testHTML = testSentence;
+              if (chunk.includes('<')) {
+                const openTag = chunk.match(/<[^>]+>/)?.[0] || '';
+                const closeTag = chunk.match(/<\/[^>]+>/)?.[0] || '';
+                testHTML = openTag + testSentence + closeTag;
+              }
               
-              if (container.scrollHeight > pageHeight && tempPage.trim()) {
-                // Save the current temp page and continue with remainder
-                if (tempPage.trim()) {
-                  resultPages.push(tempPage.trim());
+              container.innerHTML = testHTML;
+              
+              if (container.scrollHeight > (availableHeight + 40) && partialContent.trim()) {
+                // Save this partial page
+                let finalHTML = partialContent;
+                if (chunk.includes('<')) {
+                  const openTag = chunk.match(/<[^>]+>/)?.[0] || '';
+                  const closeTag = chunk.match(/<\/[^>]+>/)?.[0] || '';
+                  finalHTML = openTag + partialContent + closeTag;
                 }
-                tempPage = '';
-                remainder = sentences.slice(j).join('');
-                break;
+                resultPages.push(finalHTML.trim());
+                partialContent = sentence;
               } else {
-                tempPage = testSentence;
+                partialContent = testSentence;
               }
             }
             
-            currentPage = remainder || tempPage;
-            container.innerHTML = currentPage;
+            // Handle remaining content
+            if (partialContent.trim()) {
+              let finalHTML = partialContent;
+              if (chunk.includes('<')) {
+                const openTag = chunk.match(/<[^>]+>/)?.[0] || '';
+                const closeTag = chunk.match(/<\/[^>]+>/)?.[0] || '';
+                finalHTML = openTag + partialContent + closeTag;
+              }
+              currentPage = finalHTML;
+            } else {
+              currentPage = '';
+            }
           }
         } else {
           // Add chunk to current page
@@ -133,17 +122,11 @@ export default function usePaginateByHeight(htmlContent, pageWidth = 460, pageHe
       console.log('Pagination result:', {
         originalLength: htmlContent.length,
         pagesCreated: validPages.length,
-        pageHeights: validPages.map((page, index) => {
-          container.innerHTML = page;
-          return {
-            pageIndex: index,
-            height: container.scrollHeight,
-            contentLength: page.length
-          };
-        }),
-        pages: validPages.map((page, index) => ({
-          index: index,
-          preview: page.substring(0, 100) + (page.length > 100 ? '...' : '')
+        pagePreview: validPages.map((page, index) => ({
+          pageNumber: index + 1,
+          contentPreview: page.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
+          contentLength: page.length,
+          hasHTML: page.includes('<')
         }))
       });
       
