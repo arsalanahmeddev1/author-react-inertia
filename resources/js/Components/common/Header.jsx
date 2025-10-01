@@ -35,7 +35,7 @@ const Header = ({ logoClass, headerClass }) => {
   };
   return (
     <header className={`position-absolute top-0 w-100 z-3 ${headerClass}`}>
-      <div className="container-xxl">
+      <div className="container">
         <div className="d-flex align-items-center justify-content-between">
           <div className="">
             <div className="logo">

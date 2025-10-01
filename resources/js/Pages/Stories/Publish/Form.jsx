@@ -9,7 +9,7 @@ import { Icons } from '@/utils/icons';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
-const CheckoutForm = ({ story, character, storyText, package: packageData, finalPrice, discountApplied, discountCode, discountAmount, originalPrice }) => {
+const CheckoutForm = ({ story, character, storyText, package: packageData, finalPrice, discountApplied, discountCode, discountAmount, originalPrice, rating }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState('');
@@ -85,6 +85,7 @@ const CheckoutForm = ({ story, character, storyText, package: packageData, final
         content: storyText,
         title: story.title,
         genre: story.genre,
+        rating: rating,
         cover_image: story.cover_image,
         package_id: packageData.id,
         package_name: packageData.name,
@@ -274,7 +275,7 @@ const CheckoutForm = ({ story, character, storyText, package: packageData, final
   );
 };
 
-const Form = ({ prefill, story, package: packageData }) => {
+const Form = ({ prefill, story, package: packageData, ratings = [] }) => {
   const { auth } = usePage().props;
   
   // Function to strip HTML tags and clean up text
@@ -299,6 +300,7 @@ const Form = ({ prefill, story, package: packageData }) => {
   const [formData, setFormData] = useState({
     title: story.title || '',
     genre: story.genre || '',
+    rating: story.rating || '',
     character: prefill.character_name || '',
     content: stripHtmlTags(prefill.content || ''),
   });
@@ -425,6 +427,23 @@ const Form = ({ prefill, story, package: packageData }) => {
                     <TextInput type="text" className="input-field" id="title" value={story.genre} name="title" readOnly />
                   </div>
                   <div className="field-wrapper">
+                    <label className='label-field' htmlFor="rating">Content Rating</label>
+                    <select 
+                      className="input-field" 
+                      id="rating" 
+                      name="rating" 
+                      value={formData.rating}
+                      onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
+                    >
+                      <option value="">Select Rating</option>
+                      {ratings.map((rating) => (
+                        <option key={rating.id} value={rating.name}>
+                          {rating.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="field-wrapper">
                     <label className='label-field' htmlFor="title">Description</label>
                     <textarea name="your_story" className="input-field textarea-field" value={storyText} id="your_story" readOnly></textarea>
                   </div>
@@ -485,6 +504,7 @@ const Form = ({ prefill, story, package: packageData }) => {
                     discountCode={discountCode}
                     discountAmount={discountAmount}
                     originalPrice={originalPrice}
+                    rating={formData.rating}
                   />
                 </div>
               </div>

@@ -11,7 +11,7 @@ import '@/assets/styles/character-modal.css';
 import LikeCount from '@/Components/stories/LikeCount';
 
 
-export default function Show({ story }) {
+export default function Show({ story, ratings }) {
   const { auth } = usePage().props;
   const [showModal, setShowModal] = useState(false);
   const [showCharacterModal, setShowCharacterModal] = useState(false);
@@ -101,9 +101,14 @@ export default function Show({ story }) {
                     <div className="d-flex justify-content-between align-items-center mb-3">
                     </div>
                     <div className="mb-3">
-                      <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
+                      <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block me-2">
                         {story.genre}
                       </span>
+                      {story.rating && (
+                        <span className="label bg-primary-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
+                          {story.rating}
+                        </span>
+                      )}
                     </div>
                     {story.style && (
                       <div className="mb-3">
@@ -175,6 +180,7 @@ export default function Show({ story }) {
         show={showModal}
         onHide={handleCloseModal}
         story={story}
+        ratings={ratings}
       />
 
       <CharacterModal

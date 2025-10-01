@@ -28,13 +28,13 @@ const themeColors = {
   secondary: '#74989E',
 };
 
-const Create = ({ flash }) => {
+const Create = ({ flash, ratings = [] }) => {
   const { data, setData, post, processing, errors, reset } = useForm({
     title: '',
     description: '',
     author: '',
     genre: '',
-    style: '',
+    rating: '',
     content: '',
     cover_image: null,
     characters: []
@@ -114,6 +114,7 @@ const Create = ({ flash }) => {
         else if (errors.description) errorMessage = errors.description;
         else if (errors.author) errorMessage = errors.author;
         else if (errors.genre) errorMessage = errors.genre;
+        else if (errors.rating) errorMessage = errors.rating;
         else if (errors.content) errorMessage = errors.content;
         else if (errors.cover_image) errorMessage = errors.cover_image;
         else if (errors.backcover_image) errorMessage = errors.backcover_image;
@@ -223,15 +224,21 @@ const Create = ({ flash }) => {
                   </CCol>
                   
                   <CCol md={6}>
-                    <CFormLabel htmlFor="style">Writing Style</CFormLabel>
-                    <CFormInput
-                      id="style"
-                      value={data.style}
-                      onChange={(e) => setData('style', e.target.value)}
-                      invalid={errors.style}
-                      feedback={errors.style}
-                      placeholder="e.g., Gothic, Victorian, Modern, etc."
-                    />
+                     <CFormLabel htmlFor="rating">Content Rating</CFormLabel>
+                     <CFormSelect
+                       id="rating"
+                       value={data.rating}
+                       onChange={(e) => setData('rating', e.target.value)}
+                       invalid={errors.rating}
+                       feedback={errors.rating}
+                       options={[
+                         { value: '', label: 'Select a rating' },
+                         ...ratings.map(rating => ({
+                           value: rating.name,
+                           label: rating.name
+                         }))
+                       ]}
+                     />
                    
                   </CCol>
                 </CRow>

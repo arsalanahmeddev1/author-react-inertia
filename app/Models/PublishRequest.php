@@ -17,6 +17,7 @@ class PublishRequest extends Model
         'title',
         'character',
         'genre',
+        'rating',
         'content',
         'status',
         'payment_status',

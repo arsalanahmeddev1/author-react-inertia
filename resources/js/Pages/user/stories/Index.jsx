@@ -184,7 +184,12 @@ const Index = ({ communityStories, publishedStories, publishRequests, flash }) =
             )}
             <div>
               <div className="fw-bold">{story.title || 'Untitled'}</div>
-              <small className="text-muted">{story.genre || 'No genre'}</small>
+              <div className="d-flex gap-2 align-items-center mt-1">
+                <small className="text-muted">{story.genre || 'No genre'}</small>
+                {story.rating && (
+                  <CBadge color="warning" size="sm">{story.rating}</CBadge>
+                )}
+              </div>
             </div>
           </div>
         </CTableDataCell>

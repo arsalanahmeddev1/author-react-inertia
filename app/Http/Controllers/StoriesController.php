@@ -98,9 +98,13 @@ class StoriesController extends Controller
     {
         // Load the characters for this story
         $story->load('characters');
+        
+        // Get all ratings for the rating selector
+        $ratings = \App\Models\Rating::orderBy('name')->get();
 
         return Inertia::render('Stories/Show', [
             'story' => $story,
+            'ratings' => $ratings,
         ]);
     }
 
@@ -171,6 +175,7 @@ class StoriesController extends Controller
             'content' => 'required|string',
             'character_id' => 'nullable|integer',
             'original_story_id' => 'required|integer|exists:stories,id',
+            'rating' => 'nullable|string|exists:ratings,name',
         ]);
 
         // Check daily word limit before creating the story
@@ -210,6 +215,7 @@ class StoriesController extends Controller
         $story->description = "A continuation of \"{$originalStory->title}\" by {$user->name}";
         $story->author = $user->name;
         $story->genre = $originalStory->genre;
+        $story->rating = $data['rating'] ?? $originalStory->rating;
         $story->cover_image = $originalStory->cover_image;
         $story->content = $data['content'];
         $story->read_count = 0;
@@ -292,7 +298,8 @@ class StoriesController extends Controller
         return Inertia::render('Stories/Publish/Form', [
             'prefill' => $prefill,
             'story' => $story,
-            'package' => $packageData
+            'package' => $packageData,
+            'ratings' => \App\Models\Rating::orderBy('name')->get()
         ]);
     }
 
@@ -385,6 +392,7 @@ class StoriesController extends Controller
                 'content' => 'required',
                 'title' => 'required',
                 'genre' => 'required',
+                'rating' => 'nullable|string|exists:ratings,name',
             ]);
 
             // Get the story to access its cover_image
@@ -397,6 +405,7 @@ class StoriesController extends Controller
                 'title' => $request->title,
                 'character' => $request->character,
                 'genre' => $request->genre,
+                'rating' => $request->rating ?? $story->rating,
                 'content' => $request->content,
                 'status' => 'pending',
             ]);

@@ -52,7 +52,7 @@ const Testimonials = () => {
   };
   return (
     <section className='testimonials-sec'>
-      <div className='container-xxl'>
+      <div className='container'>
         <div className='row row-gap-40 justify-content-center justify-content-lg-start'>
           <div className='col-lg-4'>
             <div className='testimonials-title'>

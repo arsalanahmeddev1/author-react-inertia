@@ -21,6 +21,7 @@ class Story extends Model
         'description',
         'author',
         'genre',
+        'rating',
         'cover_image',
         'backcover_image',
         'read_count',
@@ -41,6 +42,11 @@ class Story extends Model
     protected $attributes = [
         'is_community' => false,
     ];
+
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
 
     public function scopeCommunity($query)
     {
@@ -132,8 +138,34 @@ class Story extends Model
         return $this->created_at ? $this->created_at->format('d M Y') : 'N/A';
     }
 
-    public function user()
+    public static function getGenres()
     {
-        return $this->belongsTo(User::class);
+        return self::whereNotNull('genre')->distinct()->pluck('genre');
+    }
+
+    public static function getRatings()
+    {
+        return self::whereNotNull('rating')->distinct()->pluck('rating');
+    }
+    
+
+    public function scopeFilter($query, $filters)
+    {
+        if (!empty($filters['genre']) && $filters['genre'] !== 'all') {
+            $query->where('genre', $filters['genre']);
+        }
+
+        if (!empty($filters['rating']) && $filters['rating'] !== 'all') {
+            $query->where('rating', $filters['rating']);
+        }
+
+        if (!empty($filters['search'])) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('title', 'like', "%{$filters['search']}")
+                    ->orWhere('description', 'like', "%{$filters['search']}%")
+                    ->orWhere('author', 'like', "%{$filters['search']}%");
+            });
+        }
+        return $query;
     }
 }

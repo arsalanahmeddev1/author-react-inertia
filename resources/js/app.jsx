@@ -11,6 +11,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 // Import HelmetProvider
 import { HelmetProvider } from 'react-helmet-async';
+import LoaderWrapper from '@/Components/LoaderWrapper/Index';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -31,7 +32,9 @@ createInertiaApp({
                
 
                 {/* Render the app */}
+                <LoaderWrapper>
                 <App {...props} />
+                </LoaderWrapper>
             </HelmetProvider>
         );
     },

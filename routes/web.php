@@ -31,6 +31,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\Admin\PackagesController as AdminPackagesController;
 use App\Http\Controllers\Admin\PublishPackageController as AdminPublishPackageController;
 use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionController;
+use App\Http\Controllers\Admin\RatingController as AdminRatingController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // google auth 
@@ -164,6 +165,9 @@ Route::prefix('admin-dashboard')->name('admin-dashboard.')->middleware(['auth', 
     Route::post('coupons', [\App\Http\Controllers\Admin\CouponController::class, 'store'])->name('coupons.store');
     Route::put('coupons/{coupon}', [\App\Http\Controllers\Admin\CouponController::class, 'update'])->name('coupons.update');
     Route::delete('coupons/{coupon}', [\App\Http\Controllers\Admin\CouponController::class, 'destroy'])->name('coupons.destroy');
+
+    // Rating routes
+    Route::resource('ratings', \App\Http\Controllers\Admin\AdminRatingController::class);
 
 });
 

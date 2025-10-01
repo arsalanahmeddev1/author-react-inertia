@@ -81,7 +81,7 @@ const Home = () => {
       <Head title="Home" />
       <HeroBanner />
       <section className='fearured-stories'>
-        <div className="container-xxl">
+        <div className="container">
           <div className="row row-gap-40">
             <div className="col-lg-6">
               <h2 className='hd-lg fw-500 mb-40 text-center text-lg-start'>Featured Stories</h2>
@@ -139,11 +139,11 @@ const Home = () => {
         </div>
       </section>
       <section className="signin-bg position-relative">
-        <div className="container-xxl">
+        <div className="container">
           <img src="/assets/images/signin-book.png" alt="signin-book" className='signin-book position-absolute' />
           <img src="/assets/images/signin-right.png" alt="signin-right" className='signin-right position-absolute bottom-0 end-0' />
           <div className="row text-center text-lg-start">
-            <div className="col-lg-7">
+            <div className="col-lg-6">
               <h2 className="hd-md mb-20 text-white" style={{ maxWidth: "770px" }}>
                 {auth?.user ? (
                   <>
@@ -189,11 +189,11 @@ const Home = () => {
         </div>
       </section>
       <section className='collection-sec'>
-        <div className="container-xxl">
+        <div className="container">
           <h2 className='hd-md fw-500 mb-70 uppercase text-center'>Our Collection</h2>
           <div className="row justify-content-center row-gap-40">
             {latestStories && latestStories.slice(0, 3).map((story, index) => (
-              <div key={story.id} className="col-12 col-lg-12 col-xl-4">
+              <div key={story.id} className="col-12 col-lg-4 col-xl-4">
                 <div className="collection-card d-flex justify-content-center align-items-center gap-20" >
                   <div className="collection-card-img" >
                     <img

@@ -3,7 +3,7 @@ import { Icons } from '../../utils/icons';
 const Footer = () => {
   return (
     <footer className='footer'>
-      <div className="container-xxl">
+      <div className="container">
         <div className="footer-content">
           <div className="row justify-content-between row-gap-40">
             <div className="col-lg-2">

@@ -5,13 +5,14 @@ import LikeCount from '@/Components/stories/LikeCount';
 import { debounce } from 'lodash';
 import '@/assets/styles/stories.css';
 
-export default function CommunityIndex({ stories, genres, filters }) {
+export default function CommunityIndex({ stories, genres, filters, ratings }) {
   const [search, setSearch] = useState(filters.search || '');
   const [genre, setGenre] = useState(filters.genre || 'all');
+  const [rating, setRating] = useState(filters.rating || 'all');
 
   // Debounce the search to avoid too many requests
   const debouncedSearch = debounce((value) => {
-    router.get(route('community.index'), { search: value, genre }, { preserveState: true });
+    router.get(route('community.index'), { search: value, genre, rating }, { preserveState: true });
   }, 300);
 
   // Handle search input change
@@ -25,6 +26,11 @@ export default function CommunityIndex({ stories, genres, filters }) {
     const selectedGenre = e.target.value;
     setGenre(selectedGenre);
     router.get(route('community.index'), { search, genre: selectedGenre }, { preserveState: true });
+  };
+  const handleRatingChange = (e) => {
+    const selectedRating = e.target.value;
+    setRating(selectedRating);
+    router.get(route('community.index'), { search, rating: selectedRating }, { preserveState: true });
   };
 
   // Clean up debounce on unmount
@@ -84,6 +90,18 @@ export default function CommunityIndex({ stories, genres, filters }) {
                     ))}
                   </select>
                 </div>
+                <div>
+                  <select
+                    className="form-select secondry-font"
+                    value={rating}
+                    onChange={handleRatingChange}
+                  >
+                    <option value="all">All Ratings</option>
+                    {ratings.map((g) => (
+                      <option key={g} value={g}>{g}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -131,10 +149,16 @@ export default function CommunityIndex({ stories, genres, filters }) {
                       </div>
                     </div>
                     <div className="d-flex justify-content-between align-items-center mb-20 pl-10">
-                      <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
-                        {story.genre}
-                      </span>
-
+                      <div className="d-flex gap-10 align-items-center">
+                        <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
+                          {story.genre}
+                        </span>
+                        {story.rating && (
+                          <span className="label bg-primary-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
+                            {story.rating}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <Link href={route('community.show', story.id)} className="btn btn-primary">Story Details</Link>
                   </div>

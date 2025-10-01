@@ -14,30 +14,40 @@ class CommunityController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Story::where('is_community', true)->where('status', 'approved');
+        // $query = Story::where('is_community', true)->where('status', 'approved');
+        
+        $stories = Story::where('is_community', true)
+         ->where('status', 'approved')
+         ->filter($request->only(['search', 'genre', 'rating']))
+         ->latest()
+         ->paginate(9)
+         ->withQueryString();
 
-        // Filter by genre if provided
-        if ($request->has('genre') && $request->genre !== 'all') {
-            $query->where('genre', $request->genre);
-        }
+        $genres = Story::getGenres();
+        $rating = Story::getRatings();
 
         // Search by title, description, or author if provided
-        if ($request->has('search') && !empty($request->search)) {
-            $query->where(function($q) use ($request) {
-                $q->where('title', 'like', "%{$request->search}%")
-                  ->orWhere('description', 'like', "%{$request->search}%")
-                  ->orWhere('author', 'like', "%{$request->search}%");
-            });
-        }
+        // if ($request->has('search') && !empty($request->search)) {
+        //     $query->where(function ($q) use ($request) {
+        //         $q->where('title', 'like', "%{$request->search}%")
+        //             ->orWhere('description', 'like', "%{$request->search}%")
+        //             ->orWhere('author', 'like', "%{$request->search}%");
+        //     });
+        // }
 
         // Get all available genres for the filter dropdown
-        $genres = Story::where('is_community', true)
-                      ->whereNotNull('genre')
-                      ->distinct()
-                      ->pluck('genre');
+        // $genres = Story::where('is_community', true)
+        //     ->whereNotNull('genre')
+        //     ->distinct()
+        //     ->pluck('genre');
+
+        // $rating = Story::whereNotNull('rating')
+        //     ->distinct()
+        //     ->pluck('rating');
+        // dd($rating);
 
         // Paginate the results - use fresh() to ensure we get the latest data
-        $stories = $query->latest()->paginate(9)->withQueryString();
+        // $stories = $query->latest()->paginate(9)->withQueryString();
 
         // We'll keep the data refresh to ensure accurate counts
         // but we won't force a page refresh in the frontend
@@ -45,10 +55,12 @@ class CommunityController extends Controller
             $stories[$key] = $story->fresh();
         }
 
+
         return Inertia::render('Community/Index', [
             'stories' => $stories,
             'genres' => $genres,
-            'filters' => $request->only(['search', 'genre']),
+            'ratings' => $rating,
+            'filters' => $request->only(['search', 'genre', 'ratings']),
         ]);
     }
 

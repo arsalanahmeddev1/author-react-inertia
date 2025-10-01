@@ -3,7 +3,7 @@ import { Tab, Nav } from 'react-bootstrap';
 import { usePage, router } from '@inertiajs/react';
 import axios from 'axios';
 
-const StoryModal = ({ show, onHide, story }) => {
+const StoryModal = ({ show, onHide, story, ratings = [] }) => {
   const { auth } = usePage().props;
   const [activeTab, setActiveTab] = useState('continue');
   const [storyContent, setStoryContent] = useState('');
@@ -17,9 +17,16 @@ const StoryModal = ({ show, onHide, story }) => {
   const [showLimitExceededModal, setShowLimitExceededModal] = useState(false);
   const [dailyWordUsage, setDailyWordUsage] = useState(0);
   const [monthlyStoryUsage, setMonthlyStoryUsage] = useState(0);
+  const [selectedRating, setSelectedRating] = useState('');
 
   // Check if user has active subscription
   const hasActiveSubscription = auth.user?.subscription?.stripe_status === 'active';
+
+  // Rating options from database
+  const ratingOptions = ratings.map(rating => ({
+    value: rating.name,
+    label: rating.name
+  }));
 
   // Reset state when modal is opened
   useEffect(() => {
@@ -29,6 +36,8 @@ const StoryModal = ({ show, onHide, story }) => {
       setSelectedCharacter('');
       setCharacterDetails(null);
       setShowLimitExceededModal(false);
+      // Set default rating from the original story
+      setSelectedRating(story?.rating || 'PG');
       if (editorRef.current) {
         editorRef.current.innerHTML = '';
       }
@@ -39,7 +48,7 @@ const StoryModal = ({ show, onHide, story }) => {
         loadUsageData();
       }
     }
-  }, [show]);
+  }, [show, story?.rating]);
 
   // Load drafts from the API
   const loadDrafts = async () => {
@@ -268,6 +277,7 @@ const StoryModal = ({ show, onHide, story }) => {
         content: content,
         character_id: selectedCharacter || null,
         original_story_id: story.id,
+        rating: selectedRating,
       };
 
       // Make the API call
@@ -325,6 +335,7 @@ const StoryModal = ({ show, onHide, story }) => {
         content: draft.htmlContent || `<p>${draft.content}</p>`,
         character_id: draft.characterId || null,
         original_story_id: story.id,
+        rating: selectedRating,
       };
 
       // Make the API call
@@ -558,7 +569,7 @@ const StoryModal = ({ show, onHide, story }) => {
                 <div className="mb-20">
                   <label className="form-label secondry-font fs-18">Select Character</label>
                   <select
-                    className="form-select character-select mb-3"
+                    className="form-select character-select mb-20"
                     value={selectedCharacter}
                     onChange={handleCharacterChange}
                   >
@@ -576,6 +587,26 @@ const StoryModal = ({ show, onHide, story }) => {
                       <p className="fs-16 mb-0">{characterDetails.description}</p>
                     </div>
                   )}
+
+                  {/* Rating Selection */}
+                  <div className="">
+                    <label className="form-label secondry-font fs-18">Content Rating</label>
+                    <select
+                      className="form-select rating-select"
+                      value={selectedRating}
+                      onChange={(e) => setSelectedRating(e.target.value)}
+                    >
+                      {ratingOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    {/* <small className="text-muted mt-1 d-block">
+                      <i className="fas fa-info-circle me-1"></i>
+                      Original story rating: <strong>{story?.rating || 'Not set'}</strong>
+                    </small> */}
+                  </div>
 
                                     {/* Usage Display */}
                   {hasActiveSubscription && auth.user?.subscription?.package && (

@@ -84,7 +84,11 @@ class StoriesController extends Controller
 
     public function create()
     {
-        return Inertia::render('admin/stories/Create');
+        $ratings = \App\Models\Rating::orderBy('name')->get();
+        
+        return Inertia::render('admin/stories/Create', [
+            'ratings' => $ratings
+        ]);
     }
 
     /**
@@ -97,7 +101,7 @@ class StoriesController extends Controller
             'description' => 'required|string',
             'author' => 'required|string|max:255',
             'genre' => 'required|string|max:100',
-            'style' => 'nullable|string|max:255',
+            'rating' => 'nullable|string|exists:ratings,name',
             'content' => 'required|string',
             'cover_image' => 'nullable|image|max:2048', // Max 2MB
             'backcover_image' => 'required|image|max:2048', // Max 2MB
@@ -111,9 +115,8 @@ class StoriesController extends Controller
             'description' => $validated['description'],
             'author' => $validated['author'],
             'genre' => $validated['genre'],
-            'style' => $validated['style'] ?? null,
+            'rating' => $validated['rating'] ?? null,
             'content' => $validated['content'],
-            'backcover_image' => $validated['backcover_image'],
             'is_community' => false, // Admin-created stories are not community stories
             'read_count' => 0,
             'likes_count' => 0,
@@ -171,9 +174,12 @@ class StoriesController extends Controller
     {
         // Load the characters relationship
         $story->load('characters');
+        
+        $ratings = \App\Models\Rating::orderBy('name')->get();
 
         return Inertia::render('admin/stories/Edit', [
             'story' => $story,
+            'ratings' => $ratings,
         ]);
     }
 
@@ -184,7 +190,7 @@ class StoriesController extends Controller
             'description' => 'required|string',
             'author' => 'required|string|max:255',
             'genre' => 'required|string|max:100',
-            'style' => 'nullable|string|max:255',
+            'rating' => 'nullable|string|exists:ratings,name',
             'content' => 'required|string',
             'cover_image' => 'nullable|image|max:2048', // Max 2MB
             'backcover_image' => 'nullable|image|max:2048', // Max 2MB
@@ -200,7 +206,7 @@ class StoriesController extends Controller
             'description' => $validated['description'],
             'author' => $validated['author'],
             'genre' => $validated['genre'],
-            'style' => $validated['style'] ?? $story->style,
+            'rating' => $validated['rating'] ?? $story->rating,
             'content' => $validated['content'],
         ];
 

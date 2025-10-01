@@ -159,6 +159,24 @@ const adminNav = [
       },
     ],
   },
+  {
+    component: CNavGroup,
+    name: 'Ratings',
+    to: '/admin-dashboard/ratings',
+    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'List',
+        to: '/admin-dashboard/ratings',
+      },
+      {
+        component: CNavItem,
+        name: 'Create',
+        to: '/admin-dashboard/ratings/create',
+      },
+    ],
+  },
 ]
 
 const userNav = [

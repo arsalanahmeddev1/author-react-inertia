@@ -203,7 +203,7 @@ const PublishSuccess = ({ publishRequest, session }) => {
                 <div className="d-flex flex-column flex-md-row gap-3 justify-content-center">
                   <Link href="/stories" className="btn btn-primary btn-lg">
                     <Icons.Book className="me-2" />
-                    View My Stories
+                    View Stories
                   </Link>
                     {/* <Link href="/stories/create" className="btn btn-outline-primary btn-lg">
                       <Icons.Plus className="me-2" />

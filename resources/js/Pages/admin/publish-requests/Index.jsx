@@ -102,6 +102,7 @@ function Index({ publishRequests, flash }) {
                                         <CTableHeaderCell scope="col">Title</CTableHeaderCell>
                                         <CTableHeaderCell scope="col">Cover Image</CTableHeaderCell>
                                         <CTableHeaderCell scope="col">Genre</CTableHeaderCell>
+                                        <CTableHeaderCell scope="col">Rating</CTableHeaderCell>
                                         <CTableHeaderCell scope="col">Character</CTableHeaderCell>
                                         <CTableHeaderCell scope="col">Content</CTableHeaderCell>
                                         <CTableHeaderCell scope="col">Author</CTableHeaderCell>
@@ -129,6 +130,13 @@ function Index({ publishRequests, flash }) {
                                                     )}
                                                 </CTableDataCell>
                                                 <CTableDataCell>{request.genre}</CTableDataCell>
+                                                <CTableDataCell>
+                                                    {request.rating ? (
+                                                        <CBadge color="warning">{request.rating}</CBadge>
+                                                    ) : (
+                                                        <span className="text-muted">Not set</span>
+                                                    )}
+                                                </CTableDataCell>
                                                 <CTableDataCell>{request.character}</CTableDataCell>
                                                 <CTableDataCell>
                                                     <CTooltip content={request.content}>
@@ -171,7 +179,7 @@ function Index({ publishRequests, flash }) {
                                         ))
                                     ) : (
                                         <CTableRow>
-                                            <CTableDataCell colSpan="11" className="text-center">
+                                            <CTableDataCell colSpan="12" className="text-center">
                                                 No publish requests found
                                             </CTableDataCell>
                                         </CTableRow>
@@ -223,10 +231,22 @@ function Index({ publishRequests, flash }) {
                             </div>
                             <div className="row mb-3">
                                 <div className="col-md-6">
-                                    <strong>Character:</strong> {selectedRequest.character}
+                                    <strong>Rating:</strong> {selectedRequest.rating ? (
+                                        <CBadge color="warning">{selectedRequest.rating}</CBadge>
+                                    ) : (
+                                        <span className="text-muted">Not set</span>
+                                    )}
                                 </div>
                                 <div className="col-md-6">
+                                    <strong>Character:</strong> {selectedRequest.character}
+                                </div>
+                            </div>
+                            <div className="row mb-3">
+                                <div className="col-md-6">
                                     <strong>Status:</strong> {getStatusBadge(selectedRequest.status)}
+                                </div>
+                                <div className="col-md-6">
+                                    <strong>Submitted:</strong> {new Date(selectedRequest.created_at).toLocaleString()}
                                 </div>
                             </div>
                             <div className="row mb-3">

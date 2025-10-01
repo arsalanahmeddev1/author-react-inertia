@@ -158,11 +158,17 @@ export default function Index({ stories, genres, filters, flash }) {
               stories.data.map((story) => (
                 <div className="col-lg-4 col-md-6" key={story.id}>
                   <div className="cards" data-aos-duration="3000" data-aos="flip-left">
-                    <img
-                      src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'}
-                      className="mb-20 w-100 story-book-img"
-                      alt={story.title}
-                    />
+                    <div className="position-relative">
+                      {/* <div className="badge-wrapper">
+                        <img src="/assets/images/badge-01.png" alt="badge" className="w-100 h-100" />
+                        <span className="fs-18 text-white">{story.rating}</span>
+                      </div> */}
+                      <img
+                        src={story.cover_image ? `/storage/${story.cover_image}` : '/assets/images/default-cover.jpg'}
+                        className="mb-20 w-100 story-book-img"
+                        alt={story.title}
+                      />
+                    </div>
                     <div className="d-flex align-items-center justify-content-between mb-10">
                       <h4 className="light-black fs-36 fw-600">{story.title}</h4>
                       <div className='d-flex align-items-center gap-10'>
@@ -177,13 +183,19 @@ export default function Index({ stories, genres, filters, flash }) {
                         <i className="fas fa-eye text-primary-theme"></i>
                         <h6 className="text-black fs-18 mb-0">{story.read_count} {story.read_count > 1 ? 'Reads' : 'Read'}</h6>
                       </div>
-                        <LikeCount className='gap-10' storyId={story.id} />
+                      <LikeCount className='gap-10' storyId={story.id} />
                     </div>
                     <div className="d-flex justify-content-between align-items-center mb-20">
-                      <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
-                        {story.genre}
-                      </span>
-
+                      <div className="d-flex gap-10 align-items-center">
+                        <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
+                          {story.genre}
+                        </span>
+                        {story.rating && (
+                          <span className="label bg-primary-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
+                            {story.rating}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <Link href={route('stories.show', story.id)} className="btn btn-primary">Story Details</Link>
                   </div>

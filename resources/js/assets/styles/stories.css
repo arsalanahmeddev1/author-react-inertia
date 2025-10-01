@@ -259,7 +259,6 @@
   cursor: pointer;
   min-width: 180px;
   border: none;
-  background-image: none; /* Removes default arrow in some browsers */
 }
 
 /* Remove default arrow in IE */

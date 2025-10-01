@@ -278,7 +278,14 @@ const Community = ({ stories, flash }) => {
                         </CTableDataCell>
                         <CTableDataCell>{story.title}</CTableDataCell>
                         <CTableDataCell>{story.author}</CTableDataCell>
-                        <CTableDataCell>{story.genre}</CTableDataCell>
+                        <CTableDataCell>
+                          <div className="d-flex gap-2 align-items-center">
+                            <CBadge color="info">{story.genre}</CBadge>
+                            {story.rating && (
+                              <CBadge color="warning">{story.rating}</CBadge>
+                            )}
+                          </div>
+                        </CTableDataCell>
                         <CTableDataCell>
                           <CBadge color={story.is_community ? 'info' : 'success'}>
                             {story.is_community ? 'Community' : 'Standard'}

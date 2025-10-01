@@ -38,7 +38,7 @@ export default function Read({ story, auth }) {
         460, // width (same as flipbook)
         600, // height (same as flipbook)
     );
-    
+
     // Debug log
     console.log('Story content:', storyContent);
     console.log('Story pages:', storyPages);
@@ -60,7 +60,7 @@ export default function Read({ story, auth }) {
             bookRef.current?.pageFlip()?.flipNext();
         }
     };
-    
+
     const flipPrev = () => {
         // Check if we can go to previous page
         if (currentPage > 0) {
@@ -306,6 +306,11 @@ export default function Read({ story, auth }) {
                                             <i className="fas fa-bookmark me-2"></i>{" "}
                                             {story.genre}
                                         </span>
+                                        {story.rating && (
+                                            <span className="label bg-primary-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
+                                                {story.rating}
+                                            </span>
+                                        )}
                                         {story.style && (
                                             <span className="label bg-primary-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
                                                 <i className="fas fa-pen-fancy me-2"></i>{" "}

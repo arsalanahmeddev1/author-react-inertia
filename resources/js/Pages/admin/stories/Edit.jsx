@@ -29,13 +29,13 @@ const themeColors = {
   secondary: '#74989E',
 };
 
-const Edit = ({ story, flash }) => {
+const Edit = ({ story, flash, ratings = [] }) => {
   const { data, setData, post, processing, errors } = useForm({
     title: story.title || '',
     description: story.description || '',
     author: story.author || '',
     genre: story.genre || '',
-    style: story.style || '',
+    rating: story.rating || '',
     content: story.content || '',
     cover_image: null,
     backcover_image: null,
@@ -122,6 +122,7 @@ const Edit = ({ story, flash }) => {
         else if (errors.description) errorMessage = errors.description;
         else if (errors.author) errorMessage = errors.author;
         else if (errors.genre) errorMessage = errors.genre;
+        else if (errors.rating) errorMessage = errors.rating;
         else if (errors.content) errorMessage = errors.content;
         else if (errors.cover_image) errorMessage = errors.cover_image;
 
@@ -206,6 +207,13 @@ const Edit = ({ story, flash }) => {
     { value: 'Horror', label: 'Horror' },
     { value: 'Historical Fiction', label: 'Historical Fiction' },
   ];
+  const ratingOptions = [
+    { value: '', label: 'Select a rating' },
+    ...ratings.map(rating => ({
+      value: rating.name,
+      label: rating.name
+    }))
+  ]
 
   return (
     <DashboardLayout>
@@ -263,16 +271,16 @@ const Edit = ({ story, flash }) => {
                   </CCol>
 
                   <CCol md={6}>
-                    <CFormLabel htmlFor="style">Writing Style</CFormLabel>
-                    <CFormInput
-                      id="style"
-                      value={data.style}
-                      onChange={(e) => setData('style', e.target.value)}
-                      invalid={errors.style}
-                      placeholder="e.g., Gothic, Victorian, Modern, etc."
+                    <CFormLabel htmlFor="rating">Content Rating</CFormLabel>
+                    <CFormSelect
+                      id="rating"
+                      value={data.rating}
+                      onChange={(e) => setData('rating', e.target.value)}
+                      invalid={errors.rating}
+                      options={ratingOptions}
                     />
-                    {errors.style && (
-                      <div className="text-danger">{errors.style}</div>
+                    {errors.rating && (
+                      <div className="text-danger">{errors.rating}</div>
                     )}
                   </CCol>
                 </CRow>
@@ -296,7 +304,7 @@ const Edit = ({ story, flash }) => {
                 <CRow className="mb-3">
                   <CCol md={6}>
                     <CFormLabel htmlFor="cover_image">Cover</CFormLabel>
-                    
+
                     <CFormInput
                       type="file"
                       id="cover_image"

@@ -25,7 +25,7 @@ export default function CustomAuthLayout({ children, title }) {
           <div className="col-lg-5 col-md-8 col-sm-10">
             <button
               type="button"
-              className="bg-transparent d-flex w-100  justify-content-center align-items-center gap-10 border-0 text-primary-theme fw-600 mb-10"
+              className="bg-transparent d-flex w-100  justify-content-center align-items-center gap-10 border-0 text-black fw-600 mb-10"
               onClick={() => window.history.back()}>
             <Icons.ArrowLeft />
               Go Back
