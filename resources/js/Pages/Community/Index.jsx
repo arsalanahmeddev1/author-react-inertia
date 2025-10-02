@@ -12,7 +12,7 @@ export default function CommunityIndex({ stories, genres, filters, ratings }) {
 
   // Debounce the search to avoid too many requests
   const debouncedSearch = debounce((value) => {
-    router.get(route('community.index'), { search: value, genre, rating }, { preserveState: true });
+    router.get(route('community.index'), { search: value, genre }, { preserveState: true });
   }, 300);
 
   // Handle search input change
@@ -93,12 +93,12 @@ export default function CommunityIndex({ stories, genres, filters, ratings }) {
                 <div>
                   <select
                     className="form-select secondry-font"
-                    value={rating}
+                    value={rating || 'all'}
                     onChange={handleRatingChange}
                   >
                     <option value="all">All Ratings</option>
-                    {ratings.map((g) => (
-                      <option key={g} value={g}>{g}</option>
+                    {ratings.map((r) => (
+                      <option key={r.id} value={r.id}>{r.name}</option>
                     ))}
                   </select>
                 </div>
@@ -153,11 +153,11 @@ export default function CommunityIndex({ stories, genres, filters, ratings }) {
                         <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
                           {story.genre}
                         </span>
-                        {story.rating && (
+                        {/* {story.rating && (
                           <span className="label bg-primary-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
                             {story.rating}
                           </span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                     <Link href={route('community.show', story.id)} className="btn btn-primary">Story Details</Link>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rating;
 use App\Models\Story;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class CommunityController extends Controller
     {
         // $query = Story::where('is_community', true)->where('status', 'approved');
         
-        $stories = Story::where('is_community', true)
+        $stories = Story::with('rating')->where('is_community', true)
          ->where('status', 'approved')
          ->filter($request->only(['search', 'genre', 'rating']))
          ->latest()
@@ -24,7 +25,7 @@ class CommunityController extends Controller
          ->withQueryString();
 
         $genres = Story::getGenres();
-        $rating = Story::getRatings();
+        $ratings = Story::getRatings();
 
         // Search by title, description, or author if provided
         // if ($request->has('search') && !empty($request->search)) {
@@ -55,11 +56,13 @@ class CommunityController extends Controller
             $stories[$key] = $story->fresh();
         }
 
+        $ratings = Rating::orderBy('name')->get();
+
 
         return Inertia::render('Community/Index', [
             'stories' => $stories,
             'genres' => $genres,
-            'ratings' => $rating,
+            'ratings' => $ratings,
             'filters' => $request->only(['search', 'genre', 'ratings']),
         ]);
     }

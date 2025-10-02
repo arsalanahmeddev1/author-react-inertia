@@ -9,4 +9,5 @@ class Rating extends Model
     protected $fillable = [
         'name'
     ];
+
 }

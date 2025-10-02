@@ -103,7 +103,7 @@ class AdminRatingController extends Controller
     {
         try {
             // Check if rating is being used by stories
-            $storiesCount = \App\Models\Story::where('rating', $rating->name)->count();
+            $storiesCount = \App\Models\Story::where('rating_id', $rating->id)->count();
             $publishRequestsCount = \App\Models\PublishRequest::where('rating', $rating->name)->count();
 
             if ($storiesCount > 0 || $publishRequestsCount > 0) {

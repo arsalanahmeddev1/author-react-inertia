@@ -21,7 +21,6 @@ class Story extends Model
         'description',
         'author',
         'genre',
-        'rating',
         'cover_image',
         'backcover_image',
         'read_count',
@@ -44,9 +43,14 @@ class Story extends Model
     ];
 
     public function user()
-{
-    return $this->belongsTo(User::class, 'user_id');
-}
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+
+    public function rating() {
+        return $this->belongsTo(Rating::class, 'rating_id');
+    }
 
     public function scopeCommunity($query)
     {
@@ -145,9 +149,11 @@ class Story extends Model
 
     public static function getRatings()
     {
-        return self::whereNotNull('rating')->distinct()->pluck('rating');
+        return self::whereNotNull('rating_id')->distinct()->pluck('rating_id');
     }
+
     
+
 
     public function scopeFilter($query, $filters)
     {
@@ -156,7 +162,7 @@ class Story extends Model
         }
 
         if (!empty($filters['rating']) && $filters['rating'] !== 'all') {
-            $query->where('rating', $filters['rating']);
+            $query->where('rating_id', $filters['rating']);
         }
 
         if (!empty($filters['search'])) {
