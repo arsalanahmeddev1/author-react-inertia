@@ -110,12 +110,19 @@ class StoriesController extends Controller
             'characters.*.description' => 'nullable|string',
         ]);
 
+        // Get rating_id from rating name
+        $ratingId = null;
+        if ($validated['rating']) {
+            $rating = \App\Models\Rating::where('name', $validated['rating'])->first();
+            $ratingId = $rating ? $rating->id : null;
+        }
+
         $storyData = [
             'title' => $validated['title'],
             'description' => $validated['description'],
             'author' => $validated['author'],
             'genre' => $validated['genre'],
-            'rating' => $validated['rating'] ?? null,
+            'rating_id' => $ratingId,
             'content' => $validated['content'],
             'is_community' => false, // Admin-created stories are not community stories
             'read_count' => 0,
@@ -172,8 +179,8 @@ class StoriesController extends Controller
 
     public function edit(Story $story)
     {
-        // Load the characters relationship
-        $story->load('characters');
+        // Load the characters and rating relationships
+        $story->load(['characters', 'rating']);
         
         $ratings = \App\Models\Rating::orderBy('name')->get();
 
@@ -201,12 +208,19 @@ class StoriesController extends Controller
             'character_deletes' => 'nullable|array',
         ]);
 
+        // Get rating_id from rating name
+        $ratingId = null;
+        if ($validated['rating']) {
+            $rating = \App\Models\Rating::where('name', $validated['rating'])->first();
+            $ratingId = $rating ? $rating->id : null;
+        }
+
         $storyData = [
             'title' => $validated['title'],
             'description' => $validated['description'],
             'author' => $validated['author'],
             'genre' => $validated['genre'],
-            'rating' => $validated['rating'] ?? $story->rating,
+            'rating_id' => $ratingId,
             'content' => $validated['content'],
         ];
 

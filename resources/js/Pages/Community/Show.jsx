@@ -69,10 +69,15 @@ export default function CommunityShow({ story }) {
                     </div>
                     {/* <div className="d-flex justify-content-between align-items-center mb-3">
                     </div> */}
-                    <div className="mb-3">
+                    <div className="mb-3 d-flex gap-3 align-items-center">
                       <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
                         {story.genre}
                       </span>
+                      {story.rating && story.rating.name && (
+                          <span className="label bg-primary-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
+                            {story.rating.name.charAt(0)}
+                          </span>
+                        )}                   
                     </div>
                     <div className="mb-3">
                       <span className="label bg-success text-white fs-16 py-10 px-20 radius-60 d-inline-block">

@@ -153,11 +153,11 @@ export default function CommunityIndex({ stories, genres, filters, ratings }) {
                         <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
                           {story.genre}
                         </span>
-                        {/* {story.rating && (
+                        {story.rating && story.rating.name && (
                           <span className="label bg-primary-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
-                            {story.rating}
+                            {story.rating.name.charAt(0)}
                           </span>
-                        )} */}
+                        )}
                       </div>
                     </div>
                     <Link href={route('community.show', story.id)} className="btn btn-primary">Story Details</Link>

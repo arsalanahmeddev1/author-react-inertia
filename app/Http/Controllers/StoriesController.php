@@ -18,10 +18,16 @@ class StoriesController extends Controller
     public function index(Request $request)
     {
         // Only show non-community stories
-        $query = Story::where('is_community', false);
+        $query = Story::with('rating')->where('is_community', false);
+        
         // Filter by genre if provided
         if ($request->has('genre') && $request->genre !== 'all') {
             $query->where('genre', $request->genre);
+        }
+
+        // Filter by rating if provided
+        if ($request->has('rating') && $request->rating !== 'all') {
+            $query->where('rating_id', $request->rating);
         }
 
         // Search by title or description if provided
@@ -38,19 +44,23 @@ class StoriesController extends Controller
             ->distinct()
             ->pluck('genre');
 
+        // Get all ratings for the filter dropdown
+        $ratings = \App\Models\Rating::orderBy('name')->get();
+
         // Paginate the results - use fresh() to ensure we get the latest data
         $stories = $query->latest()->paginate(9);
 
         // We'll keep the data refresh to ensure accurate counts
         // but we won't force a page refresh in the frontend
         foreach ($stories as $key => $story) {
-            $stories[$key] = $story->fresh();
+            $stories[$key] = $story->fresh(['rating']);
         }
 
         return Inertia::render('Stories/Index', [
             'stories' => $stories,
             'genres' => $genres,
-            'filters' => $request->only(['search', 'genre']),
+            'ratings' => $ratings,
+            'filters' => $request->only(['search', 'genre', 'rating']),
             'flash' => [
                 'success' => session('success'),
                 'error' => session('error'),
@@ -96,8 +106,8 @@ class StoriesController extends Controller
      */
     public function show(Story $story)
     {
-        // Load the characters for this story
-        $story->load('characters');
+        // Load the characters and rating for this story
+        $story->load(['characters', 'rating']);
         
         // Get all ratings for the rating selector
         $ratings = \App\Models\Rating::orderBy('name')->get();
@@ -175,7 +185,7 @@ class StoriesController extends Controller
             'content' => 'required|string',
             'character_id' => 'nullable|integer',
             'original_story_id' => 'required|integer|exists:stories,id',
-            'rating' => 'nullable|string|exists:ratings,name',
+            'rating' => 'nullable|integer|exists:ratings,id',
         ]);
 
         // Check daily word limit before creating the story
@@ -215,7 +225,7 @@ class StoriesController extends Controller
         $story->description = "A continuation of \"{$originalStory->title}\" by {$user->name}";
         $story->author = $user->name;
         $story->genre = $originalStory->genre;
-        $story->rating = $data['rating'] ?? $originalStory->rating;
+        $story->rating_id = $data['rating'] ?? $originalStory->rating_id;
         $story->cover_image = $originalStory->cover_image;
         $story->content = $data['content'];
         $story->read_count = 0;
@@ -392,7 +402,7 @@ class StoriesController extends Controller
                 'content' => 'required',
                 'title' => 'required',
                 'genre' => 'required',
-                'rating' => 'nullable|string|exists:ratings,name',
+                'rating' => 'nullable|string',
             ]);
 
             // Get the story to access its cover_image

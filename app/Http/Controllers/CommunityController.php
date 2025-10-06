@@ -53,7 +53,7 @@ class CommunityController extends Controller
         // We'll keep the data refresh to ensure accurate counts
         // but we won't force a page refresh in the frontend
         foreach ($stories as $key => $story) {
-            $stories[$key] = $story->fresh();
+            $stories[$key] = $story->fresh(['rating']);
         }
 
         $ratings = Rating::orderBy('name')->get();
@@ -69,7 +69,7 @@ class CommunityController extends Controller
 
     public function show($id)
     {
-        $story = Story::findOrFail($id);
+        $story = Story::with('rating')->findOrFail($id);
 
         // Check if the story is approved
         if ($story->status !== 'approved') {

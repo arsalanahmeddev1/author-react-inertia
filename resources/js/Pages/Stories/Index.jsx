@@ -6,13 +6,14 @@ import { debounce } from 'lodash';
 import Swal from 'sweetalert2';
 import '@/assets/styles/stories.css';
 
-export default function Index({ stories, genres, filters, flash }) {
+export default function Index({ stories, genres, filters, flash, ratings }) {
   const [search, setSearch] = useState(filters.search || '');
   const [genre, setGenre] = useState(filters.genre || 'all');
+  const [rating, setRating] = useState(filters.rating || 'all');
 
   // Debounce the search to avoid too many requests
   const debouncedSearch = debounce((value) => {
-    router.get(route('stories.index'), { search: value, genre }, { preserveState: true });
+    router.get(route('stories.index'), { search: value, genre, rating }, { preserveState: true });
   }, 300);
 
   // Handle search input change
@@ -25,7 +26,14 @@ export default function Index({ stories, genres, filters, flash }) {
   const handleGenreChange = (e) => {
     const selectedGenre = e.target.value;
     setGenre(selectedGenre);
-    router.get(route('stories.index'), { search, genre: selectedGenre }, { preserveState: true });
+    router.get(route('stories.index'), { search, genre: selectedGenre, rating }, { preserveState: true });
+  };
+
+  // Handle rating filter change
+  const handleRatingChange = (e) => {
+    const selectedRating = e.target.value;
+    setRating(selectedRating);
+    router.get(route('stories.index'), { search, genre, rating: selectedRating }, { preserveState: true });
   };
 
   // Clean up debounce on unmount
@@ -133,7 +141,7 @@ export default function Index({ stories, genres, filters, flash }) {
                     />
                   </div>
                 </div>
-                {/* <div>
+                <div>
                   <select
                     className="form-select secondry-font"
                     value={genre}
@@ -144,7 +152,19 @@ export default function Index({ stories, genres, filters, flash }) {
                       <option key={g} value={g}>{g}</option>
                     ))}
                   </select>
-                </div> */}
+                </div>
+                <div>
+                  <select
+                    className="form-select secondry-font"
+                    value={rating || 'all'}
+                    onChange={handleRatingChange}
+                  >
+                    <option value="all">All Ratings</option>
+                    {ratings.map((r) => (
+                      <option key={r.id} value={r.id}>{r.name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -190,9 +210,9 @@ export default function Index({ stories, genres, filters, flash }) {
                         <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
                           {story.genre}
                         </span>
-                        {story.rating && (
+                        {story.rating && story.rating.name && (
                           <span className="label bg-primary-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
-                            {story.rating}
+                            {story.rating.name.charAt(0)}
                           </span>
                         )}
                       </div>

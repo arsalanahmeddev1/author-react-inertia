@@ -31,6 +31,7 @@ class Story extends Model
         'is_community',
         'status',
         'user_id',
+        'rating_id',
     ];
 
     /**
@@ -149,7 +150,7 @@ class Story extends Model
 
     public static function getRatings()
     {
-        return self::whereNotNull('rating_id')->distinct()->pluck('rating_id');
+        return Rating::orderBy('name')->get();
     }
 
     

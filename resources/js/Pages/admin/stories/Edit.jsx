@@ -35,7 +35,7 @@ const Edit = ({ story, flash, ratings = [] }) => {
     description: story.description || '',
     author: story.author || '',
     genre: story.genre || '',
-    rating: story.rating || '',
+    rating: story.rating?.name || '',
     content: story.content || '',
     cover_image: null,
     backcover_image: null,

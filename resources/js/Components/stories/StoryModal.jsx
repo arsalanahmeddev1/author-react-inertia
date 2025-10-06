@@ -24,7 +24,7 @@ const StoryModal = ({ show, onHide, story, ratings = [] }) => {
 
   // Rating options from database
   const ratingOptions = ratings.map(rating => ({
-    value: rating.name,
+    value: rating.id,
     label: rating.name
   }));
 
@@ -37,7 +37,7 @@ const StoryModal = ({ show, onHide, story, ratings = [] }) => {
       setCharacterDetails(null);
       setShowLimitExceededModal(false);
       // Set default rating from the original story
-      setSelectedRating(story?.rating || 'PG');
+      setSelectedRating(story?.rating_id || ratings.find(r => r.name === 'PG')?.id || '');
       if (editorRef.current) {
         editorRef.current.innerHTML = '';
       }
@@ -48,7 +48,7 @@ const StoryModal = ({ show, onHide, story, ratings = [] }) => {
         loadUsageData();
       }
     }
-  }, [show, story?.rating]);
+  }, [show, story?.rating_id]);
 
   // Load drafts from the API
   const loadDrafts = async () => {
@@ -279,6 +279,7 @@ const StoryModal = ({ show, onHide, story, ratings = [] }) => {
         original_story_id: story.id,
         rating: selectedRating,
       };
+
 
       // Make the API call
       const response = await axios.post(route('community.store'), data);
