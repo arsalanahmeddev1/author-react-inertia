@@ -104,9 +104,9 @@ export default function Show({ story, ratings }) {
                       <span className="label bg-secondry-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block me-2">
                         {story.genre}
                       </span>
-                      {story.rating && (
+                      {story.rating && story.rating.name && (
                         <span className="label bg-primary-theme text-white fs-16 py-10 px-20 radius-60 d-inline-block">
-                          {story.rating}
+                          {story.rating.name.charAt(0)}
                         </span>
                       )}
                     </div>
