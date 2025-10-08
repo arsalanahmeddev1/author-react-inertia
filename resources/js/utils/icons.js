@@ -40,6 +40,8 @@ import { IoBook } from "react-icons/io5";
 import { MdPublishedWithChanges } from "react-icons/md";
 import { GiProgression } from "react-icons/gi";
 import { GiWorld } from "react-icons/gi";
+import { MdEmail } from "react-icons/md";
+
 
 
 
@@ -126,4 +128,5 @@ export const Icons = {
   PublishedWithChanges: MdPublishedWithChanges,
   Progression: GiProgression,
   World: GiWorld,
+  Email: MdEmail,
 }

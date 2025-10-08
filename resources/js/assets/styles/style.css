@@ -299,6 +299,7 @@ p {
     text-transform: capitalize;
     font-size: var(--text-20);
 }
+.footer-nav a:hover,
 .nav-link-btn:hover,
 a:hover {
     color: var(--primary-theme);
@@ -978,7 +979,7 @@ span.fs-54 {
 
 .footer-logos img {
     width: 100%;
-    max-width: 150px;
+    max-width: 120px;
     object-fit: contain;
 }
 
@@ -1629,7 +1630,23 @@ h6 {
 .hero-banner-center-img {
     max-width: 381px;
 }
-
+.md-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-theme);
+    color: #fff;
+    font-size: 16px;
+}
+.footer-contact-info a {
+    color: var(--default-color);
+}
+.footer-contact-info a:hover {
+    color: var(--primary-theme);
+}
 /* responsive */
 @media (min-width: 1560px) {
     .container {

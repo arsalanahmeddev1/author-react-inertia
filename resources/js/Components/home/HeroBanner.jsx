@@ -60,7 +60,7 @@ const HeroBanner = () => {
                                     {heroSlide.description}
                                 </p>
                                 <div className="d-flex flex-column flex-md-row gap-20 mb-20 ">
-                                    <Button className="btn btn-primary">Continue Your Story in Your Own Way</Button>
+                                    <a href='/stories' className="btn btn-primary">Continue Your Story in Your Own Way</a>
                                     <a href='/stories' className="btn btn-secondary">View Stories</a>
                                 </div>
                             </div>

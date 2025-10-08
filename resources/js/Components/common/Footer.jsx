@@ -30,13 +30,17 @@ const Footer = () => {
               <ul className='footer-nav secondry-font'>
                 <li><Link href="/faqs">FAQ’s</Link></li>
                 <li><Link href="/how-it-works">
-                How It Works</Link></li>
+                  How It Works</Link></li>
                 <li><Link href="/terms-and-conditions">Terms & Conditions</Link></li>
                 <li><Link href="/privacy-policy">Privacy Policy</Link></li>
                 <li><Link href="/community-guidelines">Community Guidelines</Link></li>
               </ul>
             </div>
             <div className="col-lg-4">
+              <h4 className='fs-36 secondry-font text-primary fw-600 mb-30'>Contact Us</h4>
+              <div className="footer-contact-info">
+                <p className='fs-18 secondry-font d-flex align-items-center text-white fw-500 mb-20'><span className='md-circle mr-10'><i class="fa-solid fa-envelope"></i></span> <a className='' href="mailto:Storievault@yahoo.com">Storievault@yahoo.com</a></p>
+              </div>
               <h4 className='fs-36 secondry-font footer-newsletter-hd text-white fw-500 mb-20'>Subscribe To Our Newsletter</h4>
               <form action="">
                 <div className="field-wrapper position-relative">
