@@ -73,6 +73,7 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users|regex:/^[a-zA-Z0-9_]+$/',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'role' => 'required|in:user,admin',
         ], [
             'username.regex' => 'Username can only contain letters, numbers, and underscores.',
             'username.unique' => 'This username is already taken. Please choose another one.',
@@ -84,7 +85,8 @@ class UserController extends Controller
             'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => 'user',
+            'role' => $validated['role'],
+            'is_admin' => $validated['role'] === 'admin' ? 1 : 0,
             'is_guest' => false,
             'is_active' => true,
         ]);
@@ -165,5 +167,35 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'User status updated.');
+    }
+
+    /**
+     * Toggle user admin role (promote to admin or demote to user).
+     */
+    public function promoteToAdmin(Request $request, User $user)
+    {
+        // Prevent modifying the current admin user
+        if ($request->user()->id === $user->id) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'error' => 'You cannot change your own admin status.'], 400);
+            }
+            return redirect()->back()->with('error', 'You cannot change your own admin status.');
+        }
+
+        // Toggle the role: if admin, make user; if user, make admin
+        $newRole = $user->role === 'admin' ? 'user' : 'admin';
+        $newIsAdmin = $newRole === 'admin' ? 1 : 0;
+        $action = $newRole === 'admin' ? 'promoted to admin' : 'demoted to user';
+        
+        $user->update([
+            'role' => $newRole,
+            'is_admin' => $newIsAdmin
+        ]);
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => "User has been {$action} successfully."]);
+        }
+
+        return redirect()->back()->with('success', "User has been {$action} successfully.");
     }
 }

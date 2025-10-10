@@ -29,6 +29,7 @@ const Create = ({ flash }) => {
     username: '',
     email: '',
     password: '',
+    role: 'user',
   });
 
   // Handle flash messages with SweetAlert
@@ -116,9 +117,72 @@ const Create = ({ flash }) => {
   };
 
   return (
-    <DashboardLayout>
-      <Head title="Create User" />
-      <CRow>
+    <>
+      <style>
+        {`
+          /* Toggle Switch Styles */
+          .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+          }
+          
+          .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+          
+          .toggle-label {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+          }
+          
+          .toggle-label:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          }
+          
+          .toggle-switch input:checked + .toggle-label {
+            background-color: #fea257;
+          }
+          
+          .toggle-switch input:checked + .toggle-label:before {
+            transform: translateX(26px);
+          }
+          
+          .toggle-switch input:focus + .toggle-label {
+            box-shadow: 0 0 0 3px rgba(254, 162, 87, 0.25);
+          }
+          
+          /* Hover effects */
+          .toggle-switch:hover .toggle-label {
+            box-shadow: 0 0 0 3px rgba(254, 162, 87, 0.1);
+          }
+        `}
+      </style>
+      <DashboardLayout>
+        <Head title="Create User" />
+        <CRow>
         <CCol xs={12} md={8} lg={6} className="mx-auto">
           <CCard className="mb-4">
             <CCardHeader className="d-flex justify-content-between align-items-center">
@@ -183,6 +247,29 @@ const Create = ({ flash }) => {
                   {errors.password && <div className="text-danger">{errors.password}</div>}
                 </div>
 
+                <div className="mb-3">
+                  <CFormLabel htmlFor="role">User Role</CFormLabel>
+                  <div className="d-flex align-items-center gap-3">
+                    <div className="toggle-switch">
+                      <input 
+                        type="checkbox" 
+                        id="role-toggle" 
+                        checked={data.role === 'admin'} 
+                        onChange={(e) => setData('role', e.target.checked ? 'admin' : 'user')} 
+                      />
+                      <label htmlFor="role-toggle" className="toggle-label">
+                        <span className="toggle-slider"></span>
+                      </label>
+                    </div>
+                    <div>
+                      <small className="text-muted">
+                        {data.role === 'admin' ? 'Admin User' : 'Regular User'}
+                      </small>
+                    </div>
+                  </div>
+                  {errors.role && <div className="text-danger">{errors.role}</div>}
+                </div>
+
                 <div className="d-flex justify-content-end">
                   <CButton 
                    color="primary" className='custom-primary-btn' size="sm" style={{ backgroundColor: '#fea257', borderColor: '#fea257' }}
@@ -198,6 +285,7 @@ const Create = ({ flash }) => {
         </CCol>
       </CRow>
     </DashboardLayout>
+    </>
   );
 };
 

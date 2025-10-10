@@ -80,6 +80,9 @@ const UserIndex = ({ users, flash }) => {
               {flash?.success && (
                 <div className="alert alert-success mb-3">{flash.success}</div>
               )}
+              {flash?.error && (
+                <div className="alert alert-danger mb-3">{flash.error}</div>
+              )}
 
               {/* Search Bar */}
               <div className="mb-3">
@@ -115,6 +118,7 @@ const UserIndex = ({ users, flash }) => {
                     <CTableHeaderCell scope="col">Username</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Full Name</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Email</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Role</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Subscription</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Created</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
@@ -129,6 +133,11 @@ const UserIndex = ({ users, flash }) => {
                         </CTableDataCell>
                         <CTableDataCell>{user.full_name || user.name}</CTableDataCell>
                         <CTableDataCell>{user.email}</CTableDataCell>
+                        <CTableDataCell>
+                          <span className={`badge ${user.role === 'admin' ? 'bg-danger' : 'bg-secondary'}`}>
+                            {user.role === 'admin' ? 'Admin' : 'User'}
+                          </span>
+                        </CTableDataCell>
                         <CTableDataCell>
                           {user.subscription ? (
                             <div>
@@ -182,7 +191,7 @@ const UserIndex = ({ users, flash }) => {
                     ))
                   ) : (
                     <CTableRow>
-                      <CTableDataCell colSpan="6" className="text-center">
+                      <CTableDataCell colSpan="7" className="text-center">
                         No users found
                       </CTableDataCell>
                     </CTableRow>

@@ -155,6 +155,7 @@ Route::prefix('admin-dashboard')->name('admin-dashboard.')->middleware(['auth', 
     Route::post('{story}/approve', [\App\Http\Controllers\Admin\StoriesController::class, 'approve'])->name('stories.approve');
     Route::post('{story}/reject', [\App\Http\Controllers\Admin\StoriesController::class, 'reject'])->name('stories.reject');
     Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
+    Route::post('users/{user}/promote-to-admin', [UserController::class, 'promoteToAdmin'])->name('users.promote-to-admin');
 
     Route::get('publish-requests', [PublishRequestController::class, 'index'])->name('publish-requests');
     Route::patch('publish-requests/{publishRequest}/status', [PublishRequestController::class, 'updateStatus'])->name('admin.publish-requests.update-status');
